@@ -83,6 +83,9 @@ Serif text uses old-style figures. No monospace anywhere.
 Photography is an accent, never the subject of a page. At most two photographs per page,
 monochrome silver-gelatin only, and always the camellia itself.
 
+When a product needs showing, it is shown working and set in type: a single specimen such as the
+Threshold request, drawn with the same rules, labels and buttons as the page. No mock screens.
+
 ## 7. Not in this system
 
 Monospace “technical” labels · generative or procedural art · glass, blur and glow effects ·

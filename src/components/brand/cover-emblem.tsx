@@ -67,10 +67,17 @@ export function CoverEmblem({ className, lift }: CoverEmblemProps) {
             <path d={silhouette} fill="url(#emblem-shade)" />
           </g>
 
-          <g clipPath="url(#emblem-clip)" stroke="#f5f3ee" strokeOpacity="0.07" fill="none">
-            {CAMELLIA_STROKES.map((s, i) => (
-              <path key={i} d={s.d} strokeWidth={0.55} strokeLinecap="round" />
-            ))}
+          <g clipPath="url(#emblem-clip)" stroke="#f5f3ee" fill="none" strokeLinecap="round">
+            <g strokeOpacity="0.08">
+              {CAMELLIA_STROKES.map((s, i) => (
+                <path key={i} d={s.d} strokeWidth={0.6} />
+              ))}
+            </g>
+            <g mask="url(#emblem-rim-mask)" strokeOpacity="0.34">
+              {CAMELLIA_STROKES.map((s, i) => (
+                <path key={i} d={s.d} strokeWidth={0.6} />
+              ))}
+            </g>
           </g>
 
           <g mask="url(#emblem-rim-mask)" fill="none" stroke="#f5f3ee">

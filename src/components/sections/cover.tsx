@@ -30,7 +30,7 @@ export function Cover() {
     >
       <CoverEmblem
         lift={reduce ? undefined : lift}
-        className="absolute top-[64%] left-1/2 aspect-[317/325] w-[180vw] -translate-x-1/2 sm:top-[62%] sm:w-[max(96vw,560px)] lg:w-[min(92vw,1320px)]"
+        className="absolute top-[64%] left-1/2 aspect-[317/325] w-[190vw] -translate-x-1/2 sm:top-[62%] sm:w-[max(92vw,560px)] lg:top-[58%] lg:w-[min(80vw,1160px)]"
       />
 
       <motion.div

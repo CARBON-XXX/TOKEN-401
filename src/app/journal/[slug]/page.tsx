@@ -52,8 +52,11 @@ export default async function JournalEntryPage({ params }: PageProps<"/journal/[
               {entry.title}
             </h1>
             <p className="type-lede mt-8 max-w-[22em] text-graphite">{entry.dek}</p>
-            <p className="type-label mt-10 text-stone">
-              {entry.byline} · <time dateTime={entry.published}>{entry.date}</time> · {entry.readingTime}
+            <p className="type-label mt-10 flex flex-col items-center gap-3 text-stone">
+              <span>{entry.byline}</span>
+              <span>
+                <time dateTime={entry.published}>{entry.date}</time> · {entry.readingTime}
+              </span>
             </p>
           </Rise>
 

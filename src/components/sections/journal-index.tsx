@@ -19,7 +19,7 @@ export function JournalIndex() {
           </Rise>
           <Rise as="header" className="col-span-12 lg:col-span-9" delay={0.1}>
             <h2 id="journal-title" className="type-display-2 max-w-[12em] text-soot">
-              Notes, kept in public — including the ones that went wrong.
+              Notes kept in public, including the ones that went wrong.
             </h2>
           </Rise>
         </div>
