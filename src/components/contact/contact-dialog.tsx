@@ -4,16 +4,10 @@ import { AnimatePresence, motion } from "motion/react";
 import { useState, type FormEvent, type ReactNode } from "react";
 
 import { CamelliaBloom } from "@/components/brand/camellia-bloom";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { SLOW } from "@/components/site/motion-primitives";
+import { PillButton } from "@/components/site/pill";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
   CONTACT_EMAIL,
@@ -34,7 +28,7 @@ type ContactDialogProps = {
 };
 
 const fieldClass =
-  "h-11 rounded-none border-0 border-b border-rule-strong bg-transparent px-0 font-serif text-lg text-ink shadow-none placeholder:text-ink-4 focus-visible:border-ink focus-visible:ring-0 aria-invalid:border-destructive aria-invalid:ring-0 md:text-lg";
+  "h-11 rounded-none border-0 border-b border-stone bg-transparent px-0 font-serif text-[1.1875rem] text-soot shadow-none transition-colors duration-500 focus-visible:border-soot focus-visible:ring-0 aria-invalid:border-destructive aria-invalid:ring-0 md:text-[1.1875rem]";
 
 export function ContactDialog({ open, onOpenChange, initialTopic }: ContactDialogProps) {
   const [status, setStatus] = useState<Status>("idle");
@@ -78,11 +72,15 @@ export function ContactDialog({ open, onOpenChange, initialTopic }: ContactDialo
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="max-h-[calc(100svh-2rem)] gap-0 overflow-y-auto rounded-[3px] bg-paper p-0 text-ink shadow-[0_40px_120px_-40px_rgba(20,20,19,0.45)] ring-rule-strong sm:max-w-[36rem]"
+        showCloseButton={false}
+        className="max-h-[calc(100svh-2rem)] gap-0 overflow-y-auto rounded-none bg-bone p-0 text-soot ring-0 sm:max-w-[38rem]"
         data-lenis-prevent
       >
-        <div className="flex items-center justify-between border-b border-rule px-7 py-4 sm:px-10">
-          <span className="eyebrow text-ink-3">Correspondence — N° 401</span>
+        <div className="flex items-center justify-between border-b border-plaster px-7 py-5 sm:px-11">
+          <span className="type-label text-stone">A letter to TOKEN/401</span>
+          <DialogClose className="type-label -mr-2 px-2 py-1 text-stone transition-colors duration-500 hover:text-soot">
+            Close
+          </DialogClose>
         </div>
 
         <AnimatePresence mode="wait" initial={false}>
@@ -91,25 +89,19 @@ export function ContactDialog({ open, onOpenChange, initialTopic }: ContactDialo
               key="sent"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.6 }}
-              className="flex flex-col items-center px-7 pt-12 pb-12 text-center sm:px-10"
+              transition={{ duration: 0.8, ease: SLOW }}
+              className="flex flex-col items-center px-7 pt-14 pb-14 text-center sm:px-11"
             >
-              <CamelliaBloom className="size-28 text-ink" strokeWidth={1.6} spread={1.3} />
-              <DialogTitle className="mt-8 font-serif text-3xl font-light tracking-tight">
+              <CamelliaBloom className="aspect-[317/325] w-24 text-soot" strokeWidth={1.8} spread={1.3} />
+              <DialogTitle className="mt-10 font-display text-[2.5rem] leading-[1.06] font-light tracking-[-0.012em]">
                 Your letter is on its way.
               </DialogTitle>
-              <DialogDescription className="mt-3 max-w-sm font-serif text-lg leading-relaxed text-ink-3">
-                A person — not a model — will read it and reply within two working days.
+              <DialogDescription className="type-body mt-4 max-w-[22em] text-graphite">
+                A person — not a model — will read it, and reply within two working days.
               </DialogDescription>
-              <DialogClose
-                render={
-                  <Button
-                    variant="outline"
-                    className="mt-10 h-11 rounded-full border-rule-strong bg-transparent px-6 text-sm"
-                  />
-                }
-              >
+              <DialogClose className="type-ui group relative mt-10 pb-1 text-soot">
                 Return to the page
+                <span className="absolute inset-x-0 bottom-0 h-px origin-right bg-current opacity-50 transition-transform duration-500 ease-[var(--ease-slow)] group-hover:scale-x-0" />
               </DialogClose>
             </motion.div>
           ) : (
@@ -118,19 +110,18 @@ export function ContactDialog({ open, onOpenChange, initialTopic }: ContactDialo
               noValidate
               onSubmit={onSubmit}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="px-7 pt-8 pb-8 sm:px-10 sm:pt-10"
+              transition={{ duration: 0.4 }}
+              className="px-7 pt-10 pb-9 sm:px-11 sm:pt-12"
             >
-              <DialogTitle className="font-serif text-[2.25rem] leading-[1.05] font-light tracking-[-0.02em]">
+              <DialogTitle className="font-display text-[2.75rem] leading-[1.02] font-light tracking-[-0.012em]">
                 Write to us.
               </DialogTitle>
-              <DialogDescription className="mt-3 max-w-md font-serif text-[1.0625rem] leading-relaxed text-ink-3">
-                Tell us what you are exploring. We read every letter and answer the ones we can help
-                with, carefully.
+              <DialogDescription className="type-body mt-4 max-w-[26em] text-graphite">
+                Tell us what you are working on, or wondering about. A few sentences is plenty.
               </DialogDescription>
 
-              <fieldset className="mt-8">
-                <legend className="eyebrow mb-3 text-ink-3">Regarding</legend>
+              <fieldset className="mt-10">
+                <legend className="type-label mb-4 text-stone">Regarding</legend>
                 <div className="flex flex-wrap gap-2">
                   {CONTACT_TOPICS.map((t) => (
                     <button
@@ -139,10 +130,10 @@ export function ContactDialog({ open, onOpenChange, initialTopic }: ContactDialo
                       aria-pressed={topic === t}
                       onClick={() => setTopic(t)}
                       className={cn(
-                        "rounded-full border px-3.5 py-1.5 text-[0.8125rem] transition-colors duration-300",
+                        "rounded-full border px-4 py-2 font-sans text-[0.875rem] transition-colors duration-500",
                         topic === t
-                          ? "border-ink bg-ink text-paper"
-                          : "border-rule-strong text-ink-2 hover:border-ink",
+                          ? "border-soot bg-soot text-chalk"
+                          : "border-plaster text-graphite hover:border-stone hover:text-soot",
                       )}
                     >
                       {t}
@@ -151,13 +142,12 @@ export function ContactDialog({ open, onOpenChange, initialTopic }: ContactDialo
                 </div>
               </fieldset>
 
-              <div className="mt-7 grid gap-6 sm:grid-cols-2">
+              <div className="mt-9 grid gap-7 sm:grid-cols-2">
                 <Field id="name" label="Your name" error={errors.name}>
                   <Input
                     id="name"
                     name="name"
                     autoComplete="name"
-                    placeholder="Ada Lovelace"
                     aria-invalid={Boolean(errors.name)}
                     className={fieldClass}
                   />
@@ -168,32 +158,24 @@ export function ContactDialog({ open, onOpenChange, initialTopic }: ContactDialo
                     name="email"
                     type="email"
                     autoComplete="email"
-                    placeholder="ada@analytical.engine"
                     aria-invalid={Boolean(errors.email)}
                     className={fieldClass}
                   />
                 </Field>
               </div>
-              <div className="mt-6">
+              <div className="mt-7">
                 <Field id="organisation" label="Organisation" hint="Optional">
-                  <Input
-                    id="organisation"
-                    name="organisation"
-                    autoComplete="organization"
-                    placeholder="Where you work, study, or wonder"
-                    className={fieldClass}
-                  />
+                  <Input id="organisation" name="organisation" autoComplete="organization" className={fieldClass} />
                 </Field>
               </div>
-              <div className="mt-6">
+              <div className="mt-7">
                 <Field id="message" label="Your letter" error={errors.message}>
                   <Textarea
                     id="message"
                     name="message"
                     rows={4}
-                    placeholder="A few sentences is plenty."
                     aria-invalid={Boolean(errors.message)}
-                    className={cn(fieldClass, "min-h-28 resize-none py-2.5 leading-relaxed")}
+                    className={cn(fieldClass, "min-h-32 resize-none py-2.5 leading-[1.65]")}
                   />
                 </Field>
               </div>
@@ -205,7 +187,7 @@ export function ContactDialog({ open, onOpenChange, initialTopic }: ContactDialo
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
                     exit={{ opacity: 0, height: 0 }}
-                    className="caption mt-6 text-destructive"
+                    className="type-caption mt-7 text-destructive"
                   >
                     Something interrupted the letter. Please try again, or write to{" "}
                     <a className="underline underline-offset-4" href={`mailto:${CONTACT_EMAIL}`}>
@@ -216,28 +198,11 @@ export function ContactDialog({ open, onOpenChange, initialTopic }: ContactDialo
                 ) : null}
               </AnimatePresence>
 
-              <div className="mt-9 flex flex-col-reverse items-stretch gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <p className="eyebrow text-ink-4">Replies within two working days</p>
-                <Button
-                  type="submit"
-                  disabled={status === "sending"}
-                  className="h-12 rounded-full bg-ink px-7 text-[0.9375rem] font-normal text-paper hover:bg-ink-2 disabled:opacity-80"
-                >
-                  {status === "sending" ? (
-                    <span className="inline-flex items-center gap-3">
-                      Sending
-                      <span className="relative block h-px w-8 overflow-hidden bg-paper/25">
-                        <motion.span
-                          className="absolute inset-y-0 left-0 w-1/2 bg-paper"
-                          animate={{ x: ["-100%", "200%"] }}
-                          transition={{ duration: 1.1, repeat: Infinity, ease: "easeInOut" }}
-                        />
-                      </span>
-                    </span>
-                  ) : (
-                    "Send letter"
-                  )}
-                </Button>
+              <div className="mt-10 flex flex-col-reverse items-start gap-5 sm:flex-row sm:items-center sm:justify-between">
+                <p className="type-caption text-stone">Replies within two working days.</p>
+                <PillButton type="submit" disabled={status === "sending"} className="disabled:opacity-70">
+                  {status === "sending" ? "Sending…" : "Send letter"}
+                </PillButton>
               </div>
             </motion.form>
           )}
@@ -262,18 +227,19 @@ function Field({
 }) {
   return (
     <div>
-      <Label htmlFor={id} className="eyebrow flex justify-between font-normal text-ink-3">
+      <label htmlFor={id} className="type-label flex items-baseline justify-between text-stone">
         {label}
-        {hint ? <span className="text-ink-4">{hint}</span> : null}
-      </Label>
-      <div className="mt-1">{children}</div>
+        {hint ? <span className="type-caption tracking-normal normal-case">{hint}</span> : null}
+      </label>
+      <div className="mt-2">{children}</div>
       <AnimatePresence>
         {error ? (
           <motion.p
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className="caption mt-2 text-[0.875rem] text-destructive"
+            transition={{ duration: 0.5, ease: SLOW }}
+            className="type-caption mt-2 text-destructive"
           >
             {error}
           </motion.p>
