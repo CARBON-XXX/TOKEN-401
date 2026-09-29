@@ -1,7 +1,6 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import Image from "next/image";
 import { useState, type ReactNode } from "react";
 
 import { useContact } from "@/components/contact/contact-provider";
@@ -9,8 +8,6 @@ import { Rise, SLOW } from "@/components/site/motion-primitives";
 import { Arrow, PillButton } from "@/components/site/pill";
 import type { ContactTopic } from "@/lib/contact";
 import { cn } from "@/lib/utils";
-
-import macro from "../../../public/images/camellia-macro.jpg";
 
 type Product = {
   name: string;
@@ -70,26 +67,7 @@ export function Products() {
           </Rise>
         </div>
 
-        <ProductPlate
-          index={1}
-          product={CAMELLIA}
-          specimen={
-            <figure>
-              <div className="relative aspect-[4/3] overflow-hidden bg-plaster">
-                <Image
-                  src={macro}
-                  alt="The centre of a white camellia, its petals folded in rings around the stamens."
-                  placeholder="blur"
-                  sizes="(min-width: 1024px) 30vw, 100vw"
-                  className="size-full object-cover grayscale"
-                />
-              </div>
-              <figcaption className="type-caption mt-4 text-stone">
-                Layer on layer, around a centre.
-              </figcaption>
-            </figure>
-          }
-        />
+        <ProductPlate index={1} product={CAMELLIA} specimen={<ReplySpecimen />} />
 
         <ProductPlate index={2} product={THRESHOLD} mirrored specimen={<PermissionSlip />} />
       </div>
@@ -130,7 +108,8 @@ function ProductPlate({
           delay={0.1}
           className={cn(
             "col-span-12 sm:col-span-9",
-            mirrored ? "lg:order-2 lg:col-span-5 lg:col-start-8" : "lg:col-span-4",
+            mirrored ? "lg:order-2 lg:col-start-8" : "",
+            "lg:col-span-5",
           )}
         >
           {specimen}
@@ -140,7 +119,8 @@ function ProductPlate({
           delay={0.15}
           className={cn(
             "col-span-12",
-            mirrored ? "lg:order-1 lg:col-span-5" : "lg:col-span-6 lg:col-start-7",
+            mirrored ? "lg:order-1" : "lg:col-start-8",
+            "lg:col-span-5",
           )}
         >
           <p className="type-lede max-w-[20em] text-soot">{product.lede}</p>
@@ -172,9 +152,100 @@ function ProductPlate({
   );
 }
 
+/** Products are shown working, set in type rather than drawn as UI chrome. */
+function Specimen({
+  label,
+  status,
+  description,
+  children,
+}: {
+  label: string;
+  status: string;
+  description: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="border border-soot p-6 sm:p-9" role="group" aria-label={description}>
+      <div className="flex items-baseline justify-between gap-6">
+        <span className="type-label text-soot">{label}</span>
+        <span className="type-label text-stone" aria-live="polite">
+          {status}
+        </span>
+      </div>
+      {children}
+    </div>
+  );
+}
+
+const WORKING = [
+  "Ibuprofen is known to interact with several kinds of blood-pressure medicine.",
+  "How much it matters depends on the medicine, and the question doesn’t say which.",
+  "A wrong guess could do harm, and the missing fact is easy to get. So: ask.",
+] as const;
+
+const ROMAN = ["i", "ii", "iii"] as const;
+
+function ReplySpecimen() {
+  const [showWorking, setShowWorking] = useState(false);
+
+  return (
+    <Specimen
+      label="Reply 2291"
+      status={showWorking ? "Working shown" : "Unsure of one thing"}
+      description="An example reply from Camellia"
+    >
+      <p className="type-caption mt-10 text-stone">
+        “Can I take ibuprofen with my blood-pressure tablets?”
+      </p>
+      <p className="type-lede mt-4 text-soot">
+        Possibly not — it depends on the tablets. With several common ones, ibuprofen can weaken
+        their effect and strain the kidneys.
+      </p>
+      <p className="type-body mt-4 text-graphite">
+        I don’t know which you take, so I won’t guess. What does the box say? A pharmacist can also
+        check in a minute.
+      </p>
+
+      <AnimatePresence initial={false}>
+        {showWorking ? (
+          <motion.ol
+            key="working"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.8, ease: SLOW }}
+            className="overflow-hidden"
+          >
+            {WORKING.map((step, i) => (
+              <li
+                key={step}
+                className="type-body grid grid-cols-[2.25rem_1fr] border-plaster pt-4 text-graphite first:mt-8 first:border-t first:pt-6"
+              >
+                <span className="text-stone">{ROMAN[i]}.</span>
+                {step}
+              </li>
+            ))}
+          </motion.ol>
+        ) : null}
+      </AnimatePresence>
+
+      <div className="mt-10 flex min-h-12 items-center border-t border-plaster pt-6">
+        <button
+          type="button"
+          aria-expanded={showWorking}
+          onClick={() => setShowWorking((v) => !v)}
+          className="type-ui group relative py-2 text-soot"
+        >
+          {showWorking ? "Hide the working" : "Show the working"}
+          <span className="absolute inset-x-0 bottom-1 h-px origin-right bg-current opacity-50 transition-transform duration-500 ease-[var(--ease-slow)] group-hover:scale-x-0" />
+        </button>
+      </div>
+    </Specimen>
+  );
+}
+
 type Decision = { kind: "allowed" | "declined"; at: string } | null;
 
-/** A working specimen of a Threshold request, set in type rather than drawn as UI chrome. */
 function PermissionSlip() {
   const [decision, setDecision] = useState<Decision>(null);
 
@@ -185,14 +256,11 @@ function PermissionSlip() {
     });
 
   return (
-    <div className="border border-soot p-6 sm:p-9" role="group" aria-label="An example Threshold request">
-      <div className="flex items-baseline justify-between gap-6">
-        <span className="type-label text-soot">Request 0412</span>
-        <span className="type-label text-stone" aria-live="polite">
-          {decision === null ? "Awaiting you" : decision.kind === "allowed" ? "Allowed" : "Held"}
-        </span>
-      </div>
-
+    <Specimen
+      label="Request 0412"
+      status={decision === null ? "Awaiting you" : decision.kind === "allowed" ? "Allowed" : "Held"}
+      description="An example Threshold request"
+    >
       <p className="type-lede mt-10 text-soot">
         Your assistant would like to pay £2,400 to Harbour Joinery Ltd.
       </p>
@@ -246,6 +314,6 @@ function PermissionSlip() {
           )}
         </AnimatePresence>
       </div>
-    </div>
+    </Specimen>
   );
 }

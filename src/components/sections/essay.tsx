@@ -10,22 +10,25 @@ export function Essay() {
     <section data-surface="bone" aria-labelledby="essay-title" className="pb-[clamp(112px,14vw,208px)]">
       <div className="frame">
         <div className="grid grid-cols-12 gap-x-6 gap-y-14 border-t border-plaster pt-[clamp(72px,9vw,128px)]">
-          <Rise as="figure" className="col-span-12 sm:col-span-8 lg:sticky lg:top-[calc(var(--nav-h)+2rem)] lg:col-span-5 lg:self-start">
+          <Rise
+            as="figure"
+            className="order-last col-span-7 sm:col-span-4 lg:sticky lg:top-[calc(var(--nav-h)+2rem)] lg:order-none lg:col-span-3 lg:self-start"
+          >
             <div className="relative aspect-[3/4] overflow-hidden bg-plaster">
               <Image
                 src={plaster}
                 alt="A single camellia and its leaves against a cracked plaster wall, in black and white."
                 placeholder="blur"
-                sizes="(min-width: 1024px) 40vw, (min-width: 640px) 66vw, 100vw"
+                sizes="(min-width: 1024px) 22vw, (min-width: 640px) 33vw, 58vw"
                 className="size-full object-cover grayscale"
               />
             </div>
-            <figcaption className="type-caption mt-4 max-w-[24em] text-stone">
-              Camellia japonica. It flowers in winter, when almost nothing else will.
+            <figcaption className="type-caption mt-4 text-stone">
+              Camellia japonica, which flowers in winter.
             </figcaption>
           </Rise>
 
-          <article className="col-span-12 lg:col-span-6 lg:col-start-7">
+          <article className="col-span-12 lg:col-span-6 lg:col-start-6">
             <Rise as="header">
               <p className="type-label text-stone">On the name</p>
               <h2 id="essay-title" className="type-display-2 mt-8 max-w-[11em] text-soot">

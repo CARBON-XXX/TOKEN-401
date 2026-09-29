@@ -80,8 +80,10 @@ Serif text uses old-style figures. No monospace anywhere.
 
 ## 6. Imagery
 
-Photography is an accent, never the subject of a page. At most two photographs per page,
-monochrome silver-gelatin only, and always the camellia itself.
+Photography is an accent, never the subject of a page. At most one photograph per page, set small
+(three columns or fewer), monochrome only, and only beside writing that is about what it shows —
+the camellia beside the essay on the name. A photograph never stands in for a product, an idea or
+a mood.
 
 When a product needs showing, it is shown working and set in type: a single specimen such as the
 Threshold request, drawn with the same rules, labels and buttons as the page. No mock screens.

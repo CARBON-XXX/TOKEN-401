@@ -41,5 +41,6 @@ provider and add its API key as an environment variable.
 
 ## Images
 
-Only two photographs are used, both of the camellia (`public/images/`). The rule in `DESIGN.md`
-is at most two per page. Everything else is type, the traced logo, and paper.
+The site uses one photograph: the camellia beside the essay on the name
+(`public/images/camellia-plaster.jpg`). The rule in `DESIGN.md` is at most one per page, set small.
+The products are shown as typeset specimens. Everything else is type, the traced logo and paper.
