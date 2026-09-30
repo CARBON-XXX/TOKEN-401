@@ -20,9 +20,9 @@ from the texture of the materials — paper, ink, stipple, hairline — never fr
 | **Organic**    | Hand-feeling forms against exact lines: the stippled arch, the camellia, curves that breathe.           |
 
 The home page is an **official company site**, not a product manual. It opens on the company’s
-thesis and a single drawing, introduces the first product in three figures — two layers, the
-safeguards, the two graphs — and then gives the company its own voice: statement, principles,
-journal, the essay on the name, the closing letter.
+thesis and a single drawing, introduces the first product in a two-figure spread and the
+safeguards, and then gives the company its own voice: statement, principles, journal, the essay
+on the name, the closing letter.
 
 ## 2. Material
 
@@ -30,7 +30,9 @@ journal, the essay on the name, the closing letter.
   everything. Ink fields carry the same tooth in reverse (`[data-surface="ink"]::before`).
 - **Stipple.** Organic forms are printed as dots whose _number_ thins out, the way an engraver
   shades (`Stipple` in `src/components/art/grain.tsx`). Never a smooth gradient.
-- **Hairline.** Figures are drawn in 1 px lines with labelled boxes (`Chip` in `figure-kit.tsx`).
+- **Hairline.** Figures are drawn in fine lines — 0.75–1.25 px — like a pen, never as boxes and
+  arrows. Hand-feeling outlines come from `organic.ts` (pebbles, seed heads), deterministic so
+  server and client draw the same shape.
 - **No light.** No glow, bloom, lens, blur or soft-light highlights. Nothing emits light.
 
 ## 3. Colour
@@ -89,19 +91,19 @@ to the judgement it exercises — “Judgment that asks first.”, “asks first
 - Section rhythm `clamp(96px, 11vw, 168px)`. Reading measure never exceeds 34em.
 - **Asymmetric head:** a section rule with its label (and a note on the right), the title over ten
   columns from the left, the standfirst offset to columns 7–11. Never a centred split hero.
-- **Figures:** one idea each, in a ruled panel or across the full measure, always with a caption
-  underneath — a title and one plain paragraph. Panels are separated by 1 px of `plaster` (or
-  `chalk` 12% on ink), square corners. No rounded cards, no shadows.
+- **Figures:** one idea each, set on the paper itself, never boxed. Figures are numbered like a
+  journal’s (“Fig. 2”, serif italic) and captioned beneath a hairline: number, title, one plain
+  paragraph. Spreads are staggered — the second figure starts lower than the first. No cards, no
+  shadows.
 
 ## 6. Figures
 
-| Figure         | Where      | What it says                                                                  |
-| -------------- | ---------- | ----------------------------------------------------------------------------- |
-| Two speeds     | Hero       | A sharp burst cut off in 12 ms, then a long stippled arch as the agents work. |
-| Tacit loop     | Product    | State, decision, action, new state — continuously.                            |
-| Agent spine    | Product    | A coordinator, six specialists, one shared incident state.                    |
-| Seven checks   | Safeguards | One line of checks, with a branch through a person’s yes.                     |
-| Two graphs     | Awareness  | What depends on what; where the attack is heading, and where it is cut.       |
+| Figure             | Where      | What it says                                                                 |
+| ------------------ | ---------- | ---------------------------------------------------------------------------- |
+| Fig. 1 Two speeds  | Hero       | A sharp burst cut off in 12 ms, then a long stippled arch as the agents work. |
+| Fig. 2 Seed head   | Product    | Tacit: one fine line for every workload, one in earth red where it acted.    |
+| Fig. 3 Gathering   | Product    | The agents: seven engraved stones around the one incident they share.        |
+| Fig. 4 Seven checks | Safeguards | One line of checks, with a branch through a person’s yes.                   |
 
 Everything in them is illustrative, and says so where it could be mistaken for data.
 

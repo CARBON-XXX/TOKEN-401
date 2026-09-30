@@ -45,7 +45,10 @@ export function Safeguards() {
           <Pipeline className="hidden lg:block" />
           <PipelineList className="lg:hidden" />
           <figcaption className="mt-14 grid grid-cols-12 gap-x-6 gap-y-4 border-t border-chalk/14 pt-6">
-            <p className="type-title col-span-12 lg:col-span-4">Seven checks, then a way back</p>
+            <div className="col-span-12 lg:col-span-4">
+              <p className="type-caption text-chalk/50">Fig. 4</p>
+              <p className="type-title mt-3">Seven checks, then a way back</p>
+            </div>
             <p className="type-body col-span-12 max-w-[34em] text-chalk/62 lg:col-span-6 lg:col-start-7">
               Rate limiting passes quickly. Isolating a node must first show which services depend on
               it and where their traffic will go. Cluster-wide changes meet the strictest standard of

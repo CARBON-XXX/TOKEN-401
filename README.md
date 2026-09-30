@@ -5,7 +5,7 @@ defense system: **Tacit**, a millisecond reflex layer (System 1), and a team of 
 investigates, contains, repairs and verifies incidents (System 2).
 
 The home page is the company's site. It opens on the company's thesis and one drawing, then
-introduces the first product in three figures: the two layers, the safeguards and the two graphs.
+introduces the first product in a two-figure spread (Tacit and the agents) and the safeguards.
 After that come the statement, the principles, the journal, an essay on the name and a closing
 letter. There are three journal articles at `/journal/[slug]`. The contact form opens as a letter.
 
@@ -35,7 +35,8 @@ pnpm build && pnpm start
 | `src/app/globals.css`              | Colour tokens and type steps (`type-*` utilities)                  |
 | `src/components/sections/`         | The home page, one file per section                                |
 | `src/components/art/two-speeds.tsx` | The hero drawing: a 12 ms burst and the stippled arch that follows |
-| `src/components/art/figure-kit.tsx` | The labelled box every product figure is drawn with               |
+| `src/components/art/seed-head.tsx`, `gathering.tsx` | The product figures: Tacit's seed head, the agents' stones |
+| `src/components/art/organic.ts`    | Deterministic geometry for hand-feeling forms (pebbles, seed heads) |
 | `src/components/art/grain.tsx`     | Print textures: `Grain` (specks) and `Stipple` (engraver's shading) |
 | `src/components/brand/`            | The camellia: traced logo paths and stroke-by-stroke bloom         |
 | `src/content/journal.ts`           | Journal articles (plain data; add an entry to publish a new one)   |

@@ -45,7 +45,10 @@ export function Hero() {
         <motion.figure {...enter(0.35)} className="mt-[clamp(48px,7vh,112px)]">
           <TwoSpeeds />
           <figcaption className="type-label mt-8 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 border-t border-plaster pt-4 text-stone">
-            <span className="text-soot">One incident, at two speeds</span>
+            <span className="flex items-baseline gap-3 text-soot">
+              <span className="type-caption text-stone">Fig. 1</span>
+              One incident, at two speeds
+            </span>
             <span>Illustrative · not to scale</span>
           </figcaption>
         </motion.figure>
