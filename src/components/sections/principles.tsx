@@ -3,7 +3,6 @@
 import { motion, useReducedMotion, useScroll, type MotionValue } from "motion/react";
 import { useRef, useSyncExternalStore } from "react";
 
-import { Motes } from "@/components/art/motes";
 import { CAMELLIA_STROKES, CAMELLIA_VIEWBOX } from "@/components/brand/logo-paths";
 import { Rise, useScrub } from "@/components/site/motion-primitives";
 
@@ -65,10 +64,8 @@ export function Principles() {
       id="principles"
       data-surface="ink"
       aria-labelledby="principles-title"
-      className="ink-field section-y relative scroll-mt-[var(--nav-h)] bg-ink text-chalk"
+      className="section-y relative scroll-mt-[var(--nav-h)] bg-ink text-chalk"
     >
-      <Motes className="pointer-events-none absolute inset-0 size-full" />
-
       <div className="frame relative">
         <div className="grid grid-cols-12 gap-x-6 gap-y-10">
           <Rise className="col-span-12 lg:col-span-3">
@@ -138,13 +135,7 @@ function Bloom({ progress, still }: { progress: MotionValue<number>; still: bool
         strokeLinejoin="round"
         aria-hidden
       >
-        <defs>
-          <filter id="principles-hand" x="-5%" y="-5%" width="110%" height="110%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" result="grain" />
-            <feDisplacementMap in="SourceGraphic" in2="grain" scale="1.4" xChannelSelector="R" yChannelSelector="G" />
-          </filter>
-        </defs>
-        <g filter="url(#principles-hand)">
+        <g>
           {STROKES.map((s, i) =>
             still ? (
               <path key={i} d={s.d} strokeWidth={s.width} strokeOpacity={0.9} />

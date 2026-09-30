@@ -19,7 +19,7 @@ export function Footer() {
   const reduce = useReducedMotion();
 
   return (
-    <footer data-surface="ink" className="ink-field relative overflow-hidden bg-ink text-chalk">
+    <footer data-surface="ink" className="relative overflow-hidden bg-ink text-chalk">
       <div className="frame">
         <div className="grid grid-cols-12 gap-x-6 gap-y-14 border-t border-chalk/14 pt-16 sm:pt-20">
           <p className="type-lede col-span-12 max-w-[16em] text-chalk lg:col-span-5">

@@ -1,6 +1,5 @@
 "use client";
 
-import { Motes } from "@/components/art/motes";
 import { CamelliaBloom } from "@/components/brand/camellia-bloom";
 import { useContact } from "@/components/contact/contact-provider";
 import { Rise } from "@/components/site/motion-primitives";
@@ -15,9 +14,8 @@ export function Closing() {
       id="contact"
       data-surface="ink"
       aria-labelledby="closing-title"
-      className="ink-field section-y relative scroll-mt-[var(--nav-h)] bg-ink text-center text-chalk"
+      className="section-y relative scroll-mt-[var(--nav-h)] bg-ink text-center text-chalk"
     >
-      <Motes className="pointer-events-none absolute inset-0 size-full" count={30} />
       <div className="frame relative flex flex-col items-center">
         <div className="relative">
           <div
