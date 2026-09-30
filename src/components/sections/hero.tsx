@@ -43,7 +43,7 @@ export function Hero() {
     >
       <div className="frame pt-[clamp(24px,4.5vh,64px)]">
         <motion.div {...enter(0)}>
-          <LogLine time="T+00:00.000" stage="Perceive" actor="Tacit · 1,284 workloads watched" />
+          <LogLine time="T+00:00.000" stage="Perceive · simulated incident" actor="Tacit · 1,284 workloads watched" />
         </motion.div>
 
         <motion.h1 {...enter(0.1)} id="hero-title" className="type-hero mt-[clamp(28px,5vh,72px)] text-soot">
