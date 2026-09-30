@@ -276,6 +276,15 @@ html.lenis body {
   }
 }
 
+@keyframes fall {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(200%);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
