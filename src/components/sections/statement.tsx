@@ -1,19 +1,13 @@
-import { LogLine } from "@/components/site/log-line";
 import { Rise } from "@/components/site/motion-primitives";
 import { ScrollWords } from "@/components/site/scroll-words";
+import { SectionLabel } from "@/components/site/section-label";
 
 export function Statement() {
   return (
-    <section
-      id="approach"
-      data-surface="bone"
-      data-time="T+03:41.091"
-      data-stage="Continue"
-      className="section-y scroll-mt-[var(--nav-h)]"
-    >
+    <section id="approach" data-surface="bone" className="section-y scroll-mt-[var(--nav-h)]">
       <div className="frame">
         <Rise>
-          <LogLine time="T+03:41.091" stage="Continue" actor="TOKEN/401 · the company" />
+          <SectionLabel label="The company" note="TOKEN/401, Inc." />
         </Rise>
 
         <header className="mt-[clamp(40px,5vw,80px)]">

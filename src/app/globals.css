@@ -22,6 +22,8 @@
   --color-chalk: var(--chalk);
   --color-rubric: var(--rubric);
   --color-alert: var(--alert);
+  --color-clay: var(--clay);
+  --color-ochre: var(--ochre);
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -53,15 +55,17 @@
 }
 
 :root {
-  --ink: #0f0e0d;
-  --soot: #1b1a18;
-  --graphite: #4a4742;
-  --stone: #8a857c;
-  --plaster: #d5d0c5;
-  --bone: #ece8e0;
-  --chalk: #f5f3ee;
-  --rubric: #a3303a;
-  --alert: #d4404c;
+  --ink: #1b1916;
+  --soot: #201e1b;
+  --graphite: #4b4640;
+  --stone: #8b8378;
+  --plaster: #d9d1c3;
+  --bone: #eee9df;
+  --chalk: #f6f2ea;
+  --rubric: #9b3b2b;
+  --alert: #cf6a4f;
+  --clay: #a8603f;
+  --ochre: #b48a47;
 
   --background: var(--bone);
   --foreground: var(--soot);
@@ -104,6 +108,33 @@
     @apply bg-bone text-soot;
     font-variant-numeric: oldstyle-nums proportional-nums;
     font-kerning: normal;
+  }
+
+  /* The paper itself: a fine tooth of specks printed over everything. */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='t'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.17 0 0 0 0 0.14 0 0 0 0 0.1 0 0 0 1.5 -0.66'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23t)'/%3E%3C/svg%3E");
+    background-size: 240px 240px;
+    opacity: 0.5;
+  }
+
+  /* Solid ink areas carry the paper's tooth too, as light specks where the ink did not take. */
+  [data-surface="ink"] {
+    isolation: isolate;
+  }
+  [data-surface="ink"]::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='t'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.96 0 0 0 0 0.93 0 0 0 0 0.87 0 0 0 1.5 -0.74'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23t)'/%3E%3C/svg%3E");
+    background-size: 240px 240px;
+    opacity: 0.3;
   }
 
   ::selection {
@@ -193,11 +224,13 @@ html.lenis body {
   letter-spacing: -0.018em;
 }
 
+/* Decks and ledes are set in the serif, as a magazine sets its standfirst. */
 @utility type-lede {
-  font-family: var(--font-sans);
-  font-size: clamp(1.125rem, 1.45vw, 1.3125rem);
-  line-height: 1.45;
-  letter-spacing: -0.012em;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(1.1875rem, 1.6vw, 1.4375rem);
+  line-height: 1.42;
+  letter-spacing: -0.008em;
 }
 
 @utility type-body {
@@ -247,58 +280,9 @@ html.lenis body {
   font-variant-numeric: tabular-nums;
 }
 
-@keyframes traverse {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(720%);
-  }
-}
-
 @keyframes dash-flow {
   to {
     stroke-dashoffset: -20;
-  }
-}
-
-@keyframes breathe {
-  0%,
-  100% {
-    opacity: 0.2;
-  }
-  50% {
-    opacity: 0.85;
-  }
-}
-
-@keyframes breathe-glow {
-  0%,
-  100% {
-    opacity: 0.55;
-    transform: scale(0.96);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.04);
-  }
-}
-
-@keyframes wander {
-  from {
-    transform: translate(-28%, -18%);
-  }
-  to {
-    transform: translate(26%, 22%);
-  }
-}
-
-@keyframes fall {
-  from {
-    transform: translateY(-100%);
-  }
-  to {
-    transform: translateY(200%);
   }
 }
 

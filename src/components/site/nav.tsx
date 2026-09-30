@@ -14,7 +14,7 @@ import { SLOW } from "./motion-primitives";
 import { buttonClass, PillButton } from "./pill";
 
 export const NAV_LINKS = [
-  { href: "/#reflex", label: "Product" },
+  { href: "/#product", label: "Product" },
   { href: "/#safeguards", label: "Safeguards" },
   { href: "/#approach", label: "Company" },
   { href: "/#journal", label: "Research" },
@@ -32,17 +32,6 @@ function surfaceAt(y: number): Surface {
   return found;
 }
 
-type Clock = { time: string; stage: string };
-
-/** The incident chapter most recently scrolled past, for the clock beside the mark. */
-function clockAt(y: number): Clock | null {
-  let found: Clock | null = null;
-  for (const el of document.querySelectorAll<HTMLElement>("[data-stage]")) {
-    if (el.getBoundingClientRect().top <= y) found = { time: el.dataset.time ?? "", stage: el.dataset.stage ?? "" };
-  }
-  return found;
-}
-
 export function Nav() {
   const { openContact } = useContact();
   const lenisRef = useLenis();
@@ -51,13 +40,9 @@ export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [clock, setClock] = useState<Clock | null>(null);
 
   useEffect(() => {
-    const frame = requestAnimationFrame(() => {
-      setSurface(surfaceAt(36));
-      setClock(clockAt(window.innerHeight * 0.4));
-    });
+    const frame = requestAnimationFrame(() => setSurface(surfaceAt(36)));
     const onResize = () => setSurface(surfaceAt(36));
     window.addEventListener("resize", onResize);
     return () => {
@@ -69,7 +54,6 @@ export function Nav() {
   useMotionValueEvent(scrollY, "change", (y) => {
     const delta = y - (scrollY.getPrevious() ?? 0);
     setSurface(surfaceAt(36));
-    setClock(clockAt(window.innerHeight * 0.4));
     setScrolled(y > 24);
     if (y < 640 || menuOpen) setHidden(false);
     else if (delta > 4) setHidden(true);
@@ -127,25 +111,10 @@ export function Nav() {
           )}
         />
         <nav className="frame relative flex h-[var(--nav-h)] items-center justify-between gap-8">
-          <div className="flex items-center gap-6">
-            <AnchorLink href="/#top" className="flex items-center gap-3" aria-label="TOKEN/401 — back to the beginning">
-              <CamelliaMark className="h-[22px] w-auto" />
-              <Wordmark className="h-[12px] w-auto" />
-            </AnchorLink>
-            {clock ? (
-              <span
-                aria-hidden
-                className={cn(
-                  "type-mono hidden items-center gap-2 border-l pl-6 lg:flex",
-                  onInk ? "border-chalk/20 text-chalk/55" : "border-soot/15 text-stone",
-                )}
-              >
-                <span className={cn("size-1.5 rounded-full", onInk ? "bg-chalk" : "bg-soot")} />
-                <span className={onInk ? "text-chalk" : "text-soot"}>{clock.time}</span>
-                <span>{clock.stage}</span>
-              </span>
-            ) : null}
-          </div>
+          <AnchorLink href="/#top" className="flex items-center gap-3" aria-label="TOKEN/401 — back to the beginning">
+            <CamelliaMark className="h-[22px] w-auto" />
+            <Wordmark className="h-[12px] w-auto" />
+          </AnchorLink>
 
           <div className="flex items-center gap-8">
             <ul className="hidden items-center gap-8 md:flex">

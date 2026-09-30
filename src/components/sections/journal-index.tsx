@@ -1,8 +1,8 @@
 import Link from "next/link";
 
-import { LogLine } from "@/components/site/log-line";
 import { Rise } from "@/components/site/motion-primitives";
 import { Arrow } from "@/components/site/pill";
+import { SectionLabel } from "@/components/site/section-label";
 import { JOURNAL } from "@/content/journal";
 
 export function JournalIndex() {
@@ -10,7 +10,7 @@ export function JournalIndex() {
     <section id="journal" data-surface="bone" aria-labelledby="journal-title" className="section-y scroll-mt-[var(--nav-h)]">
       <div className="frame">
         <Rise>
-          <LogLine time="Research" stage="Notes kept in public, including what failed" actor={`${JOURNAL.length} entries`} />
+          <SectionLabel label="Research" note="Notes kept in public, including what failed" />
         </Rise>
         <Rise as="header" delay={0.06} className="mt-[clamp(40px,5vw,80px)]">
           <h2 id="journal-title" className="type-display-1 text-soot">

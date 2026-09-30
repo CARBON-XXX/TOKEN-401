@@ -1,24 +1,15 @@
+import { Chip, CHIP_H, type GNode } from "@/components/art/figure-kit";
 import { Rise } from "@/components/site/motion-primitives";
 import { SectionHead } from "@/components/site/section-head";
 
-type GNode = { id: string; x: number; y: number };
-
 export function Maps() {
   return (
-    <section
-      id="maps"
-      data-surface="bone"
-      data-time="T+00:01.300"
-      data-stage="Map"
-      aria-labelledby="maps-title"
-      className="pb-[clamp(96px,11vw,168px)] scroll-mt-[var(--nav-h)]"
-    >
+    <section id="maps" data-surface="bone" aria-labelledby="maps-title" className="section-y scroll-mt-[var(--nav-h)]">
       <div className="frame">
         <SectionHead
           id="maps-title"
-          time="T+00:01.300"
-          stage="Map"
-          actor="Investigation · Forensics"
+          label="Awareness"
+          note="Service graph · Threat graph"
           title="It knows what depends on what, and where the attack is heading."
           lede="Two graphs are kept live across the whole cluster, from physical servers to agent tools. One says what an action will cost. The other says where the attacker can go next."
         />
@@ -52,33 +43,7 @@ export function Maps() {
   );
 }
 
-function Chip({ n, tone = "soot" }: { n: GNode; tone?: "soot" | "threat" | "muted" }) {
-  const w = Math.max(84, n.id.length * 7.4 + 24);
-  return (
-    <g>
-      <rect
-        x={n.x - w / 2}
-        y={n.y - 15}
-        width={w}
-        height={30}
-        rx={3}
-        fill={tone === "threat" ? "var(--rubric)" : "var(--bone)"}
-        stroke={tone === "threat" ? "var(--rubric)" : tone === "muted" ? "var(--plaster)" : "var(--soot)"}
-        strokeWidth={1}
-      />
-      <text
-        x={n.x}
-        y={n.y + 4}
-        textAnchor="middle"
-        className="font-mono"
-        fontSize={11.5}
-        fill={tone === "threat" ? "var(--chalk)" : tone === "muted" ? "var(--stone)" : "var(--soot)"}
-      >
-        {n.id}
-      </text>
-    </g>
-  );
-}
+const HALF = CHIP_H / 2;
 
 function ServiceGraph() {
   const N: Record<string, GNode> = {
@@ -108,7 +73,7 @@ function ServiceGraph() {
       aria-label="Service graph: user to API gateway to application to database to storage, and AI agent to tool to API to database."
     >
       {edges.map(([a, b]) => (
-        <line key={a + b} x1={N[a].x} y1={N[a].y + 15} x2={N[b].x} y2={N[b].y - 15} stroke="var(--stone)" strokeWidth={1} />
+        <line key={a + b} x1={N[a].x} y1={N[a].y + HALF} x2={N[b].x} y2={N[b].y - HALF} stroke="var(--stone)" strokeWidth={1} />
       ))}
       {Object.values(N).map((n) => (
         <Chip key={n.id} n={n} />
@@ -145,9 +110,9 @@ function ThreatGraph() {
           <line
             key={n.id}
             x1={n.x}
-            y1={n.y + 15}
+            y1={n.y + HALF}
             x2={m.x}
-            y2={m.y - 15}
+            y2={m.y - HALF}
             stroke={blocked ? "var(--plaster)" : "var(--rubric)"}
             strokeWidth={blocked ? 1 : 1.4}
             strokeDasharray={blocked ? "3 4" : "5 5"}

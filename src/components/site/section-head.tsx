@@ -2,26 +2,25 @@ import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
 
-import { LogLine } from "./log-line";
 import { Rise } from "./motion-primitives";
+import { SectionLabel } from "./section-label";
 
 type SectionHeadProps = {
   id: string;
-  time: string;
-  stage: string;
-  actor: string;
+  label: string;
+  note?: string;
   title: ReactNode;
   lede?: ReactNode;
   surface?: "bone" | "ink";
   className?: string;
 };
 
-export function SectionHead({ id, time, stage, actor, title, lede, surface = "bone", className }: SectionHeadProps) {
+export function SectionHead({ id, label, note, title, lede, surface = "bone", className }: SectionHeadProps) {
   const ink = surface === "ink";
   return (
     <div className={className}>
       <Rise>
-        <LogLine time={time} stage={stage} actor={actor} surface={surface} />
+        <SectionLabel label={label} note={note} surface={surface} />
       </Rise>
       <div className="mt-[clamp(40px,5vw,80px)] grid grid-cols-12 gap-x-6 gap-y-8">
         <Rise as="header" delay={0.06} className="col-span-12 lg:col-span-10">

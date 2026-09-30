@@ -17,18 +17,12 @@ export function Closing() {
       className="section-y relative scroll-mt-[var(--nav-h)] bg-ink text-center text-chalk"
     >
       <div className="frame relative flex flex-col items-center">
-        <div className="relative">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -inset-[120%] [animation:breathe-glow_10s_ease-in-out_infinite] [background:radial-gradient(closest-side,rgb(245_243_238/0.09),transparent)]"
-          />
-          <CamelliaBloom
-            trigger="inView"
-            strokeWidth={1.3}
-            spread={1.8}
-            className="relative aspect-[317/325] w-[clamp(96px,11vw,148px)] text-chalk/62"
-          />
-        </div>
+        <CamelliaBloom
+          trigger="inView"
+          strokeWidth={1.3}
+          spread={1.8}
+          className="relative aspect-[317/325] w-[clamp(96px,11vw,148px)] text-chalk/62"
+        />
         <Rise as="header" className="mt-14 sm:mt-16" delay={0.3}>
           <h2 id="closing-title" className="type-display-1 max-w-[13em]">
             If you run systems worth defending, we would like to talk.

@@ -116,36 +116,28 @@ export function Principles() {
 }
 
 function Bloom({ progress, still }: { progress: MotionValue<number>; still: boolean }) {
-  const glow = useScrub(progress, [0, 1], [0.1, 1]);
   const { width, height } = CAMELLIA_VIEWBOX;
 
   return (
-    <>
-      <motion.div
-        aria-hidden
-        style={still ? undefined : { opacity: glow }}
-        className="pointer-events-none absolute -inset-[40%] [background:radial-gradient(closest-side,rgb(245_243_238/0.1),rgb(245_243_238/0.03)_55%,transparent)]"
-      />
-      <svg
-        viewBox={`0 0 ${width} ${height}`}
-        className="relative size-full text-chalk"
-        fill="none"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden
-      >
-        <g>
-          {STROKES.map((s, i) =>
-            still ? (
-              <path key={i} d={s.d} strokeWidth={s.width} strokeOpacity={0.9} />
-            ) : (
-              <BloomStroke key={i} d={s.d} start={s.start} width={s.width} progress={progress} />
-            ),
-          )}
-        </g>
-      </svg>
-    </>
+    <svg
+      viewBox={`0 0 ${width} ${height}`}
+      className="relative size-full text-chalk"
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <g>
+        {STROKES.map((s, i) =>
+          still ? (
+            <path key={i} d={s.d} strokeWidth={s.width} strokeOpacity={0.9} />
+          ) : (
+            <BloomStroke key={i} d={s.d} start={s.start} width={s.width} progress={progress} />
+          ),
+        )}
+      </g>
+    </svg>
   );
 }
 

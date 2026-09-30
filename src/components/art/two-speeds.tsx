@@ -1,0 +1,274 @@
+"use client";
+
+import { motion, useReducedMotion } from "motion/react";
+import { useId } from "react";
+
+import { Stipple } from "@/components/art/grain";
+import { SLOW } from "@/components/site/motion-primitives";
+
+type Geometry = {
+  w: number;
+  h: number;
+  /** The line of time everything stands on. */
+  base: number;
+  /** First tick of the attack's signal. */
+  x0: number;
+  /** Where Tacit contains it. */
+  xc: number;
+  /** Where the agents have verified it closed. */
+  xe: number;
+  peak: number;
+  lift: number;
+  ticks: number;
+  font: number;
+  stages: { t: number; label: string }[];
+  /** Narrow screens: titles sit above the drawing on leaders, and end labels hang from the edge. */
+  compact?: boolean;
+};
+
+const WIDE: Geometry = {
+  w: 1200,
+  h: 250,
+  base: 200,
+  x0: 12,
+  xc: 118,
+  xe: 1036,
+  peak: 112,
+  lift: 8,
+  ticks: 30,
+  font: 11.5,
+  stages: [
+    { t: 0.3, label: "Investigate" },
+    { t: 0.5, label: "Isolate" },
+    { t: 0.68, label: "Rebuild" },
+    { t: 0.86, label: "Verify" },
+  ],
+};
+
+const NARROW: Geometry = {
+  w: 400,
+  h: 290,
+  base: 250,
+  x0: 4,
+  xc: 70,
+  xe: 344,
+  peak: 100,
+  lift: 43,
+  ticks: 18,
+  font: 12.5,
+  stages: [
+    { t: 0.62, label: "Rebuild" },
+    { t: 0.84, label: "Verify" },
+  ],
+  compact: true,
+};
+
+type Bezier = readonly [number, number, number, number];
+
+const DRAW_AT = 1.3;
+const DRAW_FOR = 3.6;
+const ARC_EASE = [0.45, 0, 0.25, 1] as const;
+
+const round = (v: number) => Math.round(v * 100) / 100;
+
+function burst(g: Geometry) {
+  const peakAt = Math.round(g.ticks * 0.66);
+  const step = (g.xc - 10 - g.x0) / (g.ticks - 1);
+  return Array.from({ length: g.ticks }, (_, i) => {
+    const grain = 0.55 + 0.45 * Math.abs(Math.sin(i * 12.9898 + 4.1));
+    const k =
+      i < peakAt
+        ? (0.06 + 0.7 * Math.pow(i / peakAt, 2.6)) * grain
+        : i === peakAt
+          ? 1
+          : 0.3 * Math.exp(-(i - peakAt) * 0.8) * grain;
+    return { x: round(g.x0 + i * step), h: round(Math.max(3, k * g.peak)), threat: i === peakAt };
+  });
+}
+
+function arc(g: Geometry) {
+  const span = g.xe - g.xc;
+  const p = [
+    [g.xc, g.base],
+    [g.xc + span * 0.05, g.lift],
+    [g.xc + span * 0.52, g.lift],
+    [g.xe, g.base],
+  ] as const;
+  const at = (t: number) => {
+    const u = 1 - t;
+    const x = u * u * u * p[0][0] + 3 * u * u * t * p[1][0] + 3 * u * t * t * p[2][0] + t * t * t * p[3][0];
+    const y = u * u * u * p[0][1] + 3 * u * u * t * p[1][1] + 3 * u * t * t * p[2][1] + t * t * t * p[3][1];
+    const dx = 3 * u * u * (p[1][0] - p[0][0]) + 6 * u * t * (p[2][0] - p[1][0]) + 3 * t * t * (p[3][0] - p[2][0]);
+    const dy = 3 * u * u * (p[1][1] - p[0][1]) + 6 * u * t * (p[2][1] - p[1][1]) + 3 * t * t * (p[3][1] - p[2][1]);
+    const len = Math.hypot(dx, dy) || 1;
+    // The normal on the outside of the arch.
+    return { x, y, nx: dy / len, ny: -dx / len };
+  };
+  const d = `M${p[0].join(" ")} C${p[1].join(" ")} ${p[2].join(" ")} ${p[3].join(" ")}`;
+  return { d, at };
+}
+
+export function TwoSpeeds({ className }: { className?: string }) {
+  return (
+    <div className={className}>
+      <Figure g={WIDE} className="hidden md:block" />
+      <Figure g={NARROW} className="md:hidden" />
+    </div>
+  );
+}
+
+function Figure({ g, className }: { g: Geometry; className?: string }) {
+  const still = !!useReducedMotion();
+  const uid = useId().replace(/:/g, "");
+  const grainId = `arch-stipple-${uid}`;
+  const shadeId = `arch-shade-${uid}`;
+  const ticks = burst(g);
+  const { d, at } = arc(g);
+  const apex = at(0.5);
+  const burstDone = 0.55 + g.ticks * 0.016;
+
+  const fade = (delay: number, duration = 1.1, to = 1) =>
+    still
+      ? { style: { opacity: to } }
+      : {
+          initial: { opacity: 0 },
+          animate: { opacity: to },
+          transition: { duration, delay, ease: SLOW },
+        };
+
+  const draw = (delay: number, duration: number, ease: Bezier = SLOW) =>
+    still
+      ? {}
+      : {
+          initial: { pathLength: 0 },
+          animate: { pathLength: 1 },
+          transition: { duration, delay, ease },
+        };
+
+  const mono = { className: "font-mono", fontSize: g.font } as const;
+  const below = g.base + 30;
+  const redX = ticks.find((t) => t.threat)?.x ?? g.x0;
+  const tacitY = g.compact ? 20 : g.base - g.peak - 44;
+  const agents = g.compact
+    ? { x: round(apex.x), y: 20, anchor: "start" as const }
+    : { x: round(apex.x), y: round(apex.y + (g.base - apex.y) * 0.46), anchor: "middle" as const };
+
+  return (
+    <svg
+      viewBox={`0 0 ${g.w} ${g.h}`}
+      className={`h-auto w-full overflow-visible ${className ?? ""}`}
+      role="img"
+      aria-label="An attack's signal rises and is cut off by Tacit within 12 milliseconds; a long arc follows as the agents investigate, isolate, rebuild and verify, closing the incident at 3 minutes 41 seconds, before the system returns to watching."
+    >
+      <Stipple id={grainId} color="var(--clay)" frequency={0.8} seed={11} />
+      <defs>
+        <linearGradient id={shadeId} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#000" stopOpacity={0} />
+          <stop offset="0.35" stopColor="#000" stopOpacity={0.12} />
+          <stop offset="1" stopColor="#000" stopOpacity={0.5} />
+        </linearGradient>
+      </defs>
+      <motion.path
+        d={`${d} Z`}
+        fill={`url(#${shadeId})`}
+        filter={`url(#${grainId})`}
+        {...fade(DRAW_AT + DRAW_FOR * 0.5, 2.6, 0.78)}
+      />
+      {Array.from({ length: Math.floor((g.w - g.x0) / 16) + 1 }, (_, i) => g.x0 + i * 16).map((x) => (
+        <motion.line key={x} x1={x} y1={g.base} x2={x} y2={g.base + 4} stroke="var(--plaster)" strokeWidth={1} {...fade(0.3 + (x / g.w) * 1.2, 0.6)} />
+      ))}
+      <motion.path d={`M0 ${g.base} H${g.xe}`} stroke="var(--stone)" strokeWidth={1} fill="none" {...draw(0.2, 1.6)} />
+
+      <motion.g {...fade(0.35)}>
+        <text x={g.x0} y={tacitY} className="font-sans" fontSize={g.font + 3} fontWeight={500} fill="var(--soot)">
+          Tacit
+        </text>
+        <text x={g.x0} y={tacitY + 18} {...mono} fill="var(--stone)">
+          {g.compact ? "System 1" : "System 1 · milliseconds"}
+        </text>
+        {g.compact ? (
+          <line x1={redX} y1={tacitY + 30} x2={redX} y2={g.base - g.peak - 8} stroke="var(--stone)" strokeWidth={1} strokeDasharray="1 3" />
+        ) : null}
+      </motion.g>
+
+      {ticks.map((t, i) => (
+        <motion.path
+          key={t.x}
+          d={`M${t.x} ${g.base} V${round(g.base - t.h)}`}
+          stroke={t.threat ? "var(--rubric)" : "var(--soot)"}
+          strokeWidth={t.threat ? 1.6 : 1}
+          fill="none"
+          {...draw(0.55 + i * 0.016, 0.22, [0.2, 0, 0, 1])}
+        />
+      ))}
+      {g.compact ? null : (
+        <motion.text x={redX + 8} y={round(g.base - g.peak + 9)} {...mono} fill="var(--rubric)" {...fade(burstDone - 0.15, 0.6)}>
+          Detected
+        </motion.text>
+      )}
+
+      <motion.circle
+        cx={g.xc}
+        cy={g.base}
+        r={4.5}
+        fill="var(--bone)"
+        stroke="var(--soot)"
+        strokeWidth={1.25}
+        {...fade(burstDone, 0.5)}
+      />
+      <motion.text x={g.x0} y={below} {...mono} fill="var(--soot)" {...fade(burstDone + 0.1)}>
+        Contained in 12 ms
+      </motion.text>
+
+      <motion.path d={d} stroke="var(--soot)" strokeWidth={1.25} fill="none" {...draw(DRAW_AT, DRAW_FOR, ARC_EASE)} />
+
+      <motion.g {...fade(DRAW_AT + DRAW_FOR * 0.45, 1.6)}>
+        <text x={agents.x} y={agents.y} textAnchor={agents.anchor} className="font-sans" fontSize={g.font + 3} fontWeight={500} fill="var(--soot)">
+          The agents
+        </text>
+        <text x={agents.x} y={agents.y + 18} textAnchor={agents.anchor} {...mono} fill="var(--stone)">
+          {g.compact ? "System 2" : "System 2 · minutes"}
+        </text>
+        {g.compact ? (
+          <line x1={agents.x} y1={agents.y + 30} x2={agents.x} y2={round(apex.y - 8)} stroke="var(--stone)" strokeWidth={1} strokeDasharray="1 3" />
+        ) : null}
+      </motion.g>
+
+      {g.stages.map((s) => {
+        const p = at(s.t);
+        const anchor = p.nx < -0.35 ? "end" : p.nx > 0.35 ? "start" : "middle";
+        return (
+          <motion.g key={s.label} {...fade(DRAW_AT + DRAW_FOR * (0.12 + s.t * 0.8), 0.9)}>
+            <circle cx={round(p.x)} cy={round(p.y)} r={2.6} fill="var(--soot)" />
+            <text x={round(p.x + p.nx * 14)} y={round(p.y + p.ny * 14 + 4)} textAnchor={anchor} {...mono} fill="var(--graphite)">
+              {s.label}
+            </text>
+          </motion.g>
+        );
+      })}
+
+      <motion.g {...fade(DRAW_AT + DRAW_FOR - 0.1, 0.8)}>
+        <circle cx={g.xe} cy={g.base} r={4.5} fill="var(--soot)" />
+        <text x={g.compact ? g.w : g.xe} y={below} textAnchor={g.compact ? "end" : "middle"} {...mono} fill="var(--soot)">
+          Verified at 3 min 41 s
+        </text>
+      </motion.g>
+
+      <motion.g {...fade(DRAW_AT + DRAW_FOR + 0.3, 1.4)}>
+        <path
+          d={`M${g.xe + 10} ${g.base} H${g.w}`}
+          stroke="var(--stone)"
+          strokeWidth={1}
+          strokeDasharray="3 7"
+          fill="none"
+          style={still ? undefined : { animation: "dash-flow 2.4s linear infinite" }}
+        />
+        {g.compact ? null : (
+          <text x={g.w} y={g.base - 14} textAnchor="end" {...mono} fill="var(--stone)">
+            Back to watching
+          </text>
+        )}
+      </motion.g>
+    </svg>
+  );
+}
