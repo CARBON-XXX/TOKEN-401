@@ -1,11 +1,11 @@
 "use client";
 
-import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } from "motion/react";
+import { motion, useReducedMotion, useScroll, type MotionValue } from "motion/react";
 import { useRef, useSyncExternalStore } from "react";
 
 import { Motes } from "@/components/art/motes";
 import { CAMELLIA_STROKES, CAMELLIA_VIEWBOX } from "@/components/brand/logo-paths";
-import { Rise } from "@/components/site/motion-primitives";
+import { Rise, useScrub } from "@/components/site/motion-primitives";
 
 const PRINCIPLES = [
   {
@@ -119,7 +119,7 @@ export function Principles() {
 }
 
 function Bloom({ progress, still }: { progress: MotionValue<number>; still: boolean }) {
-  const glow = useTransform(progress, [0, 1], [0.1, 1]);
+  const glow = useScrub(progress, [0, 1], [0.1, 1]);
   const { width, height } = CAMELLIA_VIEWBOX;
 
   return (
@@ -169,7 +169,7 @@ function BloomStroke({
   width: number;
   progress: MotionValue<number>;
 }) {
-  const pathLength = useTransform(progress, [start, start + 0.24], [0, 1]);
-  const opacity = useTransform(progress, [start, start + 0.03], [0, 0.9]);
+  const pathLength = useScrub(progress, [start, start + 0.24], [0, 1]);
+  const opacity = useScrub(progress, [start, start + 0.03], [0, 0.9]);
   return <motion.path d={d} strokeWidth={width} style={{ pathLength, opacity }} />;
 }

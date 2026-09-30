@@ -1,7 +1,9 @@
 "use client";
 
-import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } from "motion/react";
+import { motion, useReducedMotion, useScroll, type MotionValue } from "motion/react";
 import { useRef } from "react";
+
+import { useScrub } from "./motion-primitives";
 
 type Segment = { text: string; italic?: boolean };
 
@@ -51,7 +53,7 @@ function Word({
   still: boolean;
   children: string;
 }) {
-  const opacity = useTransform(progress, [from, Math.min(to, 1)], [0.14, 1]);
+  const opacity = useScrub(progress, [from, Math.min(to, 1)], [0.14, 1]);
   return (
     <>
       <motion.span style={still ? undefined : { opacity }} className={italic ? "italic" : undefined}>

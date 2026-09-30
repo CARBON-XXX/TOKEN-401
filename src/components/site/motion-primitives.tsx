@@ -1,9 +1,35 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { motion, useReducedMotion, useTransform, type MotionValue } from "motion/react";
 import type { ReactNode } from "react";
 
 export const SLOW = [0.16, 1, 0.3, 1] as const;
+
+function interpolate(v: number, input: readonly number[], output: readonly number[]) {
+  if (v <= input[0]) return output[0];
+  for (let i = 1; i < input.length; i++) {
+    if (v <= input[i]) {
+      const span = input[i] - input[i - 1];
+      const k = span > 0 ? (v - input[i - 1]) / span : 1;
+      return output[i - 1] + (output[i] - output[i - 1]) * k;
+    }
+  }
+  return output[output.length - 1];
+}
+
+/**
+ * Maps scroll progress onto a value, like `useTransform` with ranges. Computed on the main thread on
+ * purpose: Motion would otherwise hand opacity and filter to a native ScrollTimeline, whose ranges
+ * disagree with `useScroll` offsets on tall sticky sections.
+ */
+export function useScrub(progress: MotionValue<number>, input: readonly number[], output: readonly number[]) {
+  return useTransform(progress, (v) => interpolate(v, input, output));
+}
+
+/** As `useScrub`, for a CSS blur in pixels. */
+export function useScrubBlur(progress: MotionValue<number>, input: readonly number[], output: readonly number[]) {
+  return useTransform(progress, (v) => `blur(${interpolate(v, input, output)}px)`);
+}
 
 type RiseProps = {
   children: ReactNode;
