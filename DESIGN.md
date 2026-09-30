@@ -15,7 +15,7 @@ from the texture of the materials — paper, ink, stipple, hairline — never fr
 | **Humanist**   | A person is always in the picture: a serif voice for judgement, “a person’s yes” drawn into the product. |
 | **Editorial**  | Asymmetric grid, section rules, standfirsts in the serif, figures with captions — a magazine, not an app. |
 | **Intellectual** | Research-driven and precise: diagrams that explain one idea each, real labels, nothing decorative.    |
-| **Warm**       | Off-white paper, charcoal type, earth accents. No cold greys, no pure black.                            |
+| **Warm**       | Off-white paper, charcoal type, earth accents; one cool ink kept for the machine. No pure black.        |
 | **Restrained** | Generous negative space. One idea per section, one figure per idea.                                     |
 | **Organic**    | Hand-feeling forms against exact lines: the stippled arch, the camellia, curves that breathe.           |
 
@@ -35,28 +35,38 @@ on the name, the closing letter.
 - **Hairline.** Figures are drawn in fine lines — 0.75–1.25 px — like a pen, never as boxes and
   arrows. Hand-feeling outlines come from `organic.ts` (pebbles, seed heads), deterministic so
   server and client draw the same shape.
+- **Instrument markings.** The technology shows in precision, not in effects: scales with minor
+  and major ticks, a broken axis where two time scales meet, a bezel with one mark per workload,
+  leader lines to callouts, step numbers. Readouts are a value over a state — `12 ms` over
+  `CONTAINED` — as an instrument would print them.
 - **No light.** No glow, bloom, lens, blur or soft-light highlights. Nothing emits light.
 
 ## 3. Colour
 
-Paper, charcoal, the warm greys between, and three earth accents that each mean one thing.
+Paper and charcoal, near-neutral greys between, and a page printed in **two temperatures**, the
+way the headline is set in two voices. Indigo is the machine — Tacit, the reflex, anything
+measured. Clay is judgement — the agents’ long deliberation, the incident they share, a
+person’s yes. Cinnabar is the threat and nothing else. Think of a two-ink print: every accent is a
+spot colour with one meaning, never decoration.
 
-| Token      | Hex       | Role                                                        |
-| ---------- | --------- | ----------------------------------------------------------- |
-| `bone`     | `#EEE9DF` | Paper: the page ground                                      |
-| `chalk`    | `#F6F2EA` | Type on ink                                                 |
-| `plaster`  | `#D9D1C3` | Rules and cell borders on paper                             |
-| `stone`    | `#8B8378` | Metadata, figure labels                                     |
-| `graphite` | `#4B4640` | Secondary text                                              |
-| `soot`     | `#201E1B` | Charcoal: primary type, strong lines, the solid button      |
-| `ink`      | `#1B1916` | Ink fields: safeguards, principles, closing, footer         |
-| `rubric`   | `#9B3B2B` | Earth red. The threat, and only the threat, on paper        |
-| `alert`    | `#CF6A4F` | The same meaning on ink, and the person’s node in safeguards |
-| `clay`     | `#A8603F` | Organic forms (the hero arch) and the shared incident state |
-| `ochre`    | `#B48A47` | A quiet second earth, for small organic accents             |
+| Token      | Hex       | Role                                                             |
+| ---------- | --------- | ---------------------------------------------------------------- |
+| `bone`     | `#EDEAE3` | Paper: the page ground                                           |
+| `chalk`    | `#F4F2ED` | Type on ink                                                      |
+| `plaster`  | `#D6D2C9` | Rules, cell borders, minor ticks                                 |
+| `stone`    | `#77726B` | Metadata, figure labels, major ticks                             |
+| `graphite` | `#4A4845` | Secondary text                                                   |
+| `soot`     | `#1C1C1B` | Charcoal: primary type, strong lines, the solid button           |
+| `ink`      | `#171819` | Ink fields: safeguards, principles, closing, footer              |
+| `indigo`   | `#2F4B72` | The machine on paper: Tacit’s signal and core, “contained”, text selection |
+| `mist`     | `#9DB0C5` | The machine on ink: the Tacit risk check                         |
+| `clay`     | `#94533A` | Judgement on paper: the agents’ arch, the shared incident, “verified” |
+| `alert`    | `#D8795C` | Judgement on ink: the person’s node in safeguards                |
+| `rubric`   | `#B23B22` | Cinnabar. The threat, and only the threat                        |
 
-On ink the steps are made from `chalk` alone: 100% for type, 60–68% for secondary type, 40–50%
-for metadata, 12–20% for rules. No neon, no glossy gradients, no “cyber” colour.
+On ink the steps are made from `chalk` alone: 100% for type, 55–68% for secondary type, 40–50%
+for metadata, 12–20% for rules. No neon, no glossy gradients, no “cyber” colour; indigo stays a
+printing ink, never a screen blue.
 
 ## 4. Type
 
@@ -70,7 +80,8 @@ A refined serif against a grotesk, and a mono only for what a machine would prin
 | Text    | Instrument Sans 400/450 | Body and interface.                                                    |
 | Prose   | Newsreader 400          | Long reading: the essay and journal articles (`type-prose`).           |
 | Caption | Newsreader italic       | Figure captions, “System 1”, the camellia’s name.                      |
-| Machine | Geist Mono 400          | Figure labels and identifiers only.                                    |
+| Machine | Geist Mono 400          | Readouts, identifiers and dates (`type-mono`).                         |
+| Marking | Geist Mono 400, caps    | Instrument labels: states, stages, kinds (`type-tech`). Units stay lower case: `12 ms`. |
 
 | Step      | Size (fluid)                        | Line height | Tracking |
 | --------- | ----------------------------------- | ----------- | -------- |
@@ -82,6 +93,10 @@ A refined serif against a grotesk, and a mono only for what a machine would prin
 | Body      | `1rem`                              | 1.6         | 0        |
 | Prose     | `1.1875rem`, serif                  | 1.62        | 0        |
 | Mono      | `0.75rem`, tabular figures          | 1.5         | +0.01em  |
+| Marking   | `0.6875rem`, caps, tabular figures  | 1.3         | +0.08em  |
+
+Sentences are never set in mono: a check’s question (“is it allowed?”) is text, in the grotesk.
+Mono is for what the machine prints — a value, a state, a step number.
 
 The voice rule: the serif italic appears only where the sentence turns from what the machine does
 to the judgement it exercises — “Judgment that asks first.”, “asks first.”, “when to stop.”,
@@ -102,12 +117,13 @@ to the judgement it exercises — “Judgment that asks first.”, “asks first
 
 | Figure             | Where      | What it says                                                                 |
 | ------------------ | ---------- | ---------------------------------------------------------------------------- |
-| Fig. 1 Two speeds  | Hero       | A sharp burst cut off in 12 ms, then a long stippled arch as the agents work. |
-| Fig. 2 Seed head   | Product    | Tacit: one fine line for every workload, one in earth red where it acted.    |
+| Fig. 1 Two speeds  | Hero       | An indigo burst cut off in 12 ms, then a long clay arch as the agents work, on one axis broken between milliseconds and minutes. |
+| Fig. 2 Seed head   | Product    | Tacit: one fine line for every workload inside a bezel with one mark per workload; one in cinnabar, called out, where it acted. |
 | Fig. 3 Gathering   | Product    | The agents: seven engraved stones around the one incident they share.        |
-| Fig. 4 Seven checks | Safeguards | One line of checks, with a branch through a person’s yes.                   |
+| Fig. 4 Seven checks | Safeguards | Seven numbered checks on one line, with a branch through a person’s yes.    |
 
-Everything in them is illustrative, and says so where it could be mistaken for data.
+Everything in them is illustrative, and says so where it could be mistaken for data. Where a
+figure has a scale, the scale is honest about itself: a broken axis rather than “not to scale”.
 
 ## 7. Motion
 

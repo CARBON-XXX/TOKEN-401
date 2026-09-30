@@ -52,6 +52,7 @@ provider and add its API key as an environment variable.
 
 The site uses one photograph: the camellia beside the essay on the name
 (`public/images/camellia-plaster.jpg`). The rule in `DESIGN.md` is at most one per page, set small.
-The product is shown as SVG figures drawn in the page's own lines, type and earth colours.
+The product is shown as SVG figures drawn in the page's own lines and type, in two inks: indigo for
+the machine and clay for judgement, with cinnabar reserved for the threat.
 Everything in them is illustrative, not live data. The paper texture is generated in CSS, so there
 are no texture images to ship.
