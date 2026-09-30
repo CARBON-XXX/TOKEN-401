@@ -9,18 +9,18 @@ import { Rise, useScrub } from "@/components/site/motion-primitives";
 const PRINCIPLES = [
   {
     numeral: "I",
-    title: "We would rather be right than fast.",
-    body: "We judge our models by the quality of their judgement, not the speed of their reply. When a question deserves time, they are allowed to take it.",
+    title: "Fast where it must be, careful everywhere else.",
+    body: "Tacit acts in milliseconds because attacks do. Everything that can wait for thought is given it: investigation, remediation and recovery are reasoned, not reflexive.",
   },
   {
     numeral: "II",
     title: "We ask before we act.",
-    body: "Anything consequential — a payment, a deletion, a message sent in your name — waits for a person to say yes. Permission is part of the work, not friction in the way of it.",
+    body: "Every action an agent proposes is validated, checked for impact and conflict, and scored for risk before it runs. The most consequential wait for a person to say yes.",
   },
   {
     numeral: "III",
     title: "We show our working.",
-    body: "A model’s reasoning should be as legible as a well-kept notebook. We publish our methods and our mistakes, and we build tools that let others check them.",
+    body: "Every incident ends in a full reconstruction — entry, escalation, movement, every action taken and the final state — so a person can check each decision. We publish our methods and our failures too.",
   },
 ] as const;
 
@@ -69,11 +69,11 @@ export function Principles() {
       <div className="frame relative">
         <div className="grid grid-cols-12 gap-x-6 gap-y-10">
           <Rise className="col-span-12 lg:col-span-3">
-            <p className="type-label text-chalk/62">Principles</p>
+            <p className="type-label pt-2 text-chalk/55">Principles</p>
           </Rise>
           <Rise as="header" className="col-span-12 lg:col-span-9" delay={0.1}>
             <h2 id="principles-title" className="type-display-1 max-w-[10em]">
-              Three things we will not trade for speed.
+              Three things we will not trade away.
             </h2>
           </Rise>
         </div>
@@ -96,7 +96,7 @@ export function Principles() {
                 <Rise className="py-12 sm:py-16">
                   <span
                     aria-hidden
-                    className="block font-display text-[clamp(4rem,7vw,7rem)] leading-[0.7] font-light text-chalk/28"
+                    className="block font-serif text-[clamp(4rem,7vw,7rem)] leading-[0.7] font-light text-chalk/28"
                   >
                     {p.numeral}
                   </span>

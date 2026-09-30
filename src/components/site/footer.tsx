@@ -23,7 +23,7 @@ export function Footer() {
       <div className="frame">
         <div className="grid grid-cols-12 gap-x-6 gap-y-14 border-t border-chalk/14 pt-16 sm:pt-20">
           <p className="type-lede col-span-12 max-w-[16em] text-chalk lg:col-span-5">
-            An AI research company, made slowly and on purpose.
+            Autonomous defense for the systems the world now runs on.
           </p>
 
           <FooterColumn title="Index" className="col-span-6 sm:col-span-4 lg:col-span-2 lg:col-start-7">
@@ -43,7 +43,7 @@ export function Footer() {
               </button>
             </li>
             <li>
-              <button type="button" onClick={() => openContact("Research")} className={linkClass}>
+              <button type="button" onClick={() => openContact("Press")} className={linkClass}>
                 Press
               </button>
             </li>

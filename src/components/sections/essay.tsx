@@ -7,7 +7,7 @@ import plaster from "../../../public/images/camellia-plaster.jpg";
 
 export function Essay() {
   return (
-    <section data-surface="bone" aria-labelledby="essay-title" className="pb-[clamp(112px,14vw,208px)]">
+    <section data-surface="bone" aria-labelledby="essay-title" className="pb-[clamp(96px,11vw,168px)]">
       <div className="frame">
         <div className="grid grid-cols-12 gap-x-6 gap-y-14 border-t border-plaster pt-[clamp(72px,9vw,128px)]">
           <Rise
@@ -41,7 +41,7 @@ export function Essay() {
               <p className="type-label mt-8 text-stone">By the founders · Four minutes</p>
             </Rise>
 
-            <div className="type-body mt-14 max-w-[34em] space-y-6 text-soot">
+            <div className="type-prose mt-14 max-w-[34em] space-y-6 text-soot">
               <Rise as="p">
                 A token is the smallest piece of language a model can hold — a syllable, a word, a
                 comma. Everything an AI says is built from them, one after another, each a small
@@ -53,15 +53,15 @@ export function Essay() {
               </Rise>
               <Rise as="p">
                 We put the two together because we believe the next era of intelligence will be
-                defined less by how much a machine can do than by how well it knows when to stop. A
-                model that can write, reason and act in the world should also be able to pause, say
-                what it doesn’t know, and ask.
+                defined less by how much a machine can do than by how well it knows when to stop.
+                Nowhere is that truer than in defense, where a system that acts at machine speed
+                must also know which actions should wait for a yes.
               </Rise>
               <Rise as="p">
                 The camellia came later. It flowers in the depths of winter, when almost nothing
                 else will, and it is the plant that gave the world tea — and with it, a ritual built
-                entirely around patience. It seemed right for a company that intends to take its
-                time.
+                entirely around patience. It seemed right for a company that means to be fast only
+                where it must.
               </Rise>
             </div>
 

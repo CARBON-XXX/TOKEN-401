@@ -7,10 +7,11 @@
 /* Values below are specified in DESIGN.md. Change them there first. */
 
 @theme inline {
-  --font-display: var(--font-newsreader);
+  --font-display: var(--font-instrument);
   --font-serif: var(--font-newsreader);
-  --font-sans: var(--font-jost);
-  --font-heading: var(--font-newsreader);
+  --font-sans: var(--font-instrument);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-instrument);
 
   --color-ink: var(--ink);
   --color-soot: var(--soot);
@@ -19,6 +20,8 @@
   --color-plaster: var(--plaster);
   --color-bone: var(--bone);
   --color-chalk: var(--chalk);
+  --color-rubric: var(--rubric);
+  --color-alert: var(--alert);
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -57,6 +60,8 @@
   --plaster: #d5d0c5;
   --bone: #ece8e0;
   --chalk: #f5f3ee;
+  --rubric: #a3303a;
+  --alert: #d4404c;
 
   --background: var(--bone);
   --foreground: var(--soot);
@@ -115,7 +120,8 @@
   h2,
   h3 {
     font-family: var(--font-display);
-    font-weight: 300;
+    font-weight: 500;
+    font-variant-numeric: lining-nums;
     text-wrap: balance;
   }
 
@@ -144,73 +150,69 @@ html.lenis body {
 }
 
 @utility section-y {
-  padding-block: clamp(112px, 14vw, 208px);
+  padding-block: clamp(96px, 11vw, 168px);
 }
 
 @utility type-hero {
   font-family: var(--font-display);
-  font-weight: 400;
-  font-size: clamp(3.5rem, 8vw, 8.25rem);
-  line-height: 0.96;
-  letter-spacing: -0.03em;
+  font-weight: 500;
+  font-size: clamp(2.75rem, 6.6vw, 7rem);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
 }
 
-/* Blind-pressed numerals on the cover sheet; the sheet draws them, the text itself stays clear. */
-@utility type-blind {
-  font-family: var(--font-display);
+/* The second voice of a headline: judgement, set in the serif against the machine's grotesque. */
+@utility type-voice {
+  font-family: var(--font-serif);
+  font-style: italic;
   font-weight: 300;
-  font-size: min(80vw, 46svh);
-  line-height: 0.8;
-  letter-spacing: -0.04em;
-  font-variant-numeric: lining-nums;
-  @media (width >= 40rem) {
-    font-size: min(50svh, 29vw);
-  }
-}
-
-@utility type-cover {
-  font-family: var(--font-display);
-  font-weight: 300;
-  font-size: clamp(2.375rem, 4.6vw, 4.75rem);
-  line-height: 1.06;
-  letter-spacing: -0.022em;
-}
-
-@utility type-marque {
-  font-family: var(--font-display);
-  font-weight: 300;
-  font-size: clamp(3.75rem, 13vw, 12rem);
-  line-height: 0.86;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.035em;
 }
 
 @utility type-display-1 {
   font-family: var(--font-display);
-  font-weight: 300;
-  font-size: clamp(2.75rem, 6.2vw, 6.5rem);
-  line-height: 1;
-  letter-spacing: -0.03em;
+  font-weight: 500;
+  font-size: clamp(2.375rem, 4.9vw, 4.625rem);
+  line-height: 1.01;
+  letter-spacing: -0.04em;
 }
 
 @utility type-display-2 {
   font-family: var(--font-display);
-  font-weight: 300;
-  font-size: clamp(2rem, 3.6vw, 3.625rem);
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+  font-weight: 500;
+  font-size: clamp(1.875rem, 3vw, 2.75rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+
+@utility type-title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.25rem, 1.6vw, 1.5rem);
+  line-height: 1.2;
+  letter-spacing: -0.018em;
 }
 
 @utility type-lede {
-  font-family: var(--font-serif);
-  font-size: clamp(1.25rem, 1.8vw, 1.5625rem);
+  font-family: var(--font-sans);
+  font-size: clamp(1.125rem, 1.45vw, 1.3125rem);
   line-height: 1.45;
-  letter-spacing: -0.005em;
+  letter-spacing: -0.012em;
 }
 
 @utility type-body {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  letter-spacing: -0.004em;
+}
+
+/* Long reading only: essays and journal articles. */
+@utility type-prose {
   font-family: var(--font-serif);
-  font-size: 1.125rem;
-  line-height: 1.65;
+  font-size: 1.1875rem;
+  line-height: 1.62;
+  font-variant-numeric: oldstyle-nums;
 }
 
 @utility type-caption {
@@ -223,17 +225,41 @@ html.lenis body {
 @utility type-label {
   font-family: var(--font-sans);
   font-weight: 500;
-  font-size: 0.75rem;
-  line-height: 1;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+  font-size: 0.8125rem;
+  line-height: 1.2;
+  letter-spacing: 0;
 }
 
 @utility type-ui {
   font-family: var(--font-sans);
-  font-weight: 400;
+  font-weight: 450;
   font-size: 0.9375rem;
+  letter-spacing: -0.005em;
+}
+
+/* Only for things a machine would print: timestamps, identifiers, action names. */
+@utility type-mono {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 0.75rem;
+  line-height: 1.5;
   letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes traverse {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(720%);
+  }
+}
+
+@keyframes dash-flow {
+  to {
+    stroke-dashoffset: -20;
+  }
 }
 
 @keyframes breathe {

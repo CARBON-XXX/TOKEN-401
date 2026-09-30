@@ -1,4 +1,4 @@
-export type JournalKind = "Essay" | "Research" | "Product";
+export type JournalKind = "Essay" | "Research" | "Engineering";
 
 export type JournalEntry = {
   slug: string;
@@ -18,64 +18,64 @@ export type JournalEntry = {
 
 export const JOURNAL: JournalEntry[] = [
   {
-    slug: "calibrated-refusal",
+    slug: "two-speeds-of-defense",
     kind: "Research",
-    title: "Calibrated refusal",
-    dek: "Teaching a model the shape of its own uncertainty.",
-    date: "2 September 2026",
-    published: "2026-09-02",
+    title: "Two speeds of defense",
+    dek: "Why an autonomous defender needs a reflex and a mind, and how the two share one incident.",
+    date: "16 September 2026",
+    published: "2026-09-16",
     readingTime: "Six minutes",
     byline: "From the research team",
     opening: [
-      "Most discussion of refusals treats them as a switch: the model either answers or it doesn’t. In practice the interesting cases sit in between — questions a model can partly answer, answers it can partly stand behind. We have spent the past year studying that middle ground.",
-      "Our starting point is calibration, an old idea from weather forecasting. A forecaster who says there is a seventy per cent chance of rain is not judged on any single day, but on whether it rains on roughly seven of every ten days they say so. The same standard can be applied to a model.",
+      "Attacks do not wait for reasoning. A stolen token can be used within seconds of being taken, and lateral movement across a cluster is measured in minutes. Yet the questions that actually end an incident — where did this start, what else was touched, what is safe to restore — need careful thought, and careful thought takes time.",
+      "We stopped trying to make one system do both. Our defense is built in two layers, borrowing the old distinction between fast and slow thinking. The first, Tacit, is a model of our own that runs continuously beside every workload. The second is a team of agents that reasons, plans and carries an incident through to its end.",
     ],
-    pullQuote: "A model that says it is ninety per cent sure should be right about nine times in ten.",
+    pullQuote: "The reflex buys time. The reasoning decides what to do with it.",
     closing: [
-      "Large models are often poorly calibrated in exactly the places that matter: they are most overconfident on questions that look familiar but are not. We trained Camellia to produce, alongside each answer, a private estimate of how likely it is to be correct, and then rewarded that estimate for being honest rather than for being high.",
-      "The effect on behaviour was larger than we expected. When the estimate is low, the model now tends to do one of three things: say plainly what it is unsure of, ask the question that would resolve the doubt, or offer the part of the answer it can support and stop there. Outright refusals became rarer, not more common — because the model had better options than silence.",
-      "There is a great deal we have not solved. Calibration degrades on subjects far from the training data, and a model can be well calibrated on average while being badly wrong about one person’s particular question. We are publishing our methods, our evaluation sets and the failures we found, in the hope that others will find more.",
-      "The goal is not a model that refuses less, or one that refuses more. It is a model whose refusals mean something.",
+      "Tacit works in a tight loop: state, decision, action, new state, decision. It scores the risk of processes, credentials, service accounts and agent tool calls as they happen, and when the risk is high enough it acts at once — freezing a process, revoking a token, limiting a connection. Just as importantly, it decides what it cannot settle alone, and escalates.",
+      "The agents take that escalation and own it. An Investigation agent gathers evidence and tests competing hypotheses; a Threat Hunter looks for the same pattern elsewhere; a Defender plans containment with the blast radius in view; Recovery rebuilds from a trusted state; Verification refuses to close anything that has not been shown to be closed.",
+      "The hardest part has been neither layer. It has been the seam between them: making sure Tacit keeps defending while the agents think, that the two never act on the same resource at once, and that every conclusion the agents reach is written back to a shared incident state Tacit can read in real time.",
+      "We will publish more on that seam, including the ways it has failed in our own testing.",
     ],
   },
   {
-    slug: "permission-as-a-feature",
-    kind: "Product",
-    title: "Permission as a feature",
-    dek: "Notes on designing agents that ask before they act.",
+    slug: "an-incident-that-outlives-its-model",
+    kind: "Engineering",
+    title: "An incident that outlives its model",
+    dek: "Cognitive checkpoints, and why none of our agents belongs to a single provider.",
+    date: "2 September 2026",
+    published: "2026-09-02",
+    readingTime: "Five minutes",
+    byline: "From the platform team",
+    opening: [
+      "An attack that lasts four hours will, sooner or later, meet a model API that is slow, rate-limited or down. If the agent investigating it is bound to that provider, the investigation stops at the worst possible moment — or starts again from nothing on another model that knows none of what was learned.",
+      "So we separated the agent from the model. Every incident keeps a single cognitive state: the facts confirmed so far, the hypotheses still open and how confident we are in each, the actions taken and what they did, the current plan, and the parts of the service and threat graphs it touches.",
+    ],
+    pullQuote: "Provider A, checkpoint, Provider B, continue — without starting over.",
+    closing: [
+      "Agents reach models through a Cognitive Gateway rather than directly. The gateway watches the health, latency, error rate and remaining quota of every provider, cloud and local, and routes each task to the model best suited to it. When a provider degrades, a circuit breaker opens, and the next request goes elsewhere carrying the checkpoint with it.",
+      "For the most critical steps it sends the same request down two paths and takes the first sound answer. That costs more, so it is used sparingly: the scheduler decides how much intelligence an incident deserves, from Tacit alone for routine noise to the strongest available models for a cluster-wide event.",
+      "And when every external path is gone, the defense does not go with it. Tacit, the agent runtime, the incident state, local tools and both graphs keep running on the cluster. Containment continues, evidence is preserved, and plans already approved keep executing. When the connection returns, the deeper investigation resumes where it paused.",
+    ],
+  },
+  {
+    slug: "every-action-is-a-proposal",
+    kind: "Essay",
+    title: "Every action is a proposal",
+    dek: "On building an autonomous defender that still asks before it acts.",
     date: "18 August 2026",
     published: "2026-08-18",
-    readingTime: "Five minutes",
-    byline: "From the Threshold team",
-    opening: [
-      "When software only answered questions, a mistake cost you a bad answer. Now that it books, buys, sends and deletes, a mistake costs you whatever it touched. Threshold began as an internal rule — no agent of ours acts on the world without a person’s yes — and became a product when we saw how many teams were writing the same rule by hand.",
-      "The difficulty is not asking. It is asking well. An agent that interrupts for everything is soon ignored, and a permission that is always granted is no permission at all.",
-    ],
-    pullQuote: "Most actions are small and reversible, and a few are neither.",
-    closing: [
-      "Threshold sorts every action an agent proposes by two questions: can it be undone, and does it speak for you? Reading a calendar is neither. Moving a meeting can be undone, but it speaks for you. Paying an invoice is both. Only that last kind waits for a person, and when it does, the request is written in plain language — what will happen, why the agent thinks it should, and what cannot be taken back.",
-      "Every decision, whether yes, no or not yet, is signed and kept in a record that cannot be quietly edited. That record is for you, not for us. Months later, anyone with access can see who allowed what, and on what information.",
-      "We think of a permission request the way a good correspondent thinks of the last line of a letter: the place where care becomes visible. It should be rare, clear and impossible to misread. Most of our design work on Threshold has been taking words out of it.",
-    ],
-  },
-  {
-    slug: "on-restraint",
-    kind: "Essay",
-    title: "On restraint",
-    dek: "Why the best answer is sometimes a question.",
-    date: "14 April 2026",
-    published: "2026-04-14",
     readingTime: "Four minutes",
     byline: "By the founders",
     opening: [
-      "Ask a good doctor a hard question and watch what happens before the answer. There is a pause — sometimes only a breath — in which they decide what they actually know, what they suspect, and what they would need to find out. That pause is not a delay in the work. It is the work.",
-      "Language models are not built to pause. They are built to continue. Given any run of words they produce the most plausible next one, and then the next, with the same even confidence whether the subject is the boiling point of water or the dose of a medicine they have seen mentioned twice. The fluency is real. What it seems to promise often is not.",
+      "An autonomous defender is only useful if it can act: isolate a node, revoke a credential, disable an agent’s tool. It is only safe if it cannot act carelessly. A containment that takes down the payment service has done the attacker’s work for them.",
+      "Our name comes from HTTP 401, the answer a server gives when it will not go on until it knows who is asking. We held to that idea long before we built a defense system, and it turned out to be exactly the idea a defense system needs.",
     ],
-    pullQuote: "Fluency is not the same as knowledge, but it is very easy to mistake one for the other.",
+    pullQuote: "Nothing the agents decide runs directly. It runs once it has been shown to be safe.",
     closing: [
-      "We think much of the work ahead in AI is teaching systems the difference — and, just as importantly, teaching them to show it. A model that is unsure should sound unsure. A model that is missing something should ask for it. A model that is about to do something it cannot take back should stop and check.",
-      "None of this is glamorous. Restraint rarely demonstrates well; an assistant that says “I don’t know, but here is how we could find out” will lose most side-by-side comparisons to one that simply answers. We have decided to accept that trade. What we care about is not how often a model impresses someone in the first minute, but whether it is still trusted in the hundredth hour.",
-      "So we build for the pause. Our models are trained to separate what they know from what they are guessing, to ask when a request could mean two different things, and to decline — plainly, and without a lecture — when a question sits outside what they can responsibly answer. It is slower. We think it is also the only way this goes well.",
+      "Every action an agent proposes passes through the same sequence: validation, a permission check, an impact analysis against the live service graph, a check for conflicts with other agents’ work, and finally a risk check by Tacit. Only then is it executed — with a distributed action ID, a lock on the resource it touches, and a way back.",
+      "The strictness scales with the stakes. Rate-limiting a noisy client is low risk and passes quickly. Revoking a token is medium. Isolating a node is high, and must first show which services depend on it and where their traffic will go. Cluster-wide changes, shutting a database or rotating credentials at scale are critical, and are held to the strictest standard of all — including, where an organisation chooses, a person’s approval.",
+      "Then every action enters a loop of its own: act, observe, verify, replan. If the threat has not stopped, if persistence remains, or if the remedy has created a new problem, the plan changes. An incident is closed when it is shown to be closed, not when the last command returns.",
     ],
   },
 ];

@@ -38,7 +38,7 @@ export default async function JournalEntryPage({ params }: PageProps<"/journal/[
           id="top"
           data-surface="bone"
           aria-labelledby="entry-title"
-          className="pt-[calc(var(--nav-h)+clamp(64px,9vw,144px))] pb-[clamp(112px,14vw,208px)]"
+          className="pt-[calc(var(--nav-h)+clamp(64px,9vw,144px))] pb-[clamp(96px,11vw,168px)]"
         >
           <Rise as="header" className="frame flex flex-col items-center text-center">
             <p className="type-label text-stone">
@@ -61,7 +61,7 @@ export default async function JournalEntryPage({ params }: PageProps<"/journal/[
           </Rise>
 
           <div className="frame mt-[clamp(72px,9vw,128px)]">
-            <div className="type-body mx-auto max-w-[34em] space-y-6 border-t border-plaster pt-14 text-soot">
+            <div className="type-prose mx-auto max-w-[34em] space-y-6 border-t border-plaster pt-14 text-soot">
               {entry.opening.map((para, i) => (
                 <Rise as="p" key={i}>
                   {para}
@@ -75,7 +75,7 @@ export default async function JournalEntryPage({ params }: PageProps<"/journal/[
               </blockquote>
             </Rise>
 
-            <div className="type-body mx-auto max-w-[34em] space-y-6 text-soot">
+            <div className="type-prose mx-auto max-w-[34em] space-y-6 text-soot">
               {entry.closing.map((para, i) => (
                 <Rise as="p" key={i}>
                   {para}
@@ -94,7 +94,7 @@ export default async function JournalEntryPage({ params }: PageProps<"/journal/[
           </div>
         </article>
 
-        <section data-surface="bone" aria-label="Next in the journal" className="pb-[clamp(112px,14vw,208px)]">
+        <section data-surface="bone" aria-label="Next in the journal" className="pb-[clamp(96px,11vw,168px)]">
           <div className="frame">
             <Link
               href={`/journal/${next.slug}`}

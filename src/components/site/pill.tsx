@@ -3,47 +3,67 @@ import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
 
 type Surface = "bone" | "ink";
+type Tone = "solid" | "outline";
 
 export function Arrow({ className }: { className?: string }) {
   return (
     <svg
-      viewBox="0 0 24 10"
-      className={cn(
-        "h-2.5 w-6 shrink-0",
-        className,
-      )}
+      viewBox="0 0 16 16"
+      className={cn("size-3.5 shrink-0", className)}
       fill="none"
       stroke="currentColor"
-      strokeWidth="1"
+      strokeWidth="1.4"
       aria-hidden
     >
-      <path d="M0 5h23M18.5 0.5 23 5l-4.5 4.5" />
+      <path d="M2 8h11.5M9 3.5 13.5 8 9 12.5" />
     </svg>
   );
 }
 
-const solid: Record<Surface, string> = {
-  bone: "bg-soot text-chalk hover:bg-graphite",
-  ink: "bg-chalk text-ink hover:bg-plaster",
+const tones: Record<Surface, Record<Tone, string>> = {
+  bone: {
+    solid: "bg-soot text-chalk hover:bg-graphite",
+    outline: "border border-soot/20 text-soot hover:border-soot/45",
+  },
+  ink: {
+    solid: "bg-chalk text-ink hover:bg-plaster",
+    outline: "border border-chalk/25 text-chalk hover:border-chalk/55",
+  },
 };
 
-type PillButtonProps = ComponentProps<"button"> & { surface?: Surface };
+const base = "type-ui inline-flex h-11 items-center gap-2.5 rounded-[4px] px-5 font-medium transition-colors duration-300";
 
-/** The one filled button in the system. Used once per view at most. */
-export function PillButton({ surface = "bone", className, children, type = "button", ...props }: PillButtonProps) {
+export function buttonClass({ surface = "bone", tone = "solid", className }: { surface?: Surface; tone?: Tone; className?: string }) {
+  return cn(base, tones[surface][tone], className);
+}
+
+type PillButtonProps = ComponentProps<"button"> & { surface?: Surface; tone?: Tone; arrow?: boolean };
+
+export function PillButton({
+  surface = "bone",
+  tone = "solid",
+  arrow = true,
+  className,
+  children,
+  type = "button",
+  ...props
+}: PillButtonProps) {
   return (
-    <button
-      type={type}
-      className={cn(
-        "group type-ui inline-flex h-12 items-center gap-4 rounded-full px-7 transition-colors duration-500",
-        solid[surface],
-        className,
-      )}
-      {...props}
-    >
+    <button type={type} className={buttonClass({ surface, tone, className })} {...props}>
       {children}
-      <Arrow />
+      {arrow ? <Arrow /> : null}
     </button>
+  );
+}
+
+type ButtonLinkProps = ComponentProps<"a"> & { surface?: Surface; tone?: Tone; arrow?: boolean };
+
+export function ButtonLink({ surface = "bone", tone = "solid", arrow = true, className, children, ...props }: ButtonLinkProps) {
+  return (
+    <a className={buttonClass({ surface, tone, className })} {...props}>
+      {children}
+      {arrow ? <Arrow /> : null}
+    </a>
   );
 }
 
@@ -52,11 +72,8 @@ type TextLinkProps = ComponentProps<"a"> & { arrow?: boolean };
 /** Quiet inline action, underlined. */
 export function TextLink({ className, children, arrow = false, ...props }: TextLinkProps) {
   return (
-    <a className={cn("group type-ui inline-flex items-center gap-3", className)} {...props}>
-      <span className="relative pb-1">
-        {children}
-        <span className="absolute inset-x-0 bottom-0 h-px origin-right bg-current opacity-50" />
-      </span>
+    <a className={cn("type-ui inline-flex items-center gap-2 font-medium", className)} {...props}>
+      <span className="underline decoration-current/35 underline-offset-[5px]">{children}</span>
       {arrow ? <Arrow /> : null}
     </a>
   );

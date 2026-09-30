@@ -56,7 +56,7 @@ function Word({
   const opacity = useScrub(progress, [from, Math.min(to, 1)], [0.14, 1]);
   return (
     <>
-      <motion.span style={still ? undefined : { opacity }} className={italic ? "italic" : undefined}>
+      <motion.span style={still ? undefined : { opacity }} className={italic ? "font-serif font-normal tracking-[-0.01em] italic" : undefined}>
         {children}
       </motion.span>{" "}
     </>

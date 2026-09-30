@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Jost, Newsreader } from "next/font/google";
+import { Geist_Mono, Instrument_Sans, Newsreader } from "next/font/google";
 
 import { ContactProvider } from "@/components/contact/contact-provider";
 import { SmoothScroll } from "@/components/providers/smooth-scroll";
@@ -14,22 +14,28 @@ const newsreader = Newsreader({
   display: "swap",
 });
 
-const jost = Jost({
-  variable: "--font-jost",
+const instrument = Instrument_Sans({
+  variable: "--font-instrument",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
   subsets: ["latin"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
   title: {
-    default: "TOKEN/401 — Every word, weighed",
+    default: "TOKEN/401 — Autonomous cyber defense that asks before it acts",
     template: "%s — TOKEN/401",
   },
   description:
-    "TOKEN/401 is an AI research company. We build language models that reason before they answer, say what they don’t know, and ask before they act.",
+    "TOKEN/401 is an AI research company building autonomous cyber defense: Tacit, a millisecond reflex layer, and a team of agents that investigates, contains, repairs and verifies every incident.",
   openGraph: {
     title: "TOKEN/401",
-    description: "Every word, weighed.",
+    description: "Autonomous cyber defense that asks before it acts.",
     type: "website",
   },
 };
@@ -42,7 +48,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${newsreader.variable} ${jost.variable} antialiased`}
+      className={`${newsreader.variable} ${instrument.variable} ${geistMono.variable} antialiased`}
     >
       <body>
         <SmoothScroll>

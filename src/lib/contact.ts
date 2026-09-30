@@ -1,8 +1,8 @@
 export const CONTACT_TOPICS = [
-  "Camellia models",
-  "Threshold",
+  "Early access",
   "Research",
   "Careers",
+  "Press",
   "Something else",
 ] as const;
 

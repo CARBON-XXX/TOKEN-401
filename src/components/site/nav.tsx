@@ -11,13 +11,13 @@ import { cn } from "@/lib/utils";
 
 import { AnchorLink } from "./anchor-link";
 import { SLOW } from "./motion-primitives";
-import { PillButton } from "./pill";
+import { buttonClass, PillButton } from "./pill";
 
 export const NAV_LINKS = [
-  { href: "/#approach", label: "Approach" },
-  { href: "/#principles", label: "Principles" },
-  { href: "/#products", label: "Products" },
-  { href: "/#journal", label: "Journal" },
+  { href: "/#reflex", label: "Product" },
+  { href: "/#safeguards", label: "Safeguards" },
+  { href: "/#approach", label: "Company" },
+  { href: "/#journal", label: "Research" },
 ] as const;
 
 type Surface = "ink" | "bone";
@@ -32,6 +32,17 @@ function surfaceAt(y: number): Surface {
   return found;
 }
 
+type Clock = { time: string; stage: string };
+
+/** The incident chapter most recently scrolled past, for the clock beside the mark. */
+function clockAt(y: number): Clock | null {
+  let found: Clock | null = null;
+  for (const el of document.querySelectorAll<HTMLElement>("[data-stage]")) {
+    if (el.getBoundingClientRect().top <= y) found = { time: el.dataset.time ?? "", stage: el.dataset.stage ?? "" };
+  }
+  return found;
+}
+
 export function Nav() {
   const { openContact } = useContact();
   const lenisRef = useLenis();
@@ -40,9 +51,13 @@ export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [clock, setClock] = useState<Clock | null>(null);
 
   useEffect(() => {
-    const frame = requestAnimationFrame(() => setSurface(surfaceAt(36)));
+    const frame = requestAnimationFrame(() => {
+      setSurface(surfaceAt(36));
+      setClock(clockAt(window.innerHeight * 0.4));
+    });
     const onResize = () => setSurface(surfaceAt(36));
     window.addEventListener("resize", onResize);
     return () => {
@@ -54,6 +69,7 @@ export function Nav() {
   useMotionValueEvent(scrollY, "change", (y) => {
     const delta = y - (scrollY.getPrevious() ?? 0);
     setSurface(surfaceAt(36));
+    setClock(clockAt(window.innerHeight * 0.4));
     setScrolled(y > 24);
     if (y < 640 || menuOpen) setHidden(false);
     else if (delta > 4) setHidden(true);
@@ -110,44 +126,57 @@ export function Nav() {
             scrolled && !menuOpen ? "opacity-100" : "opacity-0",
           )}
         />
-        <nav className="frame relative flex h-[var(--nav-h)] items-center justify-between md:grid md:grid-cols-[1fr_auto_1fr]">
-          <ul className="hidden items-center gap-9 md:flex">
-            {NAV_LINKS.map((link) => (
-              <li key={link.href}>
-                <AnchorLink
-                  href={link.href}
-                  className={cn(
-                    "type-ui group relative py-2 transition-colors duration-500",
-                    onInk ? "text-chalk/62 hover:text-chalk" : "text-graphite hover:text-soot",
-                  )}
-                >
-                  {link.label}
-                </AnchorLink>
-              </li>
-            ))}
-          </ul>
+        <nav className="frame relative flex h-[var(--nav-h)] items-center justify-between gap-8">
+          <div className="flex items-center gap-6">
+            <AnchorLink href="/#top" className="flex items-center gap-3" aria-label="TOKEN/401 — back to the beginning">
+              <CamelliaMark className="h-[22px] w-auto" />
+              <Wordmark className="h-[12px] w-auto" />
+            </AnchorLink>
+            {clock ? (
+              <span
+                aria-hidden
+                className={cn(
+                  "type-mono hidden items-center gap-2 border-l pl-6 lg:flex",
+                  onInk ? "border-chalk/20 text-chalk/55" : "border-soot/15 text-stone",
+                )}
+              >
+                <span className={cn("size-1.5 rounded-full", onInk ? "bg-chalk" : "bg-soot")} />
+                <span className={onInk ? "text-chalk" : "text-soot"}>{clock.time}</span>
+                <span>{clock.stage}</span>
+              </span>
+            ) : null}
+          </div>
 
-          <AnchorLink
-            href="/#top"
-            className="group flex items-center gap-3 md:justify-self-center"
-            aria-label="TOKEN/401 — back to the beginning"
-          >
-            <CamelliaMark className="h-[22px] w-auto" />
-            <Wordmark className="h-[12px] w-auto" />
-          </AnchorLink>
-
-          <div className="flex items-center justify-self-end">
+          <div className="flex items-center gap-8">
+            <ul className="hidden items-center gap-8 md:flex">
+              {NAV_LINKS.map((link) => (
+                <li key={link.href}>
+                  <AnchorLink
+                    href={link.href}
+                    className={cn(
+                      "type-ui py-2 transition-colors duration-300",
+                      onInk ? "text-chalk/70 hover:text-chalk" : "text-graphite hover:text-soot",
+                    )}
+                  >
+                    {link.label}
+                  </AnchorLink>
+                </li>
+              ))}
+            </ul>
             <button
               type="button"
-              onClick={() => openContact()}
-              className="type-ui group relative hidden py-2 md:inline-block"
+              onClick={() => openContact("Early access")}
+              className={buttonClass({
+                surface: onInk ? "ink" : "bone",
+                tone: "outline",
+                className: "hidden h-9 px-4 md:inline-flex",
+              })}
             >
-              Write to us
-              <span className="absolute inset-x-0 bottom-1 h-px origin-left bg-current opacity-50" />
+              Request access
             </button>
             <button
               type="button"
-              className="type-label -mr-2 px-2 py-3 md:hidden"
+              className="type-ui -mr-2 px-2 py-3 font-medium md:hidden"
               aria-expanded={menuOpen}
               aria-controls="site-menu"
               onClick={() => setMenuOpen((v) => !v)}
@@ -180,7 +209,7 @@ export function Nav() {
                   <AnchorLink
                     href={link.href}
                     onClick={(e) => goFromMenu(e, link.href)}
-                    className="block py-5 font-display text-[2.75rem] leading-none font-light"
+                    className="block py-5 font-display text-[2.5rem] leading-none font-medium tracking-[-0.03em]"
                   >
                     {link.label}
                   </AnchorLink>
@@ -197,10 +226,10 @@ export function Nav() {
                 surface="ink"
                 onClick={() => {
                   setMenuOpen(false);
-                  openContact();
+                  openContact("Early access");
                 }}
               >
-                Write to us
+                Request access
               </PillButton>
               <a href={`mailto:${CONTACT_EMAIL}`} className="type-ui text-chalk/62">
                 {CONTACT_EMAIL}

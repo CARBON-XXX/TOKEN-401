@@ -30,16 +30,17 @@ export function Closing() {
           />
         </div>
         <Rise as="header" className="mt-14 sm:mt-16" delay={0.3}>
-          <h2 id="closing-title" className="type-display-2 max-w-[14em]">
-            If you have read this far, we would like to hear from you.
+          <h2 id="closing-title" className="type-display-1 max-w-[13em]">
+            If you run systems worth defending, we would like to talk.
           </h2>
         </Rise>
         <Rise as="p" className="type-lede mt-8 max-w-[24em] text-chalk/62" delay={0.4}>
-          Researchers, builders and the simply curious — a person reads every letter, and answers.
+          We are working with a small number of early partners. A person reads every message, and
+          answers.
         </Rise>
         <Rise className="mt-12 flex flex-col items-center gap-6 sm:flex-row sm:gap-10" delay={0.5}>
-          <PillButton surface="ink" onClick={() => openContact()}>
-            Write to us
+          <PillButton surface="ink" onClick={() => openContact("Early access")}>
+            Request access
           </PillButton>
           <a
             href={`mailto:${CONTACT_EMAIL}`}
