@@ -1,101 +1,82 @@
 "use client";
 
-import { motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "motion/react";
-import { useRef } from "react";
+import { motion, useMotionValueEvent, useReducedMotion, useScroll } from "motion/react";
+import { useRef, useState } from "react";
 
-import { HorizonField } from "@/components/art/horizon-field";
-import { CoverEmblem } from "@/components/brand/cover-emblem";
+import { PressSheet, type PressState } from "@/components/art/press-sheet";
+import { AnchorLink } from "@/components/site/anchor-link";
 import { SLOW } from "@/components/site/motion-primitives";
-
-const LINES: { w: string; italic?: boolean }[][] = [
-  [{ w: "There" }, { w: "is" }, { w: "a" }, { w: "pause" }],
-  [{ w: "before" }, { w: "every" }, { w: "good", italic: true }, { w: "answer." }],
-];
+import { Arrow } from "@/components/site/pill";
+import { cn } from "@/lib/utils";
 
 export function Cover() {
   const ref = useRef<HTMLElement>(null);
-  const emblemRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef(0);
   const reduce = useReducedMotion();
+  const [press, setPress] = useState<PressState | "pending">("pending");
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const lift = useTransform(scrollYProgress, [0, 1], ["0%", "-22%"]);
-  const textY = useTransform(scrollYProgress, [0, 1], [0, -90]);
-  const textOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   useMotionValueEvent(scrollYProgress, "change", (v) => {
     progressRef.current = v;
   });
+
+  const printed = press !== "failed";
+  const after = (delay: number) =>
+    reduce
+      ? {}
+      : {
+          initial: { opacity: 0, y: 14 },
+          animate: { opacity: 1, y: 0 },
+          transition: { duration: 1.4, delay, ease: SLOW },
+        };
 
   return (
     <section
       ref={ref}
       id="top"
-      data-surface="ink"
+      data-surface="bone"
       aria-labelledby="cover-title"
-      className="relative h-[100svh] min-h-[680px] overflow-hidden bg-ink text-chalk"
+      className="relative flex h-[100svh] min-h-[640px] flex-col overflow-hidden bg-bone text-soot [--press-ink:rgb(17_17_16)]"
     >
-      <HorizonField anchorRef={emblemRef} progressRef={progressRef} className="absolute inset-0 size-full" />
+      <PressSheet sheetRef={ref} progressRef={progressRef} onState={setPress} className="absolute inset-0 size-full transition-opacity duration-300" />
 
-      <CoverEmblem
-        ref={emblemRef}
-        lift={reduce ? undefined : lift}
-        className="absolute top-[64%] left-1/2 aspect-[317/325] w-[190vw] -translate-x-1/2 sm:top-[62%] sm:w-[max(92vw,560px)] lg:top-[58%] lg:w-[min(80vw,1160px)]"
-      />
-
-      <motion.div
-        style={reduce ? undefined : { y: textY, opacity: textOpacity }}
-        className="frame relative flex h-[62%] flex-col items-center justify-center pt-[var(--nav-h)] text-center"
+      <span
+        aria-hidden
+        data-press="blind"
+        className="type-blind pointer-events-none absolute top-[calc(var(--nav-h)+2vh)] -right-[0.03em] text-transparent select-none sm:top-auto sm:-bottom-[0.12em]"
       >
-        <motion.p
-          initial={reduce ? false : { opacity: 0, letterSpacing: "0.32em" }}
-          animate={{ opacity: 1, letterSpacing: "0.16em" }}
-          transition={{ duration: 2.4, delay: 0.6, ease: SLOW }}
-          className="type-label text-chalk/62"
-        >
+        401
+      </span>
+
+      <div className="frame relative mt-auto pt-[calc(var(--nav-h)+2rem)] pb-[clamp(44px,9vh,104px)] sm:pr-[50%] lg:pr-[48%]">
+        <motion.p {...after(1.2)} className="type-label text-graphite">
           An AI research company
         </motion.p>
-        <h1 id="cover-title" className="type-cover mt-7 max-w-[14em] sm:mt-9">
-          {LINES.map((line, li) => (
-            <span key={li} className="block">
-              {line.map(({ w, italic }, wi) => {
-                const i = LINES.slice(0, li).reduce((n, l) => n + l.length, 0) + wi;
-                return (
-                  <motion.span
-                    key={w}
-                    className={italic ? "inline-block italic" : "inline-block"}
-                    initial={reduce ? false : { opacity: 0, y: "0.28em", filter: "blur(12px)" }}
-                    animate={{ opacity: 1, y: "0em", filter: "blur(0px)" }}
-                    transition={{ duration: 1.8, delay: 1 + i * 0.11 + (w === "good" ? 0.35 : 0), ease: SLOW }}
-                  >
-                    {w}
-                    {wi < line.length - 1 ? "\u00a0" : null}
-                  </motion.span>
-                );
-              })}
-            </span>
-          ))}
-        </h1>
-        <motion.p
-          initial={reduce ? false : { opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.6, delay: 2.4, ease: SLOW }}
-          className="type-lede mt-7 max-w-[27em] text-chalk/62 sm:mt-9"
+        <h1
+          id="cover-title"
+          data-press="ink"
+          className={cn("type-hero mt-6 sm:mt-8", printed ? "text-transparent" : "text-soot")}
         >
-          We build systems that take their time, say what they don’t know, and ask before they act.
+          Every word,
+          <br />
+          weighed.
+        </h1>
+        <motion.p {...after(1.8)} className="type-lede mt-8 max-w-[25em] text-graphite sm:mt-10">
+          TOKEN/401 builds language models that reason before they answer, say what they don’t know,
+          and ask before they act.
         </motion.p>
-      </motion.div>
-
-      <motion.a
-        href="#approach"
-        initial={reduce ? false : { opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.6, delay: 3.4, ease: SLOW }}
-        className="type-label absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-4 text-chalk/62 transition-colors duration-500 hover:text-chalk"
-      >
-        Read on
-        <span aria-hidden className="relative block h-10 w-px overflow-hidden bg-chalk/14">
-          <span className="absolute inset-x-0 top-0 h-1/2 bg-chalk/62 [animation:fall_2.8s_var(--ease-slow)_infinite]" />
-        </span>
-      </motion.a>
+        <motion.div {...after(2.1)} className="mt-10 flex flex-wrap items-center gap-x-10 gap-y-5">
+          <AnchorLink
+            href="/#products"
+            className="type-ui inline-flex h-12 items-center gap-4 rounded-full bg-soot px-7 text-chalk"
+          >
+            Our models
+            <Arrow />
+          </AnchorLink>
+          <AnchorLink href="/#journal" className="type-ui inline-flex items-center gap-3 border-b border-soot/40 pb-1">
+            Read the research
+          </AnchorLink>
+        </motion.div>
+      </div>
     </section>
   );
 }

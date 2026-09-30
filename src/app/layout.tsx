@@ -22,20 +22,20 @@ const jost = Jost({
 
 export const metadata: Metadata = {
   title: {
-    default: "TOKEN/401 — There is a pause before every good answer",
+    default: "TOKEN/401 — Every word, weighed",
     template: "%s — TOKEN/401",
   },
   description:
-    "TOKEN/401 is an AI research company. We build systems that take their time, say what they don’t know, and ask before they act.",
+    "TOKEN/401 is an AI research company. We build language models that reason before they answer, say what they don’t know, and ask before they act.",
   openGraph: {
     title: "TOKEN/401",
-    description: "There is a pause before every good answer.",
+    description: "Every word, weighed.",
     type: "website",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0f0e0d",
+  themeColor: "#ece8e0",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
