@@ -23,7 +23,8 @@
   --color-rubric: var(--rubric);
   --color-alert: var(--alert);
   --color-clay: var(--clay);
-  --color-ochre: var(--ochre);
+  --color-indigo: var(--indigo);
+  --color-mist: var(--mist);
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -55,17 +56,18 @@
 }
 
 :root {
-  --ink: #1b1916;
-  --soot: #201e1b;
-  --graphite: #4b4640;
-  --stone: #8b8378;
-  --plaster: #d9d1c3;
-  --bone: #eee9df;
-  --chalk: #f6f2ea;
-  --rubric: #9b3b2b;
-  --alert: #cf6a4f;
-  --clay: #a8603f;
-  --ochre: #b48a47;
+  --ink: #171819;
+  --soot: #1c1c1b;
+  --graphite: #4a4845;
+  --stone: #77726b;
+  --plaster: #d6d2c9;
+  --bone: #edeae3;
+  --chalk: #f4f2ed;
+  --rubric: #b23b22;
+  --alert: #d8795c;
+  --clay: #94533a;
+  --indigo: #2f4b72;
+  --mist: #9db0c5;
 
   --background: var(--bone);
   --foreground: var(--soot);
@@ -117,7 +119,7 @@
     inset: 0;
     z-index: 100;
     pointer-events: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='t'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.17 0 0 0 0 0.14 0 0 0 0 0.1 0 0 0 1.5 -0.66'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23t)'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='t'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.13 0 0 0 0 0.13 0 0 0 0 0.12 0 0 0 1.5 -0.66'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23t)'/%3E%3C/svg%3E");
     background-size: 240px 240px;
     opacity: 0.26;
   }
@@ -132,13 +134,13 @@
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='t'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.96 0 0 0 0 0.93 0 0 0 0 0.87 0 0 0 1.5 -0.74'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23t)'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='t'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.95 0 0 0 0 0.94 0 0 0 0 0.91 0 0 0 1.5 -0.74'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23t)'/%3E%3C/svg%3E");
     background-size: 240px 240px;
     opacity: 0.16;
   }
 
   ::selection {
-    background: var(--soot);
+    background: var(--indigo);
     color: var(--chalk);
   }
 
@@ -277,6 +279,17 @@ html.lenis body {
   font-size: 0.75rem;
   line-height: 1.5;
   letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Instrument markings: short names and states, set the way a machine is labelled. Units stay lower case. */
+@utility type-tech {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 0.6875rem;
+  line-height: 1.3;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   font-variant-numeric: tabular-nums;
 }
 
