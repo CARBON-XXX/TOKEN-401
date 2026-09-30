@@ -71,7 +71,7 @@ export default async function JournalEntryPage({ params }: PageProps<"/journal/[
 
             <Rise as="figure" className="mx-auto my-[clamp(56px,7vw,104px)] max-w-[44rem] text-center">
               <blockquote className="type-display-2 text-soot">
-                <p className="italic">“{entry.pullQuote}”</p>
+                <p className="type-voice">“{entry.pullQuote}”</p>
               </blockquote>
             </Rise>
 
