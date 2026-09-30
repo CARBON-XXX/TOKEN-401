@@ -1,12 +1,17 @@
 # TOKEN/401
 
-The website of TOKEN/401, an AI research company. The site has a home page (cover, approach,
-an essay on the name, principles, products, journal index and a closing letter) and three journal
-articles at `/journal/[slug]`. The contact form opens as a letter.
+The website of TOKEN/401, an AI research company whose first product is an autonomous cyber
+defense system: **Tacit**, a millisecond reflex layer (System 1), and a team of agents that
+investigates, contains, repairs and verifies incidents (System 2).
+
+The home page tells one simulated incident in chapters — Perceive, Contain, Escalate, Map, Propose,
+Provider fails, Verified — and then the company: statement, principles, journal, an essay on the
+name and a closing letter. There are three journal articles at `/journal/[slug]`. The contact form
+opens as a letter.
 
 Every colour, type size and motion on the site comes from [`DESIGN.md`](./DESIGN.md), the visual
-system. It starts with five words of direction and derives the values from them. Read it before
-adding anything to the UI.
+system. It starts with the direction and derives the values from it. Read it before adding
+anything to the UI.
 
 ## Running locally
 
@@ -28,8 +33,9 @@ pnpm build && pnpm start
 | Path                               | What it is                                                         |
 | ---------------------------------- | ------------------------------------------------------------------ |
 | `src/app/globals.css`              | Colour tokens and type steps (`type-*` utilities)                  |
-| `src/components/sections/`         | The home page, one file per section                                |
-| `src/components/art/press-sheet.tsx` | The cover sheet: WebGL letterpress that prints the page's own text |
+| `src/components/sections/`         | The home page, one file per chapter                                |
+| `src/components/art/cluster-field.tsx` | The hero map: a canvas drawing of the cluster that plays an incident |
+| `src/components/site/log-line.tsx` | The time · stage · actor line each chapter opens with              |
 | `src/components/brand/`            | The camellia: traced logo paths and stroke-by-stroke bloom         |
 | `src/content/journal.ts`           | Journal articles (plain data; add an entry to publish a new one)   |
 | `src/app/api/contact/route.ts`     | Contact endpoint                                                   |
@@ -44,6 +50,5 @@ provider and add its API key as an environment variable.
 
 The site uses one photograph: the camellia beside the essay on the name
 (`public/images/camellia-plaster.jpg`). The rule in `DESIGN.md` is at most one per page, set small.
-The products are shown as typeset specimens. The cover's pressed headline and blind 401 are drawn by
-`PressSheet` from the page's own text; without WebGL they fall back to plain type. Everything else
-is type and the traced logo.
+The product is shown as typeset specimens and one canvas drawing, the hero's plotted cluster.
+Everything in them is illustrative, not live data. Everything else is type and the traced logo.
