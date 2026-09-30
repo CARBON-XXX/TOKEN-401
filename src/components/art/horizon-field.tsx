@@ -76,8 +76,15 @@ float dust(vec2 p, float t) {
 }
 
 void main() {
-  vec3 ink = vec3(0.055, 0.052, 0.049);
-  vec3 pearl = vec3(0.965, 0.95, 0.925);
+  // Colour exists only as light: hot white-gold at the source, amber and ember as it spreads,
+  // a cool teal where it scatters high into the sky. Everything unlit stays near-black.
+  vec3 night = vec3(0.028, 0.034, 0.04);
+  vec3 soil = vec3(0.026, 0.023, 0.023);
+  vec3 hot = vec3(1.0, 0.93, 0.8);
+  vec3 gold = vec3(1.0, 0.7, 0.32);
+  vec3 amber = vec3(1.0, 0.42, 0.08);
+  vec3 ember = vec3(0.72, 0.14, 0.04);
+  vec3 teal = vec3(0.08, 0.34, 0.45);
   float t = uTime;
   float H = uRes.y;
   float W = uEmblem.z;
@@ -93,7 +100,8 @@ void main() {
   vec2 S = crown + vec2(uPointer.x * 0.035 * H, (0.15 - 0.13 * uRise - 0.035 * uLift + 0.01 * breathe) * W);
   float power = uRise * (0.86 + 0.14 * breathe) * (1.0 + 0.6 * uLift);
 
-  vec2 d = (px - S) / H;
+  // Light falls off relative to the flower, so it keeps its proportions on narrow screens.
+  vec2 d = (px - S) / (W * 0.8);
   float r = length(d);
   float dx = abs(px.x - S.x) / W;
 
@@ -102,7 +110,7 @@ void main() {
     float decay = 1.0;
     for (int i = 1; i <= 20; i++) {
       vec2 sp = mix(px, S, float(i) / 21.0);
-      shafts += (1.0 - maskAt(sp).r) * exp(-length(sp - S) / H * 3.6) * decay;
+      shafts += (1.0 - maskAt(sp).r) * exp(-length(sp - S) / (W * 0.8) * 3.6) * decay;
       decay *= 0.94;
     }
     shafts /= 11.0;
@@ -120,14 +128,28 @@ void main() {
 
   float glowWide = exp(-r * 2.3);
   float glowCore = exp(-r * 7.0);
-  float sky = glowWide * 0.2 + glowCore * 0.5;
-  sky += shafts * streak * (0.25 + 0.9 * fogDensity) * 0.45;
-  sky += fogDensity * (glowWide * 1.5 + shafts * 0.7 + 0.03) * 0.62;
+  float warmth = clamp(glowWide * 1.4, 0.0, 1.0);
   float limbFall = exp(-dx / 0.4);
-  sky += (far * 0.5 + near * 0.5) * (1.0 - body) * limbFall * 0.8;
-  sky *= power;
-  sky += smoothstep(0.1, 1.0, fp.y) * 0.03 * uRise;
-  vec3 col = ink + pearl * (1.0 - exp(-sky * 1.05)) * 0.92;
+  float above = smoothstep(0.05, -0.7, d.y);
+
+  float glowWarm = exp(-r * 3.6);
+  float limbTight = exp(-dx / 0.07);
+  vec3 edgeLight = mix(ember, mix(amber, gold, limbTight), limbFall);
+
+  // Hue follows height above the horizon, as a real dawn sky does; intensity follows the source.
+  float hy = (crown.y - px.y) / (W * 0.8);
+  float lowSky = exp(-max(hy, 0.0) * 3.2);
+  vec3 skyHue = mix(teal, mix(amber, gold, exp(-r * 4.5)), lowSky);
+
+  vec3 L = hot * exp(-r * 8.0) * 0.95;
+  L += skyHue * exp(-r * 2.2) * 0.62;
+  L += teal * exp(-r * 0.8) * (0.5 + 0.5 * above) * 0.34;
+  L += gold * shafts * streak * (0.25 + 0.9 * fogDensity) * 0.45;
+  L += mix(teal, skyHue, clamp(glowWide * 2.0, 0.0, 1.0)) * fogDensity * (glowWide * 1.4 + shafts * 0.6 + 0.14) * 0.62;
+  L += edgeLight * (1.0 - body) * (near * 2.4 + far * 1.25) * (0.2 + 0.8 * limbFall);
+  L *= power;
+  vec3 col = night + (1.0 - exp(-L * 1.2)) * 0.97;
+  col += teal * smoothstep(0.2, 1.0, fp.y) * 0.04 * uRise;
 
   if (body > 0.001) {
     vec2 uv = (px - uEmblem.xy) / uEmblem.zw;
@@ -137,9 +159,9 @@ void main() {
     float edge = clamp((1.0 - near) * 2.0, 0.0, 1.0);
     float band = clamp((1.0 - far) * 2.0, 0.0, 1.0);
     float graze = (edge * 0.55 + band * 0.45) * exp(-dx / 0.3) * power;
-    vec3 stone = ink * (0.62 + 0.3 * marble);
-    stone += pearl * graze * (0.06 + 0.2 * marble);
-    stone += pearl * fogDensity * (graze * 0.18 + glowWide * 0.16);
+    vec3 stone = soil * (0.75 + 0.4 * marble);
+    stone += mix(ember, amber, edge) * edge * graze * (0.1 + 0.2 * marble);
+    stone += mix(teal * 0.6, amber * 0.5, warmth) * fogDensity * (graze * 0.12 + glowWide * 0.1);
     col = mix(col, stone, body);
   }
 
@@ -149,10 +171,10 @@ void main() {
   float rim = body * ((1.0 - up1) * 0.8 + (1.0 - up2) * 0.3);
   float rimFall = exp(-dx / 0.24) * exp(-max(0.0, px.y - crown.y) / (0.22 * W));
   float glint = 0.8 + 0.2 * sin((px.x - S.x) / W * 10.0 - t * 0.3);
-  col += pearl * rim * rimFall * glint * power * 0.9;
+  col += mix(amber, hot, rimFall * rimFall) * rim * (0.12 + rimFall) * glint * power * 0.95;
 
   float lightField = glowWide * 0.9 + shafts * 0.9 + far * limbFall * 0.4;
-  col += pearl * dust(fp, t) * (0.08 + 1.4 * lightField * power) * (1.0 - 0.6 * body);
+  col += mix(gold, hot, 0.4) * dust(fp, t) * (0.06 + 1.4 * lightField * power) * (1.0 - 0.6 * body);
 
   vec2 vg = gl_FragCoord.xy / uRes - 0.5;
   col *= 1.0 - dot(vg, vg) * 0.6;
