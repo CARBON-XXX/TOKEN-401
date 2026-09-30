@@ -63,7 +63,7 @@ export default async function JournalEntryPage({ params }: PageProps<"/journal/[
           <div className="frame mt-[clamp(72px,9vw,128px)]">
             <div className="type-body mx-auto max-w-[34em] space-y-6 border-t border-plaster pt-14 text-soot">
               {entry.opening.map((para, i) => (
-                <Rise as="p" key={i} className={i === 0 ? "drop-cap" : undefined}>
+                <Rise as="p" key={i}>
                   {para}
                 </Rise>
               ))}

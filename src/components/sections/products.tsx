@@ -130,7 +130,7 @@ function ProductPlate({
             {product.facts.map(([term, detail]) => (
               <div key={term} className="grid grid-cols-[7rem_1fr] items-baseline border-b border-plaster py-4">
                 <dt className="type-label text-stone">{term}</dt>
-                <dd className="font-serif text-[1.0625rem] text-soot">{detail}</dd>
+                <dd className="font-serif text-base text-soot">{detail}</dd>
               </div>
             ))}
           </dl>

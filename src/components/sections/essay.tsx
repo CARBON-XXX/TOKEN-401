@@ -42,7 +42,7 @@ export function Essay() {
             </Rise>
 
             <div className="type-body mt-14 max-w-[34em] space-y-6 text-soot">
-              <Rise as="p" className="drop-cap">
+              <Rise as="p">
                 A token is the smallest piece of language a model can hold — a syllable, a word, a
                 comma. Everything an AI says is built from them, one after another, each a small
                 decision about what comes next.

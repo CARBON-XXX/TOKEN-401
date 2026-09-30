@@ -28,7 +28,7 @@ type ContactDialogProps = {
 };
 
 const fieldClass =
-  "h-11 rounded-none border-0 border-b border-stone bg-transparent px-0 font-serif text-[1.1875rem] text-soot shadow-none transition-colors duration-500 focus-visible:border-soot focus-visible:ring-0 aria-invalid:border-destructive aria-invalid:ring-0 md:text-[1.1875rem]";
+  "h-11 rounded-none border-0 border-b border-stone bg-transparent px-0 font-serif text-[1.0625rem] text-soot shadow-none transition-colors duration-500 focus-visible:border-soot focus-visible:ring-0 aria-invalid:border-destructive aria-invalid:ring-0 md:text-[1.0625rem]";
 
 export function ContactDialog({ open, onOpenChange, initialTopic }: ContactDialogProps) {
   const [status, setStatus] = useState<Status>("idle");

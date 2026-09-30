@@ -1,23 +1,16 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, EB_Garamond, Jost } from "next/font/google";
+import { Jost, Newsreader } from "next/font/google";
 
 import { ContactProvider } from "@/components/contact/contact-provider";
 import { SmoothScroll } from "@/components/providers/smooth-scroll";
 
 import "./globals.css";
 
-const cormorant = Cormorant_Garamond({
-  variable: "--font-cormorant",
-  subsets: ["latin"],
-  weight: ["300", "400"],
-  style: ["normal", "italic"],
-  display: "swap",
-});
-
-const garamond = EB_Garamond({
-  variable: "--font-eb-garamond",
+const newsreader = Newsreader({
+  variable: "--font-newsreader",
   subsets: ["latin"],
   style: ["normal", "italic"],
+  axes: ["opsz"],
   display: "swap",
 });
 
@@ -49,7 +42,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${cormorant.variable} ${garamond.variable} ${jost.variable} antialiased`}
+      className={`${newsreader.variable} ${jost.variable} antialiased`}
     >
       <body>
         <SmoothScroll>
