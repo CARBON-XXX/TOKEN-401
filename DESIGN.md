@@ -27,7 +27,9 @@ on the name, the closing letter.
 ## 2. Material
 
 - **Paper.** The whole page carries a fine tooth of specks (`body::after`), printed over
-  everything. Ink fields carry the same tooth in reverse (`[data-surface="ink"]::before`).
+  everything. Ink fields carry the same tooth in reverse (`[data-surface="ink"]::before`). Keep it
+  faint, felt more than seen: 26% on paper, 16% on ink. If the grain reads as texture from arm’s
+  length, it is too strong.
 - **Stipple.** Organic forms are printed as dots whose _number_ thins out, the way an engraver
   shades (`Stipple` in `src/components/art/grain.tsx`). Never a smooth gradient.
 - **Hairline.** Figures are drawn in fine lines — 0.75–1.25 px — like a pen, never as boxes and
@@ -112,6 +114,11 @@ Everything in them is illustrative, and says so where it could be mistaken for d
 - One easing: `cubic-bezier(0.16, 1, 0.3, 1)`. Text 1.2 s, colour 0.3–0.5 s.
 - Behaviours:
   - **rise** — fade + 16 px, once, as content arrives.
+  - **ink** — on arrival the nav camellia is inked in along its own centerlines, heart first,
+    while the wordmark’s letters rise out of their baseline. The pen is a mask over the real
+    filled mark, so the last frame is the logo itself. Going back to the top inks it again.
+  - **lean** — the camellia leans with the speed of the scroll (at most 8°) and springs back
+    upright when the page is still, like a flower in a draught.
   - **two speeds** — on load the burst draws in a fraction of a second, the arch over several.
     The motion _is_ the idea.
   - **loop** — the Tacit marker turns continuously; it is the one thing that never stops.
@@ -120,7 +127,9 @@ Everything in them is illustrative, and says so where it could be mistaken for d
   - **draw** — the camellia opens across the principles.
 - Nothing responds to hover or follows the pointer. Hover may change a colour; nothing moves,
   grows or appears. Every behaviour works the same on a phone.
-- `prefers-reduced-motion` stops all of it and shows the finished state.
+- `prefers-reduced-motion` stops all of it and shows the finished state. New components read it
+  through `useStill()` (in `motion-primitives.tsx`), which stays false through hydration so the
+  server HTML always matches.
 
 ## 8. Imagery
 

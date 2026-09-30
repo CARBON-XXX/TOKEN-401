@@ -38,7 +38,7 @@ pnpm build && pnpm start
 | `src/components/art/seed-head.tsx`, `gathering.tsx` | The product figures: Tacit's seed head, the agents' stones |
 | `src/components/art/organic.ts`    | Deterministic geometry for hand-feeling forms (pebbles, seed heads) |
 | `src/components/art/grain.tsx`     | Print textures: `Grain` (specks) and `Stipple` (engraver's shading) |
-| `src/components/brand/`            | The camellia: traced logo paths and stroke-by-stroke bloom         |
+| `src/components/brand/`            | The camellia: traced logo paths, stroke-by-stroke bloom, inked nav mark, rising wordmark |
 | `src/content/journal.ts`           | Journal articles (plain data; add an entry to publish a new one)   |
 | `src/app/api/contact/route.ts`     | Contact endpoint                                                   |
 
