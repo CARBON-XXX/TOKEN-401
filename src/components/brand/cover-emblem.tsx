@@ -55,7 +55,7 @@ export function CoverEmblem({ className, lift, ref, drawDelay = 1.6 }: CoverEmbl
             </mask>
           </defs>
 
-          <g mask="url(#emblem-light-mask)" fill="none" stroke="#f6d8b2" strokeLinecap="round" strokeLinejoin="round">
+          <g mask="url(#emblem-light-mask)" fill="none" stroke="#f5f3ee" strokeLinecap="round" strokeLinejoin="round">
             <g strokeOpacity={0.5}>
               {CAMELLIA_STROKES.map((s, i) => (
                 <motion.path
