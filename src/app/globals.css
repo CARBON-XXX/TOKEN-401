@@ -276,6 +276,37 @@ html.lenis body {
   }
 }
 
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+
+@keyframes breathe-glow {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(0.96);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+
+@keyframes wander {
+  from {
+    transform: translate(-28%, -18%);
+  }
+  to {
+    transform: translate(26%, 22%);
+  }
+}
+
 @keyframes fall {
   from {
     transform: translateY(-100%);

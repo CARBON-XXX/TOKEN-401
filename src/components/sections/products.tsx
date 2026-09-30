@@ -1,7 +1,7 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
-import { useState, type ReactNode } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import { useContact } from "@/components/contact/contact-provider";
 import { Rise, SLOW } from "@/components/site/motion-primitives";
@@ -168,7 +168,10 @@ function Specimen({
     <div className="border border-soot p-6 sm:p-9" role="group" aria-label={description}>
       <div className="flex items-baseline justify-between gap-6">
         <span className="type-label text-soot">{label}</span>
-        <span className="type-label text-stone" aria-live="polite">
+        <span className="type-label flex items-center gap-2.5 text-stone" aria-live="polite">
+          {status === "Awaiting you" ? (
+            <span aria-hidden className="size-1.5 rounded-full bg-soot [animation:breathe_3.2s_ease-in-out_infinite]" />
+          ) : null}
           {status}
         </span>
       </div>
@@ -185,62 +188,168 @@ const WORKING = [
 
 const ROMAN = ["i", "ii", "iii"] as const;
 
+const ANSWER = [
+  {
+    className: "type-lede text-soot",
+    words: "Possibly not — it depends on the tablets. With several common ones, ibuprofen can weaken their effect and strain the kidneys.".split(" "),
+  },
+  {
+    className: "type-body mt-4 text-graphite",
+    words: "I don’t know which you take, so I won’t guess. What does the box say? A pharmacist can also check in a minute.".split(" "),
+  },
+];
+const ANSWER_OFFSETS = [0, ANSWER[0].words.length];
+const ANSWER_TOTAL = ANSWER[0].words.length + ANSWER[1].words.length;
+const PAUSE_MS = 2000;
+const TOKEN_MS = 55;
+
+type ReplyPhase = "waiting" | "pausing" | "answering" | "done";
+
 function ReplySpecimen() {
+  const reduce = useReducedMotion();
+  const [phase, setPhase] = useState<ReplyPhase>("waiting");
+  const [shown, setShown] = useState(0);
   const [showWorking, setShowWorking] = useState(false);
+  const timers = useRef<number[]>([]);
+
+  const clearTimers = () => {
+    for (const id of timers.current) window.clearTimeout(id);
+    timers.current = [];
+  };
+  useEffect(() => clearTimers, []);
+
+  // The reply takes its time on purpose: a visible pause, then the answer one word at a time.
+  const play = () => {
+    clearTimers();
+    setShowWorking(false);
+    setShown(0);
+    setPhase("pausing");
+    timers.current.push(
+      window.setTimeout(() => {
+        setPhase("answering");
+        for (let i = 1; i <= ANSWER_TOTAL; i++) {
+          timers.current.push(
+            window.setTimeout(() => {
+              setShown(i);
+              if (i === ANSWER_TOTAL) setPhase("done");
+            }, i * TOKEN_MS),
+          );
+        }
+      }, PAUSE_MS),
+    );
+  };
+
+  const current: ReplyPhase = reduce ? "done" : phase;
+  const visible = reduce ? ANSWER_TOTAL : shown;
+  const status = {
+    waiting: "\u2014",
+    pausing: "Considering",
+    answering: "Answering",
+    done: showWorking ? "Working shown" : "Unsure of one thing",
+  }[current];
 
   return (
-    <Specimen
-      label="Reply 2291"
-      status={showWorking ? "Working shown" : "Unsure of one thing"}
-      description="An example reply from Camellia"
-    >
-      <p className="type-caption mt-10 text-stone">
-        “Can I take ibuprofen with my blood-pressure tablets?”
-      </p>
-      <p className="type-lede mt-4 text-soot">
-        Possibly not — it depends on the tablets. With several common ones, ibuprofen can weaken
-        their effect and strain the kidneys.
-      </p>
-      <p className="type-body mt-4 text-graphite">
-        I don’t know which you take, so I won’t guess. What does the box say? A pharmacist can also
-        check in a minute.
-      </p>
+    <motion.div viewport={{ once: true, amount: 0.6 }} onViewportEnter={() => (reduce ? null : play())}>
+      <Specimen label="Reply 2291" status={status} description="An example reply from Camellia">
+        <p className="type-caption mt-10 text-stone">
+          “Can I take ibuprofen with my blood-pressure tablets?”
+        </p>
 
-      <AnimatePresence initial={false}>
-        {showWorking ? (
-          <motion.ol
-            key="working"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.8, ease: SLOW }}
-            className="overflow-hidden"
-          >
-            {WORKING.map((step, i) => (
-              <li
-                key={step}
-                className="type-body grid grid-cols-[2.25rem_1fr] border-plaster pt-4 text-graphite first:mt-8 first:border-t first:pt-6"
+        <div className="relative mt-4" aria-busy={current === "pausing" || current === "answering"}>
+          <AnimatePresence>
+            {current === "pausing" ? (
+              <motion.div
+                key="pause"
+                aria-hidden
+                className="absolute inset-x-0 top-3 flex items-center gap-4"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.6, ease: SLOW }}
               >
-                <span className="text-stone">{ROMAN[i]}.</span>
-                {step}
-              </li>
-            ))}
-          </motion.ol>
-        ) : null}
-      </AnimatePresence>
+                <span className="type-label shrink-0 text-stone">A pause</span>
+                <span className="relative h-px flex-1 overflow-hidden bg-plaster">
+                  <motion.span
+                    className="absolute inset-0 origin-left bg-soot/40"
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ duration: PAUSE_MS / 1000, ease: [0.45, 0, 0.55, 1] }}
+                  />
+                </span>
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
 
-      <div className="mt-10 flex min-h-12 items-center border-t border-plaster pt-6">
-        <button
-          type="button"
-          aria-expanded={showWorking}
-          onClick={() => setShowWorking((v) => !v)}
-          className="type-ui group relative py-2 text-soot"
+          {ANSWER.map((para, pi) => (
+            <p key={pi} className={para.className}>
+              {para.words.map((w, wi) => {
+                const on = ANSWER_OFFSETS[pi] + wi < visible;
+                return (
+                  <span
+                    key={wi}
+                    className="transition-[opacity,filter] duration-700 ease-[var(--ease-slow)]"
+                    style={{ opacity: on ? 1 : 0, filter: on ? "none" : "blur(3px)" }}
+                  >
+                    {w}{" "}
+                  </span>
+                );
+              })}
+            </p>
+          ))}
+        </div>
+
+        <AnimatePresence initial={false}>
+          {showWorking ? (
+            <motion.ol
+              key="working"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.8, ease: SLOW }}
+              className="overflow-hidden"
+            >
+              {WORKING.map((step, i) => (
+                <li
+                  key={step}
+                  className="type-body grid grid-cols-[2.25rem_1fr] border-plaster pt-4 text-graphite first:mt-8 first:border-t first:pt-6"
+                >
+                  <span className="text-stone">{ROMAN[i]}.</span>
+                  {step}
+                </li>
+              ))}
+            </motion.ol>
+          ) : null}
+        </AnimatePresence>
+
+        <div
+          className={cn(
+            "mt-10 flex min-h-12 items-center justify-between gap-6 border-t border-plaster pt-6 transition-opacity duration-700",
+            current === "done" ? "opacity-100" : "pointer-events-none opacity-0",
+          )}
         >
-          {showWorking ? "Hide the working" : "Show the working"}
-          <span className="absolute inset-x-0 bottom-1 h-px origin-right bg-current opacity-50 transition-transform duration-500 ease-[var(--ease-slow)] group-hover:scale-x-0" />
-        </button>
-      </div>
-    </Specimen>
+          <button
+            type="button"
+            aria-expanded={showWorking}
+            disabled={current !== "done"}
+            onClick={() => setShowWorking((v) => !v)}
+            className="type-ui group relative py-2 text-soot"
+          >
+            {showWorking ? "Hide the working" : "Show the working"}
+            <span className="absolute inset-x-0 bottom-1 h-px origin-right bg-current opacity-50 transition-transform duration-500 ease-[var(--ease-slow)] group-hover:scale-x-0" />
+          </button>
+          {reduce ? null : (
+            <button
+              type="button"
+              disabled={current !== "done"}
+              onClick={play}
+              className="type-label text-stone transition-colors duration-500 hover:text-soot"
+            >
+              Ask again
+            </button>
+          )}
+        </div>
+      </Specimen>
+    </motion.div>
   );
 }
 

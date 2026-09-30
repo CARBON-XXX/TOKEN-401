@@ -1,4 +1,5 @@
 import { Rise } from "@/components/site/motion-primitives";
+import { ScrollWords } from "@/components/site/scroll-words";
 
 export function Statement() {
   return (
@@ -8,12 +9,17 @@ export function Statement() {
           <p className="type-label text-stone">Approach</p>
         </Rise>
 
-        <Rise as="header" className="col-span-12 lg:col-span-9" delay={0.1}>
-          <h2 className="type-display-2 max-w-[17em] text-soot">
-            We believe the measure of an intelligent system is not how much it can do, but how
-            well it knows <em className="italic">when to stop.</em>
-          </h2>
-        </Rise>
+        <header className="col-span-12 lg:col-span-9">
+          <ScrollWords
+            className="type-display-2 max-w-[17em] text-soot"
+            segments={[
+              {
+                text: "We believe the measure of an intelligent system is not how much it can do, but how well it knows",
+              },
+              { text: "when to stop.", italic: true },
+            ]}
+          />
+        </header>
 
         <div className="col-span-12 mt-6 grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:col-span-8 lg:col-start-4 lg:mt-14">
           <Rise as="p" className="type-body max-w-[26em] text-graphite" delay={0.15}>

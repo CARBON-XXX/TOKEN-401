@@ -73,10 +73,18 @@ Serif text uses old-style figures. No monospace anywhere.
 ## 5. Motion
 
 - One easing: `cubic-bezier(0.16, 1, 0.3, 1)`. Text 1.2 s, emblem 2.8 s, hover 0.5 s.
-- Three behaviours only: **rise** (fade + 16 px), **draw** (the camellia, stroke by stroke),
-  **ascend** (the cover emblem rising like first light).
-- Nothing loops except the cover’s light, which breathes once every ten seconds.
-- `prefers-reduced-motion` removes all of it.
+- Behaviours, each tied to reading rather than to time:
+  - **rise** — fade + 16 px, for most text.
+  - **draw** — the camellia, stroke by stroke. In Principles it is scrubbed by scroll and opens
+    from bud to full bloom across the three principles (sticky on wide screens).
+  - **ascend** — the cover emblem rising like first light.
+  - **ink** — the Approach statement takes on ink word by word as it is read.
+  - **pause, then speak** — the Camellia specimen waits visibly before answering word by word.
+  - **set** — the footer wordmark rises glyph by glyph out of its baseline.
+- Only light and air move on their own: the cover’s dawn, dust in the ink rooms (`Motes`), the
+  glow behind the closing flower (10 s), and daylight wandering across the essay photograph (26 s).
+  The single other loop is the “awaiting you” dot, because the slip is literally waiting.
+- `prefers-reduced-motion` removes all of it: text is shown fully inked, flowers fully drawn.
 
 ## 6. Imagery
 

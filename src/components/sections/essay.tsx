@@ -22,6 +22,10 @@ export function Essay() {
                 sizes="(min-width: 1024px) 22vw, (min-width: 640px) 33vw, 58vw"
                 className="size-full object-cover grayscale"
               />
+              <div
+                aria-hidden
+                className="pointer-events-none absolute -inset-1/2 mix-blend-soft-light [animation:wander_26s_ease-in-out_infinite_alternate] [background:radial-gradient(closest-side,rgb(255_255_255/0.55),transparent_70%)]"
+              />
             </div>
             <figcaption className="type-caption mt-4 text-stone">
               Camellia japonica, which flowers in winter.
