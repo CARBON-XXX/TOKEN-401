@@ -142,7 +142,7 @@ function ProductPlate({
           >
             <span className="relative pb-1">
               {product.action}
-              <span className="absolute inset-x-0 bottom-0 h-px origin-right bg-current opacity-50 transition-transform duration-500 ease-[var(--ease-slow)] group-hover:scale-x-0" />
+              <span className="absolute inset-x-0 bottom-0 h-px origin-right bg-current opacity-50" />
             </span>
             <Arrow />
           </button>
@@ -335,7 +335,7 @@ function ReplySpecimen() {
             className="type-ui group relative py-2 text-soot"
           >
             {showWorking ? "Hide the working" : "Show the working"}
-            <span className="absolute inset-x-0 bottom-1 h-px origin-right bg-current opacity-50 transition-transform duration-500 ease-[var(--ease-slow)] group-hover:scale-x-0" />
+            <span className="absolute inset-x-0 bottom-1 h-px origin-right bg-current opacity-50" />
           </button>
           {reduce ? null : (
             <button
@@ -394,7 +394,6 @@ function PermissionSlip() {
                 className="type-ui group relative py-2 text-graphite transition-colors duration-500 hover:text-soot"
               >
                 Not yet
-                <span className="absolute inset-x-0 bottom-1 h-px origin-right scale-x-0 bg-current transition-transform duration-500 ease-[var(--ease-slow)] group-hover:origin-left group-hover:scale-x-100" />
               </button>
               <PillButton onClick={() => decide("allowed")}>Allow once</PillButton>
             </motion.div>

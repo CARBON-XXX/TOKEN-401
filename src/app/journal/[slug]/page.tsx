@@ -102,7 +102,7 @@ export default async function JournalEntryPage({ params }: PageProps<"/journal/[
             >
               <span className="type-label col-span-12 text-stone lg:col-span-3">Next in the journal</span>
               <span className="col-span-12 lg:col-span-9">
-                <span className="type-display-1 block text-soot transition-transform duration-700 ease-[var(--ease-slow)] group-hover:translate-x-2">
+                <span className="type-display-1 block text-soot">
                   {next.title}
                 </span>
                 <span className="mt-6 flex items-center gap-4 text-graphite">

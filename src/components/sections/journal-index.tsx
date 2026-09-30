@@ -38,7 +38,7 @@ export function JournalIndex() {
                   {entry.kind}
                 </span>
                 <span className="col-span-12 sm:col-span-9 sm:col-start-4 lg:col-span-5 lg:col-start-4">
-                  <span className="block font-display text-[clamp(2.25rem,3.6vw,3.25rem)] leading-[1.02] font-light tracking-[-0.012em] text-soot transition-transform duration-700 ease-[var(--ease-slow)] group-hover:translate-x-2">
+                  <span className="block font-display text-[clamp(2.25rem,3.6vw,3.25rem)] leading-[1.02] font-light tracking-[-0.012em] text-soot">
                     {entry.title}
                   </span>
                 </span>

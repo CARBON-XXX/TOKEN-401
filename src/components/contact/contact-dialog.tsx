@@ -101,7 +101,7 @@ export function ContactDialog({ open, onOpenChange, initialTopic }: ContactDialo
               </DialogDescription>
               <DialogClose className="type-ui group relative mt-10 pb-1 text-soot">
                 Return to the page
-                <span className="absolute inset-x-0 bottom-0 h-px origin-right bg-current opacity-50 transition-transform duration-500 ease-[var(--ease-slow)] group-hover:scale-x-0" />
+                <span className="absolute inset-x-0 bottom-0 h-px origin-right bg-current opacity-50" />
               </DialogClose>
             </motion.div>
           ) : (

@@ -9,7 +9,7 @@ export function Arrow({ className }: { className?: string }) {
     <svg
       viewBox="0 0 24 10"
       className={cn(
-        "h-2.5 w-6 shrink-0 transition-transform duration-500 ease-[var(--ease-slow)] group-hover:translate-x-1",
+        "h-2.5 w-6 shrink-0",
         className,
       )}
       fill="none"
@@ -49,13 +49,13 @@ export function PillButton({ surface = "bone", className, children, type = "butt
 
 type TextLinkProps = ComponentProps<"a"> & { arrow?: boolean };
 
-/** Quiet inline action: the underline recedes on hover and returns. */
+/** Quiet inline action, underlined. */
 export function TextLink({ className, children, arrow = false, ...props }: TextLinkProps) {
   return (
     <a className={cn("group type-ui inline-flex items-center gap-3", className)} {...props}>
       <span className="relative pb-1">
         {children}
-        <span className="absolute inset-x-0 bottom-0 h-px origin-right bg-current opacity-50 transition-transform duration-500 ease-[var(--ease-slow)] group-hover:scale-x-0" />
+        <span className="absolute inset-x-0 bottom-0 h-px origin-right bg-current opacity-50" />
       </span>
       {arrow ? <Arrow /> : null}
     </a>

@@ -122,7 +122,6 @@ export function Nav() {
                   )}
                 >
                   {link.label}
-                  <span className="absolute inset-x-0 bottom-1 h-px origin-right scale-x-0 bg-current transition-transform duration-500 ease-[var(--ease-slow)] group-hover:origin-left group-hover:scale-x-100" />
                 </AnchorLink>
               </li>
             ))}
@@ -133,7 +132,7 @@ export function Nav() {
             className="group flex items-center gap-3 md:justify-self-center"
             aria-label="TOKEN/401 — back to the beginning"
           >
-            <CamelliaMark className="h-[22px] w-auto transition-transform duration-[1.4s] ease-[var(--ease-slow)] group-hover:rotate-[30deg]" />
+            <CamelliaMark className="h-[22px] w-auto" />
             <Wordmark className="h-[12px] w-auto" />
           </AnchorLink>
 
@@ -144,7 +143,7 @@ export function Nav() {
               className="type-ui group relative hidden py-2 md:inline-block"
             >
               Write to us
-              <span className="absolute inset-x-0 bottom-1 h-px origin-left bg-current opacity-50 transition-transform duration-500 ease-[var(--ease-slow)] group-hover:origin-right group-hover:scale-x-0" />
+              <span className="absolute inset-x-0 bottom-1 h-px origin-left bg-current opacity-50" />
             </button>
             <button
               type="button"
@@ -163,7 +162,7 @@ export function Nav() {
         {menuOpen ? (
           <motion.div
             id="site-menu"
-            className="ink-field fixed inset-0 z-40 flex flex-col bg-ink pt-[var(--nav-h)] text-chalk md:hidden"
+            className="fixed inset-0 z-40 flex flex-col bg-ink pt-[var(--nav-h)] text-chalk md:hidden"
             initial={{ clipPath: "inset(0 0 100% 0)" }}
             animate={{ clipPath: "inset(0 0 0% 0)" }}
             exit={{ clipPath: "inset(0 0 100% 0)" }}
