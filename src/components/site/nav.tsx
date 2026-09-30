@@ -3,7 +3,6 @@
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
 import { useEffect, useState, type MouseEvent } from "react";
 
-import { CamelliaMark, Wordmark } from "@/components/brand/camellia-mark";
 import { useContact } from "@/components/contact/contact-provider";
 import { useLenis } from "@/components/providers/smooth-scroll";
 import { CONTACT_EMAIL } from "@/lib/contact";
@@ -11,6 +10,7 @@ import { cn } from "@/lib/utils";
 
 import { AnchorLink } from "./anchor-link";
 import { SLOW } from "./motion-primitives";
+import { NavLogo } from "./nav-logo";
 import { buttonClass, PillButton } from "./pill";
 
 export const NAV_LINKS = [
@@ -111,10 +111,7 @@ export function Nav() {
           )}
         />
         <nav className="frame relative flex h-[var(--nav-h)] items-center justify-between gap-8">
-          <AnchorLink href="/#top" className="flex items-center gap-3" aria-label="TOKEN/401 — back to the beginning">
-            <CamelliaMark className="h-[22px] w-auto" />
-            <Wordmark className="h-[12px] w-auto" />
-          </AnchorLink>
+          <NavLogo />
 
           <div className="flex items-center gap-8">
             <ul className="hidden items-center gap-8 md:flex">

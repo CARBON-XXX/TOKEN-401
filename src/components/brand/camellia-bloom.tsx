@@ -7,26 +7,27 @@ import { CAMELLIA_STROKES, CAMELLIA_VIEWBOX } from "./logo-paths";
 const MAX_R = Math.max(...CAMELLIA_STROKES.map((s) => s.r));
 const INK_EASE = [0.65, 0, 0.35, 1] as const;
 
-type BloomTiming = { delay: number; duration: number };
+export type BloomTiming = { delay: number; duration: number };
 
-function strokeTiming(r: number, len: number, spread: number): BloomTiming {
+/** Inner strokes start first; `pace` scales how quickly each stroke is drawn once it starts. */
+export function strokeTiming(r: number, len: number, spread: number, pace = 1): BloomTiming {
   return {
     delay: Math.pow(r / MAX_R, 0.85) * spread,
-    duration: 0.9 + len / 240,
+    duration: (0.9 + len / 240) / pace,
   };
 }
 
 /** Seconds until the last petal finishes drawing, for a given spread. */
-export function bloomDuration(spread = 1.9) {
+export function bloomDuration(spread = 1.9, pace = 1) {
   return Math.max(
     ...CAMELLIA_STROKES.map((s) => {
-      const t = strokeTiming(s.r, s.len, spread);
+      const t = strokeTiming(s.r, s.len, spread, pace);
       return t.delay + t.duration;
     }),
   );
 }
 
-const strokeVariants: Variants = {
+export const strokeVariants: Variants = {
   hidden: { pathLength: 0, opacity: 0 },
   drawn: (t: BloomTiming) => ({
     pathLength: 1,

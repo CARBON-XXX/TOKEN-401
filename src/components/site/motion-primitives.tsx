@@ -1,9 +1,29 @@
 "use client";
 
 import { motion, useReducedMotion, useTransform, type MotionValue } from "motion/react";
-import type { ReactNode } from "react";
+import { useSyncExternalStore, type ReactNode } from "react";
 
 export const SLOW = [0.16, 1, 0.3, 1] as const;
+
+const PREFERS_STILL = "(prefers-reduced-motion: reduce)";
+
+function onPreferenceChange(onChange: () => void) {
+  const mq = window.matchMedia(PREFERS_STILL);
+  mq.addEventListener("change", onChange);
+  return () => mq.removeEventListener("change", onChange);
+}
+
+/**
+ * Like `useReducedMotion`, but false until hydration has finished, so the client's first render
+ * matches the server's HTML; readers who prefer less motion switch to the still version right after.
+ */
+export function useStill() {
+  return useSyncExternalStore(
+    onPreferenceChange,
+    () => window.matchMedia(PREFERS_STILL).matches,
+    () => false,
+  );
+}
 
 function interpolate(v: number, input: readonly number[], output: readonly number[]) {
   if (v <= input[0]) return output[0];

@@ -1,22 +1,18 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
 import type { ReactNode } from "react";
 
-import { Wordmark } from "@/components/brand/camellia-mark";
-import { WORDMARK } from "@/components/brand/logo-paths";
+import { RisingWordmark } from "@/components/brand/rising-wordmark";
 import { useContact } from "@/components/contact/contact-provider";
 import { CONTACT_EMAIL } from "@/lib/contact";
 
 import { AnchorLink } from "./anchor-link";
-import { SLOW } from "./motion-primitives";
 import { NAV_LINKS } from "./nav";
 
 const linkClass = "type-ui text-left text-chalk/62 transition-colors duration-500 hover:text-chalk";
 
 export function Footer() {
   const { openContact } = useContact();
-  const reduce = useReducedMotion();
 
   return (
     <footer data-surface="ink" className="relative overflow-hidden bg-ink text-chalk">
@@ -74,11 +70,7 @@ export function Footer() {
         </div>
 
         <div className="mt-24 sm:mt-32">
-          {reduce ? (
-            <Wordmark className="block h-auto w-full text-chalk" title="TOKEN/401" />
-          ) : (
-            <RisingWordmark />
-          )}
+          <RisingWordmark className="block h-auto w-full text-chalk" title="TOKEN/401" />
         </div>
 
         <div className="type-label flex flex-col gap-4 border-t border-chalk/14 py-7 text-chalk/62 sm:flex-row sm:items-center sm:justify-between">
@@ -97,44 +89,6 @@ export function Footer() {
         </div>
       </div>
     </footer>
-  );
-}
-
-/** Left-to-right order of the traced glyphs, from where each path starts. */
-const GLYPH_RANK = (() => {
-  const xs = WORDMARK.paths.map((d) => Number(d.match(/^M(-?\d+)/)?.[1] ?? 0));
-  const sorted = [...xs].sort((a, b) => a - b);
-  return xs.map((x) => sorted.indexOf(x));
-})();
-
-/** The wordmark set letter by letter, each glyph rising out of the line it stands on. */
-function RisingWordmark() {
-  const { width, height, transform, paths } = WORDMARK;
-  return (
-    <motion.svg
-      viewBox={`0 0 ${width} ${height}`}
-      className="block h-auto w-full text-chalk"
-      fill="currentColor"
-      role="img"
-      initial="hidden"
-      whileInView="shown"
-      viewport={{ once: true, amount: 0.5 }}
-    >
-      <title>TOKEN/401</title>
-      {paths.map((d, i) => (
-        <motion.g
-          key={i}
-          variants={{
-            hidden: { y: height * 1.05 },
-            shown: { y: 0, transition: { duration: 1.9, delay: GLYPH_RANK[i] * 0.085, ease: SLOW } },
-          }}
-        >
-          <g transform={transform}>
-            <path d={d} />
-          </g>
-        </motion.g>
-      ))}
-    </motion.svg>
   );
 }
 
