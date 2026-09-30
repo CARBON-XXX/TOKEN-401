@@ -27,9 +27,10 @@ pnpm build && pnpm start
 
 | Path                               | What it is                                                         |
 | ---------------------------------- | ------------------------------------------------------------------ |
-| `src/app/globals.css`              | Colour tokens, type steps (`type-*` utilities), paper texture      |
+| `src/app/globals.css`              | Colour tokens and type steps (`type-*` utilities)                  |
 | `src/components/sections/`         | The home page, one file per section                                |
-| `src/components/brand/`            | The camellia: traced logo paths, stroke-by-stroke bloom, cover emblem |
+| `src/components/art/press-sheet.tsx` | The cover sheet: WebGL letterpress that prints the page's own text |
+| `src/components/brand/`            | The camellia: traced logo paths and stroke-by-stroke bloom         |
 | `src/content/journal.ts`           | Journal articles (plain data; add an entry to publish a new one)   |
 | `src/app/api/contact/route.ts`     | Contact endpoint                                                   |
 
@@ -43,4 +44,6 @@ provider and add its API key as an environment variable.
 
 The site uses one photograph: the camellia beside the essay on the name
 (`public/images/camellia-plaster.jpg`). The rule in `DESIGN.md` is at most one per page, set small.
-The products are shown as typeset specimens. Everything else is type, the traced logo and paper.
+The products are shown as typeset specimens. The cover's pressed headline and blind 401 are drawn by
+`PressSheet` from the page's own text; without WebGL they fall back to plain type. Everything else
+is type and the traced logo.
