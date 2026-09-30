@@ -5,107 +5,134 @@ these words asks for it. If a new element can’t be justified by one of them, i
 
 ## 1. Direction
 
-| Word          | What it means for the work                                                                                       |
-| ------------- | ---------------------------------------------------------------------------------------------------------------- |
-| **Clear**     | An official website first: plain navigation, a statement a stranger understands, clean surfaces.                |
-| **Exact**     | The look of a well-made instrument or technical document: hairline rules, square cells, real identifiers.       |
-| **Two-speed** | The product thinks at two speeds, and so does the page: the grotesque for reflex, the serif italic for judgement. |
-| **Candid**    | The writing carries the brand. Plain sentences, first person plural, no hype, no invented metrics.              |
-| **Reserved**  | Monochrome with one signal colour. An element earns its place by carrying meaning, or it is removed.            |
+**Humanist · Editorial · Intellectual · Warm · Restrained · Organic**
 
-The home page is **one incident, told in chapters**. Each section opens with a log line — time,
-stage, actor — and the chapters run in order: Perceive, Contain, Escalate, Map, Propose, Provider
-fails, Verified, Continue. The company’s own voice (statement, principles, journal, essay, letter)
-comes after the incident is closed. The nav carries the clock of the chapter being read.
+Warm humanist modernism: the calm of a serious journal, not the glare of a console. Quality comes
+from the texture of the materials — paper, ink, stipple, hairline — never from lighting effects.
 
-## 2. Colour
+| Word           | What it means for the work                                                                              |
+| -------------- | ------------------------------------------------------------------------------------------------------- |
+| **Humanist**   | A person is always in the picture: a serif voice for judgement, “a person’s yes” drawn into the product. |
+| **Editorial**  | Asymmetric grid, section rules, standfirsts in the serif, figures with captions — a magazine, not an app. |
+| **Intellectual** | Research-driven and precise: diagrams that explain one idea each, real labels, nothing decorative.    |
+| **Warm**       | Off-white paper, charcoal type, earth accents. No cold greys, no pure black.                            |
+| **Restrained** | Generous negative space. One idea per section, one figure per idea.                                     |
+| **Organic**    | Hand-feeling forms against exact lines: the stippled arch, the camellia, curves that breathe.           |
 
-Ink on paper, the greys between them, and **rubric** as the only signal. Rubric means one thing
-everywhere: the threat, or a thing that has failed. It is never decoration, never a link colour.
-Surfaces are flat — no grain, noise or glow.
+The home page is an **official company site**, not a product manual. It opens on the company’s
+thesis and a single drawing, introduces the first product in three figures — two layers, the
+safeguards, the two graphs — and then gives the company its own voice: statement, principles,
+journal, the essay on the name, the closing letter.
 
-| Token      | Hex       | Role                                                   |
-| ---------- | --------- | ------------------------------------------------------ |
-| `ink`      | `#0F0E0D` | Dark fields: safeguards, principles, closing, footer   |
-| `soot`     | `#1B1A18` | Primary text on paper, strong rules, the solid button  |
-| `graphite` | `#4A4742` | Secondary text                                         |
-| `stone`    | `#8A857C` | Metadata, log lines, disabled                          |
-| `plaster`  | `#D5D0C5` | Rules and cell borders on paper                        |
-| `bone`     | `#ECE8E0` | Page ground                                            |
-| `chalk`    | `#F5F3EE` | Type on ink                                            |
-| `rubric`   | `#A3303A` | Threat and failure on paper                            |
-| `alert`    | `#D4404C` | Threat and failure on ink                              |
+## 2. Material
+
+- **Paper.** The whole page carries a fine tooth of specks (`body::after`), printed over
+  everything. Ink fields carry the same tooth in reverse (`[data-surface="ink"]::before`).
+- **Stipple.** Organic forms are printed as dots whose _number_ thins out, the way an engraver
+  shades (`Stipple` in `src/components/art/grain.tsx`). Never a smooth gradient.
+- **Hairline.** Figures are drawn in 1 px lines with labelled boxes (`Chip` in `figure-kit.tsx`).
+- **No light.** No glow, bloom, lens, blur or soft-light highlights. Nothing emits light.
+
+## 3. Colour
+
+Paper, charcoal, the warm greys between, and three earth accents that each mean one thing.
+
+| Token      | Hex       | Role                                                        |
+| ---------- | --------- | ----------------------------------------------------------- |
+| `bone`     | `#EEE9DF` | Paper: the page ground                                      |
+| `chalk`    | `#F6F2EA` | Type on ink                                                 |
+| `plaster`  | `#D9D1C3` | Rules and cell borders on paper                             |
+| `stone`    | `#8B8378` | Metadata, figure labels                                     |
+| `graphite` | `#4B4640` | Secondary text                                              |
+| `soot`     | `#201E1B` | Charcoal: primary type, strong lines, the solid button      |
+| `ink`      | `#1B1916` | Ink fields: safeguards, principles, closing, footer         |
+| `rubric`   | `#9B3B2B` | Earth red. The threat, and only the threat, on paper        |
+| `alert`    | `#CF6A4F` | The same meaning on ink, and the person’s node in safeguards |
+| `clay`     | `#A8603F` | Organic forms (the hero arch) and the shared incident state |
+| `ochre`    | `#B48A47` | A quiet second earth, for small organic accents             |
 
 On ink the steps are made from `chalk` alone: 100% for type, 60–68% for secondary type, 40–50%
-for metadata, 12–20% for rules.
+for metadata, 12–20% for rules. No neon, no glossy gradients, no “cyber” colour.
 
-## 3. Type
+## 4. Type
 
-Three families, each with one job.
+A refined serif against a grotesk, and a mono only for what a machine would print.
 
-| Role    | Family                   | Use                                                                   |
-| ------- | ------------------------ | --------------------------------------------------------------------- |
-| Display | Instrument Sans 500      | Headlines and titles. Tight tracking, lining figures.                 |
-| Voice   | Newsreader 300 italic    | The judgement half of a headline (`type-voice`). At most once a view. |
-| Text    | Instrument Sans 400/450  | Ledes, body, interface.                                               |
-| Prose   | Newsreader 400           | Long reading only: the essay and journal articles (`type-prose`).     |
-| Machine | Geist Mono 400           | Only what a machine would print: times, IDs, action names, states.    |
+| Role    | Family                  | Use                                                                    |
+| ------- | ----------------------- | ---------------------------------------------------------------------- |
+| Display | Instrument Sans 500     | Headlines and titles. Tight tracking, lining figures.                  |
+| Voice   | Newsreader 300 italic   | The judgement half of a headline (`type-voice`). At most once a view.  |
+| Lede    | Newsreader 400          | Standfirsts under headlines (`type-lede`), set like a magazine’s deck. |
+| Text    | Instrument Sans 400/450 | Body and interface.                                                    |
+| Prose   | Newsreader 400          | Long reading: the essay and journal articles (`type-prose`).           |
+| Caption | Newsreader italic       | Figure captions, “System 1”, the camellia’s name.                      |
+| Machine | Geist Mono 400          | Figure labels and identifiers only.                                    |
 
-| Step      | Size (fluid)                       | Line height | Tracking |
-| --------- | ---------------------------------- | ----------- | -------- |
-| Hero      | `clamp(2.75rem, 6.6vw, 7rem)`      | 0.98        | −0.045em |
-| Display 1 | `clamp(2.375rem, 4.9vw, 4.625rem)` | 1.01        | −0.04em  |
-| Display 2 | `clamp(1.875rem, 3vw, 2.75rem)`    | 1.08        | −0.03em  |
-| Title     | `clamp(1.25rem, 1.6vw, 1.5rem)`    | 1.2         | −0.018em |
-| Lede      | `clamp(1.125rem, 1.45vw, 1.3125rem)` | 1.45      | −0.012em |
-| Body      | `1rem`                             | 1.6         | 0        |
-| Prose     | `1.1875rem`, serif                 | 1.62        | 0        |
-| Mono      | `0.75rem`, tabular figures         | 1.5         | +0.01em  |
+| Step      | Size (fluid)                        | Line height | Tracking |
+| --------- | ----------------------------------- | ----------- | -------- |
+| Hero      | `clamp(2.75rem, 6.6vw, 7rem)`       | 0.98        | −0.045em |
+| Display 1 | `clamp(2.375rem, 4.9vw, 4.625rem)`  | 1.01        | −0.04em  |
+| Display 2 | `clamp(1.875rem, 3vw, 2.75rem)`     | 1.08        | −0.03em  |
+| Title     | `clamp(1.25rem, 1.6vw, 1.5rem)`     | 1.2         | −0.018em |
+| Lede      | `clamp(1.1875rem, 1.6vw, 1.4375rem)`, serif | 1.42 | −0.008em |
+| Body      | `1rem`                              | 1.6         | 0        |
+| Prose     | `1.1875rem`, serif                  | 1.62        | 0        |
+| Mono      | `0.75rem`, tabular figures          | 1.5         | +0.01em  |
 
 The voice rule: the serif italic appears only where the sentence turns from what the machine does
-to the judgement it exercises — “Judgment that asks first.”, “asks first.”, “when to stop.”
+to the judgement it exercises — “Judgment that asks first.”, “asks first.”, “when to stop.”,
+“A person’s yes”.
 
-## 4. Layout
+## 5. Layout
 
 - Twelve columns, 1440 px measure, outer margin `clamp(20px, 5vw, 88px)`, 24 px gutter.
 - Section rhythm `clamp(96px, 11vw, 168px)`. Reading measure never exceeds 34em.
-- Chapter head: log line across the full measure, then the title over ten columns, then the lede
-  offset to columns 7–11. Never a two-column split hero.
-- Content sits in **ruled grids**: cells separated by 1 px of `plaster` (or `chalk` 12% on ink),
-  square corners. No rounded cards, no shadows. Controls have a 4 px radius; chips 3 px.
-- The hero is the only full-bleed image: the plotted cluster under the headline, with a readout
-  strip of the incident beneath it.
+- **Asymmetric head:** a section rule with its label (and a note on the right), the title over ten
+  columns from the left, the standfirst offset to columns 7–11. Never a centred split hero.
+- **Figures:** one idea each, in a ruled panel or across the full measure, always with a caption
+  underneath — a title and one plain paragraph. Panels are separated by 1 px of `plaster` (or
+  `chalk` 12% on ink), square corners. No rounded cards, no shadows.
 
-## 5. Motion
+## 6. Figures
+
+| Figure         | Where      | What it says                                                                  |
+| -------------- | ---------- | ----------------------------------------------------------------------------- |
+| Two speeds     | Hero       | A sharp burst cut off in 12 ms, then a long stippled arch as the agents work. |
+| Tacit loop     | Product    | State, decision, action, new state — continuously.                            |
+| Agent spine    | Product    | A coordinator, six specialists, one shared incident state.                    |
+| Seven checks   | Safeguards | One line of checks, with a branch through a person’s yes.                     |
+| Two graphs     | Awareness  | What depends on what; where the attack is heading, and where it is cut.       |
+
+Everything in them is illustrative, and says so where it could be mistaken for data.
+
+## 7. Motion
 
 - One easing: `cubic-bezier(0.16, 1, 0.3, 1)`. Text 1.2 s, colour 0.3–0.5 s.
 - Behaviours:
   - **rise** — fade + 16 px, once, as content arrives.
-  - **incident** — the hero map plays one incident every 11 s and annotates itself as it goes.
-  - **reflex** — the Tacit loop marker turns continuously; it is the one thing that never stops.
-  - **flow** — the pipeline pulse and the threat-graph dashes move along their paths.
-  - **scrub** — the lifecycle rule and the company statement follow the reader’s scroll.
+  - **two speeds** — on load the burst draws in a fraction of a second, the arch over several.
+    The motion _is_ the idea.
+  - **loop** — the Tacit marker turns continuously; it is the one thing that never stops.
+  - **flow** — the safeguards pulse and the threat-graph dashes move along their paths.
+  - **scrub** — the company statement follows the reader’s scroll.
   - **draw** — the camellia opens across the principles.
 - Nothing responds to hover or follows the pointer. Hover may change a colour; nothing moves,
   grows or appears. Every behaviour works the same on a phone.
 - `prefers-reduced-motion` stops all of it and shows the finished state.
 
-## 6. Imagery
+## 8. Imagery
 
-**The plotted cluster** (`ClusterField`) is the site’s one image. It is a 2D canvas drawing of a
-cluster on paper — dots for workloads, squares for coordinators, survey crosses on the ground plane
-— and it only ever shows what the product does. It is illustrative and says so in its readout.
+Drawings, not pictures: every product idea is a figure in the page’s own lines, type and earth
+colours. No mock screens, no dashboards, no generic AI imagery.
 
-Product ideas are shown as **specimens set in type**: the reflex loop, open hypotheses, the action
-record, the provider table, the incident reconstruction, the two graphs. They use the page’s own
-rules, mono and colours. No mock screens, no dashboards pretending to be screenshots.
+Photography is an accent: at most one per page, set small, warm monochrome, beside writing about
+what it shows — the camellia beside the essay on the name.
 
-Photography is an accent: at most one per page, set small, monochrome, beside writing about what it
-shows — the camellia beside the essay on the name.
+## 9. Not in this system
 
-## 7. Not in this system
-
-Split hero with a dark rounded product card · rounded cards · glass, blur and glow · neon or
-“cyber” colour · gradients as decoration · stock security imagery (locks, shields, hooded figures,
-matrix rain) · grain or noise · hover-driven motion · pointer-following effects · icons except the
-arrow · badges · drop shadows · invented performance claims outside a labelled simulation.
+Glow, bloom or light effects · glossy or decorative gradients · neon or cyberpunk colour · glass
+and blur · incident logs, timestamps or telemetry as decoration · dashboards and feature grids ·
+split hero with a dark rounded product card · rounded cards · drop shadows · stock security
+imagery (locks, shields, hooded figures, matrix rain) · generic AI imagery (brains, circuits,
+glowing orbs) · hover-driven motion · pointer-following effects · icons except the arrow · badges ·
+invented performance claims outside a labelled illustration.
