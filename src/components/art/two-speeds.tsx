@@ -47,7 +47,7 @@ const WIDE: Geometry = {
 
 const NARROW: Geometry = {
   w: 400,
-  h: 290,
+  h: 300,
   base: 250,
   x0: 4,
   xc: 70,
@@ -68,6 +68,10 @@ type Bezier = readonly [number, number, number, number];
 const DRAW_AT = 1.3;
 const DRAW_FOR = 3.6;
 const ARC_EASE = [0.45, 0, 0.25, 1] as const;
+
+/** Tacit's side of the axis runs in milliseconds up to containment; the agents' side in seconds after it. */
+const CONTAINED_MS = 12;
+const VERIFIED_S = 221;
 
 const round = (v: number) => Math.round(v * 100) / 100;
 
@@ -145,8 +149,21 @@ function Figure({ g, className }: { g: Geometry; className?: string }) {
           transition: { duration, delay, ease },
         };
 
-  const mono = { className: "font-mono", fontSize: g.font } as const;
-  const below = g.base + 30;
+  const tech = { className: "font-mono uppercase", fontSize: g.font - 1, letterSpacing: "0.08em" } as const;
+  const readout = { className: "font-mono tabular-nums", fontSize: g.font + 0.5 } as const;
+  const valueY = g.base + 27;
+  const tagY = valueY + 16;
+  const breakX = g.xc + 20;
+  const msX = (ms: number) => round(g.x0 + (ms / CONTAINED_MS) * (g.xc - g.x0));
+  const secondX = (s: number) => round(g.xc + (s / VERIFIED_S) * (g.xe - g.xc));
+  const scale = [
+    ...Array.from({ length: CONTAINED_MS / 2 + 1 }, (_, i) => ({ x: msX(i * 2), major: i === 0 })),
+    ...Array.from({ length: Math.floor(VERIFIED_S / 10) - 1 }, (_, i) => {
+      const s = (i + 2) * 10;
+      return { x: secondX(s), major: s % 60 === 0 };
+    }),
+  ];
+  const minutes = g.compact ? [60, 120] : [60, 120, 180];
   const redX = ticks.find((t) => t.threat)?.x ?? g.x0;
   const tacitY = g.compact ? 20 : g.base - g.peak - 44;
   const agents = g.compact
@@ -174,16 +191,36 @@ function Figure({ g, className }: { g: Geometry; className?: string }) {
         filter={`url(#${grainId})`}
         {...fade(DRAW_AT + DRAW_FOR * 0.5, 2.6, 0.78)}
       />
-      {Array.from({ length: Math.floor((g.w - g.x0) / 16) + 1 }, (_, i) => g.x0 + i * 16).map((x) => (
-        <motion.line key={x} x1={x} y1={g.base} x2={x} y2={g.base + 4} stroke="var(--plaster)" strokeWidth={1} {...fade(0.3 + (x / g.w) * 1.2, 0.6)} />
+      {scale.map((t) => (
+        <motion.line
+          key={t.x}
+          x1={t.x}
+          y1={g.base}
+          x2={t.x}
+          y2={g.base + (t.major ? 7 : 4)}
+          stroke={t.major ? "var(--stone)" : "var(--plaster)"}
+          strokeWidth={1}
+          {...fade(0.3 + (t.x / g.w) * 1.2, 0.6)}
+        />
       ))}
-      <motion.path d={`M0 ${g.base} H${g.xe}`} stroke="var(--stone)" strokeWidth={1} fill="none" {...draw(0.2, 1.6)} />
+      <motion.path
+        d={`M0 ${g.base} H${breakX - 4} M${breakX + 4} ${g.base} H${g.xe}`}
+        stroke="var(--stone)"
+        strokeWidth={1}
+        fill="none"
+        {...draw(0.2, 1.6)}
+      />
+      <motion.g {...fade(0.9, 0.6)}>
+        {[-4, 4].map((o) => (
+          <line key={o} x1={breakX + o - 2.5} y1={g.base + 5} x2={breakX + o + 2.5} y2={g.base - 5} stroke="var(--stone)" strokeWidth={1} />
+        ))}
+      </motion.g>
 
       <motion.g {...fade(0.35)}>
         <text x={g.x0} y={tacitY} className="font-sans" fontSize={g.font + 3} fontWeight={500} fill="var(--soot)">
           Tacit
         </text>
-        <text x={g.x0} y={tacitY + 18} {...mono} fill="var(--stone)">
+        <text x={g.x0} y={tacitY + 18} {...tech} fill="var(--stone)">
           {g.compact ? "System 1" : "System 1 · milliseconds"}
         </text>
         {g.compact ? (
@@ -195,14 +232,14 @@ function Figure({ g, className }: { g: Geometry; className?: string }) {
         <motion.path
           key={t.x}
           d={`M${t.x} ${g.base} V${round(g.base - t.h)}`}
-          stroke={t.threat ? "var(--rubric)" : "var(--soot)"}
+          stroke={t.threat ? "var(--rubric)" : "var(--indigo)"}
           strokeWidth={t.threat ? 1.6 : 1}
           fill="none"
           {...draw(0.55 + i * 0.016, 0.22, [0.2, 0, 0, 1])}
         />
       ))}
       {g.compact ? null : (
-        <motion.text x={redX + 8} y={round(g.base - g.peak + 9)} {...mono} fill="var(--rubric)" {...fade(burstDone - 0.15, 0.6)}>
+        <motion.text x={redX + 8} y={round(g.base - g.peak + 9)} {...tech} fill="var(--rubric)" {...fade(burstDone - 0.15, 0.6)}>
           Detected
         </motion.text>
       )}
@@ -212,13 +249,36 @@ function Figure({ g, className }: { g: Geometry; className?: string }) {
         cy={g.base}
         r={4.5}
         fill="var(--bone)"
-        stroke="var(--soot)"
+        stroke="var(--indigo)"
         strokeWidth={1.25}
         {...fade(burstDone, 0.5)}
       />
-      <motion.text x={g.x0} y={below} {...mono} fill="var(--soot)" {...fade(burstDone + 0.1)}>
-        Contained in 12 ms
-      </motion.text>
+      <motion.g {...fade(burstDone + 0.1)}>
+        <text x={msX(0)} y={valueY} {...readout} fill="var(--stone)">
+          0
+        </text>
+        <text x={g.xc} y={valueY} textAnchor="middle" {...readout} fill="var(--soot)">
+          12 ms
+        </text>
+        <text x={g.xc} y={tagY} textAnchor="middle" {...tech} fill="var(--indigo)">
+          Contained
+        </text>
+      </motion.g>
+
+      {minutes.map((s) => (
+        <motion.text
+          key={s}
+          x={secondX(s)}
+          y={valueY}
+          textAnchor="middle"
+          {...readout}
+          fontSize={g.font}
+          fill="var(--stone)"
+          {...fade(DRAW_AT + DRAW_FOR * (s / VERIFIED_S) * 0.9, 0.8)}
+        >
+          {s / 60} min
+        </motion.text>
+      ))}
 
       <motion.path d={d} stroke="var(--soot)" strokeWidth={1.25} fill="none" {...draw(DRAW_AT, DRAW_FOR, ARC_EASE)} />
 
@@ -226,7 +286,7 @@ function Figure({ g, className }: { g: Geometry; className?: string }) {
         <text x={agents.x} y={agents.y} textAnchor={agents.anchor} className="font-sans" fontSize={g.font + 3} fontWeight={500} fill="var(--soot)">
           The agents
         </text>
-        <text x={agents.x} y={agents.y + 18} textAnchor={agents.anchor} {...mono} fill="var(--stone)">
+        <text x={agents.x} y={agents.y + 18} textAnchor={agents.anchor} {...tech} fill="var(--stone)">
           {g.compact ? "System 2" : "System 2 · minutes"}
         </text>
         {g.compact ? (
@@ -240,7 +300,7 @@ function Figure({ g, className }: { g: Geometry; className?: string }) {
         return (
           <motion.g key={s.label} {...fade(DRAW_AT + DRAW_FOR * (0.12 + s.t * 0.8), 0.9)}>
             <circle cx={round(p.x)} cy={round(p.y)} r={2.6} fill="var(--soot)" />
-            <text x={round(p.x + p.nx * 14)} y={round(p.y + p.ny * 14 + 4)} textAnchor={anchor} {...mono} fill="var(--graphite)">
+            <text x={round(p.x + p.nx * 14)} y={round(p.y + p.ny * 14 + 4)} textAnchor={anchor} {...tech} fill="var(--graphite)">
               {s.label}
             </text>
           </motion.g>
@@ -249,8 +309,11 @@ function Figure({ g, className }: { g: Geometry; className?: string }) {
 
       <motion.g {...fade(DRAW_AT + DRAW_FOR - 0.1, 0.8)}>
         <circle cx={g.xe} cy={g.base} r={4.5} fill="var(--soot)" />
-        <text x={g.compact ? g.w : g.xe} y={below} textAnchor={g.compact ? "end" : "middle"} {...mono} fill="var(--soot)">
-          Verified at 3 min 41 s
+        <text x={g.compact ? g.w : g.xe} y={valueY} textAnchor={g.compact ? "end" : "middle"} {...readout} fill="var(--soot)">
+          3 min 41 s
+        </text>
+        <text x={g.compact ? g.w : g.xe} y={tagY} textAnchor={g.compact ? "end" : "middle"} {...tech} fill="var(--clay)">
+          Verified
         </text>
       </motion.g>
 
@@ -264,7 +327,7 @@ function Figure({ g, className }: { g: Geometry; className?: string }) {
           style={still ? undefined : { animation: "dash-flow 2.4s linear infinite" }}
         />
         {g.compact ? null : (
-          <text x={g.w} y={g.base - 14} textAnchor="end" {...mono} fill="var(--stone)">
+          <text x={g.w} y={g.base - 14} textAnchor="end" {...tech} fill="var(--stone)">
             Back to watching
           </text>
         )}

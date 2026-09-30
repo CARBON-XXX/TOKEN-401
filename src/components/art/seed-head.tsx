@@ -36,6 +36,24 @@ const LINES = Array.from({ length: N }, (_, i) => {
   };
 });
 
+/** The bezel: one mark per workload, in step with the lines, every tenth drawn long. */
+const DIAL_R = 194;
+const DIAL = Array.from({ length: N }, (_, i) => {
+  const a = (i / N) * Math.PI * 2 - Math.PI / 2;
+  const long = i % 10 === 0;
+  const r0 = DIAL_R - (long ? 8 : 4);
+  return {
+    d: `M${round(C.x + Math.cos(a) * r0)} ${round(C.y + Math.sin(a) * r0)} L${round(C.x + Math.cos(a) * DIAL_R)} ${round(C.y + Math.sin(a) * DIAL_R)}`,
+    long,
+    acted: i === ACTED,
+  };
+});
+
+const bezel: Variants = {
+  hidden: { opacity: 0 },
+  shown: { opacity: 1, transition: { duration: 1.4, delay: 0.2, ease: SLOW } },
+};
+
 const line: Variants = {
   hidden: { pathLength: 0, opacity: 0 },
   shown: (delay: number) => ({ pathLength: 1, opacity: 1, transition: { duration: 0.55, delay, ease: SLOW } }),
@@ -54,10 +72,10 @@ const late: Variants = {
 export function SeedHead({ className }: { className?: string }) {
   const still = !!useReducedMotion();
   const acted = LINES[ACTED];
-  const label = {
-    x: round(acted.tip.x + acted.dir.x * 12),
-    y: round(acted.tip.y + acted.dir.y * 12 + 4),
-  };
+  const along = (r: number) => ({ x: round(C.x + acted.dir.x * r), y: round(C.y + acted.dir.y * r) });
+  const from = { x: round(acted.tip.x + acted.dir.x * 6), y: round(acted.tip.y + acted.dir.y * 6) };
+  const elbow = along(DIAL_R + 12);
+  const label = { x: elbow.x + 14, y: elbow.y };
 
   return (
     <svg
@@ -66,7 +84,7 @@ export function SeedHead({ className }: { className?: string }) {
       role="img"
       aria-label="Tacit drawn as a seed head: one fine line for every workload it watches, one of them in red where it has acted within 12 milliseconds."
     >
-      <Stipple id="seed-stipple" color="var(--clay)" frequency={0.9} seed={21} />
+      <Stipple id="seed-stipple" color="var(--indigo)" frequency={0.9} seed={21} />
       <defs>
         <radialGradient id="seed-shade" cx="0.42" cy="0.4" r="0.7">
           <stop offset="0" stopColor="#000" stopOpacity={0.2} />
@@ -75,6 +93,16 @@ export function SeedHead({ className }: { className?: string }) {
       </defs>
 
       <motion.g initial={still ? false : "hidden"} whileInView="shown" viewport={{ once: true, amount: 0.4 }}>
+        <motion.g variants={bezel} fill="none" strokeWidth={0.75}>
+          {DIAL.map((t, i) => (
+            <path
+              key={i}
+              d={t.d}
+              stroke={t.acted ? "var(--rubric)" : t.long ? "var(--stone)" : "var(--plaster)"}
+              strokeWidth={t.acted ? 1.1 : undefined}
+            />
+          ))}
+        </motion.g>
         <motion.g variants={late}>
           <circle cx={C.x} cy={C.y} r={21} fill="url(#seed-shade)" filter="url(#seed-stipple)" />
           <circle cx={C.x} cy={C.y} r={21} fill="none" stroke="var(--soot)" strokeOpacity={0.7} strokeWidth={0.9} />
@@ -100,9 +128,20 @@ export function SeedHead({ className }: { className?: string }) {
             />
           </g>
         ))}
-        <motion.text x={label.x} y={label.y} className="font-mono" fontSize={11.5} fill="var(--rubric)" variants={late}>
-          acted on · 12 ms
-        </motion.text>
+        <motion.g variants={late}>
+          <path
+            d={`M${from.x} ${from.y} L${elbow.x} ${elbow.y} H${label.x - 5}`}
+            fill="none"
+            stroke="var(--rubric)"
+            strokeWidth={0.75}
+          />
+          <text x={label.x} y={label.y - 3} className="font-mono tabular-nums" fontSize={12} fill="var(--soot)">
+            12 ms
+          </text>
+          <text x={label.x} y={label.y + 12} className="font-mono uppercase" fontSize={10.5} letterSpacing="0.08em" fill="var(--rubric)">
+            Acted on
+          </text>
+        </motion.g>
       </motion.g>
     </svg>
   );

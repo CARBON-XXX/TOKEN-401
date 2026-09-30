@@ -19,6 +19,8 @@ const STEPS = [
 
 const HUMAN_AFTER = "Tacit risk";
 
+const stepNo = (i: number) => String(i + 1).padStart(2, "0");
+
 export function Safeguards() {
   return (
     <section
@@ -104,14 +106,27 @@ function Pipeline({ className }: { className?: string }) {
 
       {STEPS.map((s, i) => {
         const last = i === STEPS.length - 1;
+        const machine = s.name === HUMAN_AFTER;
         const anchor = i === 0 ? "start" : last ? "end" : "middle";
         const tx = i === 0 ? xs[i] - 6 : last ? xs[i] + 6 : xs[i];
         return (
           <g key={s.name}>
+            <text
+              x={tx}
+              y={LINE_Y - 86}
+              textAnchor={anchor}
+              className="font-mono tabular-nums"
+              fontSize={11}
+              letterSpacing="0.08em"
+              fill={machine ? "var(--mist)" : "var(--chalk)"}
+              fillOpacity={machine ? 1 : 0.4}
+            >
+              {stepNo(i)}
+            </text>
             <text x={tx} y={LINE_Y - 58} textAnchor={anchor} className="font-sans" fontSize={17} fontWeight={500} fill="var(--chalk)">
               {s.name}
             </text>
-            <text x={tx} y={LINE_Y - 34} textAnchor={anchor} className="font-mono" fontSize={11.5} fill="var(--chalk)" fillOpacity={0.5}>
+            <text x={tx} y={LINE_Y - 34} textAnchor={anchor} className="font-sans" fontSize={14} fill="var(--chalk)" fillOpacity={0.55}>
               {s.ask}
             </text>
             <circle
@@ -119,9 +134,9 @@ function Pipeline({ className }: { className?: string }) {
               cy={LINE_Y}
               r={last ? 6.5 : 5}
               fill={last ? "var(--chalk)" : "var(--ink)"}
-              stroke="var(--chalk)"
-              strokeOpacity={last ? 1 : 0.7}
-              strokeWidth={1}
+              stroke={machine ? "var(--mist)" : "var(--chalk)"}
+              strokeOpacity={last || machine ? 1 : 0.7}
+              strokeWidth={machine ? 1.25 : 1}
             />
           </g>
         );
@@ -131,7 +146,7 @@ function Pipeline({ className }: { className?: string }) {
       <text x={person.x} y={person.y + 42} textAnchor="middle" className="font-serif" fontStyle="italic" fontSize={26} fontWeight={300} fill="var(--chalk)">
         A person’s yes
       </text>
-      <text x={person.x} y={person.y + 64} textAnchor="middle" className="font-mono" fontSize={11.5} fill="var(--chalk)" fillOpacity={0.5}>
+      <text x={person.x} y={person.y + 64} textAnchor="middle" className="font-sans" fontSize={14} fill="var(--chalk)" fillOpacity={0.55}>
         when the stakes are critical
       </text>
     </svg>
@@ -143,24 +158,26 @@ function PipelineList({ className }: { className?: string }) {
     <ol className={cn("relative ml-[5px] border-l border-chalk/25", className)}>
       {STEPS.map((s, i) => {
         const last = i === STEPS.length - 1;
+        const machine = s.name === HUMAN_AFTER;
         return (
           <Fragment key={s.name}>
             <li className="relative pb-8 pl-8 last:pb-0">
               <span
                 aria-hidden
                 className={cn(
-                  "absolute top-[0.5em] -left-[6px] size-[11px] rounded-full border border-chalk/70",
-                  last ? "bg-chalk" : "bg-ink",
+                  "absolute top-[1.55rem] -left-[6px] size-[11px] rounded-full border",
+                  last ? "border-chalk bg-chalk" : machine ? "border-mist bg-ink" : "border-chalk/70 bg-ink",
                 )}
               />
-              <p className="type-title">{s.name}</p>
-              <p className="type-mono mt-1 text-chalk/50">{s.ask}</p>
+              <p className={cn("type-tech", machine ? "text-mist" : "text-chalk/40")}>{stepNo(i)}</p>
+              <p className="type-title mt-1.5">{s.name}</p>
+              <p className="type-body mt-0.5 text-chalk/55">{s.ask}</p>
             </li>
-            {s.name === HUMAN_AFTER ? (
+            {machine ? (
               <li className="relative pb-8 pl-8">
                 <div className="border-l border-dashed border-alert/70 py-1 pl-5">
                   <p className="font-serif text-[1.5rem] leading-tight font-light italic">A person’s yes</p>
-                  <p className="type-mono mt-1 text-chalk/50">when the stakes are critical</p>
+                  <p className="type-body mt-1 text-chalk/55">when the stakes are critical</p>
                 </div>
               </li>
             ) : null}

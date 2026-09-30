@@ -22,7 +22,7 @@ export function JournalIndex() {
           {JOURNAL.map((entry, i) => (
             <Rise as="li" key={entry.slug} delay={i * 0.08} className="bg-bone">
               <Link href={`/journal/${entry.slug}`} className="flex h-full flex-col p-6 sm:p-8">
-                <span className="type-mono flex items-center justify-between text-stone">
+                <span className="type-tech flex items-center justify-between text-stone">
                   <span>{entry.kind}</span>
                   <time dateTime={entry.published}>{entry.date}</time>
                 </span>

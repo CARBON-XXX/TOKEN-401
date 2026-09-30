@@ -22,7 +22,7 @@ export function Hero() {
 
   return (
     <section id="top" data-surface="bone" aria-labelledby="hero-title" className="relative pt-[var(--nav-h)]">
-      <div className="frame pt-[clamp(40px,8vh,120px)] pb-[clamp(72px,9vw,128px)]">
+      <div className="frame pt-[clamp(32px,6vh,120px)] pb-[clamp(72px,9vw,128px)]">
         <motion.h1 {...enter(0)} id="hero-title" className="type-hero text-soot">
           <span className="block">Machine reflexes.</span>
           <span className="type-voice block text-graphite">Judgment that asks first.</span>
@@ -42,14 +42,14 @@ export function Hero() {
           </motion.div>
         </div>
 
-        <motion.figure {...enter(0.35)} className="mt-[clamp(48px,7vh,112px)]">
+        <motion.figure {...enter(0.35)} className="mt-[clamp(40px,5.5vh,112px)]">
           <TwoSpeeds />
           <figcaption className="type-label mt-8 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 border-t border-plaster pt-4 text-stone">
             <span className="flex items-baseline gap-3 text-soot">
               <span className="type-caption text-stone">Fig. 1</span>
               One incident, at two speeds
             </span>
-            <span>Illustrative · not to scale</span>
+            <span>Illustrative · two time scales</span>
           </figcaption>
         </motion.figure>
       </div>
