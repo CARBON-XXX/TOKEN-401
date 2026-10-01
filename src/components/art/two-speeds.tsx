@@ -1,10 +1,10 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
 import { useId, useLayoutEffect, useRef, useState, type RefObject } from "react";
 
 import { Stipple } from "@/components/art/grain";
-import { SLOW } from "@/components/site/motion-primitives";
+import { SLOW, useStill } from "@/components/site/motion-primitives";
 
 type Geometry = {
   w: number;
@@ -21,7 +21,8 @@ type Geometry = {
   lift: number;
   ticks: number;
   font: number;
-  stages: { t: number; label: string }[];
+  /** Stage labels sit off the arch along its normal; `anchor` overrides where that leaves them crowded. */
+  stages: { t: number; label: string; anchor?: "start" | "middle" | "end" }[];
   systems: readonly [string, string];
   /**
    * The rendered width, in px, the type was drawn for. At other widths the type is held near its
@@ -34,9 +35,9 @@ type Geometry = {
 };
 
 const FOUR_STAGES = [
-  { t: 0.3, label: "Investigate" },
-  { t: 0.5, label: "Isolate" },
-  { t: 0.68, label: "Rebuild" },
+  { t: 0.34, label: "Investigate" },
+  { t: 0.52, label: "Isolate" },
+  { t: 0.69, label: "Rebuild" },
   { t: 0.86, label: "Verify" },
 ];
 
@@ -69,7 +70,7 @@ const MEDIUM: Geometry = {
   ticks: 28,
   font: 12,
   stages: [
-    { t: 0.36, label: "Investigate" },
+    { t: 0.36, label: "Investigate", anchor: "end" },
     { t: 0.53, label: "Isolate" },
     { t: 0.7, label: "Rebuild" },
     { t: 0.87, label: "Verify" },
@@ -99,6 +100,12 @@ const NARROW: Geometry = {
   hold: [0.6, 1.2],
   compact: true,
 };
+
+const FIGURES = [
+  { g: WIDE, className: "hidden xl:block" },
+  { g: MEDIUM, className: "hidden md:block xl:hidden" },
+  { g: NARROW, className: "md:hidden" },
+] as const;
 
 type Bezier = readonly [number, number, number, number];
 
@@ -150,11 +157,12 @@ function arc(g: Geometry) {
 }
 
 export function TwoSpeeds({ className }: { className?: string }) {
+  const still = useStill();
   return (
     <div className={className}>
-      <Figure g={WIDE} className="hidden xl:block" />
-      <Figure g={MEDIUM} className="hidden md:block xl:hidden" />
-      <Figure g={NARROW} className="md:hidden" />
+      {FIGURES.map((f) => (
+        <Figure key={`${f.g.w}-${still}`} g={f.g} still={still} className={f.className} />
+      ))}
     </div>
   );
 }
@@ -177,8 +185,7 @@ function useTypeHold(ref: RefObject<SVGSVGElement | null>, g: Geometry) {
   return k;
 }
 
-function Figure({ g, className }: { g: Geometry; className?: string }) {
-  const still = !!useReducedMotion();
+function Figure({ g, still, className }: { g: Geometry; still: boolean; className?: string }) {
   const svgRef = useRef<SVGSVGElement>(null);
   const k = useTypeHold(svgRef, g);
   const uid = useId().replace(/:/g, "");
@@ -362,7 +369,7 @@ function Figure({ g, className }: { g: Geometry; className?: string }) {
 
       {g.stages.map((s) => {
         const p = at(s.t);
-        const anchor = p.nx < -0.2 ? "end" : p.nx > 0.2 ? "start" : "middle";
+        const anchor = s.anchor ?? (p.nx < -0.35 ? "end" : p.nx > 0.35 ? "start" : "middle");
         return (
           <motion.g key={s.label} {...fade(DRAW_AT + DRAW_FOR * (0.12 + s.t * 0.8), 0.9)}>
             <circle cx={round(p.x)} cy={round(p.y)} r={2.6} fill="var(--soot)" />
