@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
-import { useEffect, useState, type MouseEvent } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type MouseEvent } from "react";
 
 import { useContact } from "@/components/contact/contact-provider";
 import { useLenis } from "@/components/providers/smooth-scroll";
@@ -22,6 +22,21 @@ export const NAV_LINKS = [
 
 type Surface = "ink" | "bone";
 
+/** The nav section being read: the last one whose top has passed a line a third of the way down, until the closing. */
+function sectionAt(probe: number): string | null {
+  const past = (id: string) => {
+    const el = document.getElementById(id);
+    return !!el && el.getBoundingClientRect().top <= probe;
+  };
+  if (past("contact")) return null;
+  let found: string | null = null;
+  for (const link of NAV_LINKS) {
+    const id = link.href.slice(2);
+    if (past(id)) found = id;
+  }
+  return found;
+}
+
 /** Reads the `data-surface` of whichever section is currently beneath the bar. */
 function surfaceAt(y: number): Surface {
   let found: Surface = "bone";
@@ -40,20 +55,38 @@ export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [section, setSection] = useState<string | null>(null);
+  const listRef = useRef<HTMLUListElement>(null);
+  const [mark, setMark] = useState({ x: 0, width: 0 });
+
+  const placeMark = useCallback(() => {
+    const link = listRef.current?.querySelector<HTMLElement>('[aria-current="true"]');
+    if (link) setMark({ x: link.offsetLeft, width: link.offsetWidth });
+  }, []);
+
+  useLayoutEffect(placeMark, [section, placeMark]);
 
   useEffect(() => {
-    const frame = requestAnimationFrame(() => setSurface(surfaceAt(36)));
-    const onResize = () => setSurface(surfaceAt(36));
+    const read = () => {
+      setSurface(surfaceAt(36));
+      setSection(sectionAt(window.innerHeight / 3));
+    };
+    const frame = requestAnimationFrame(read);
+    const onResize = () => {
+      read();
+      placeMark();
+    };
     window.addEventListener("resize", onResize);
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener("resize", onResize);
     };
-  }, []);
+  }, [placeMark]);
 
   useMotionValueEvent(scrollY, "change", (y) => {
     const delta = y - (scrollY.getPrevious() ?? 0);
     setSurface(surfaceAt(36));
+    setSection(sectionAt(window.innerHeight / 3));
     setScrolled(y > 24);
     if (y < 640 || menuOpen) setHidden(false);
     else if (delta > 4) setHidden(true);
@@ -114,20 +147,37 @@ export function Nav() {
           <NavLogo />
 
           <div className="flex items-center gap-8">
-            <ul className="hidden items-center gap-8 md:flex">
-              {NAV_LINKS.map((link) => (
-                <li key={link.href}>
-                  <AnchorLink
-                    href={link.href}
-                    className={cn(
-                      "type-ui py-2 transition-colors duration-300",
-                      onInk ? "text-chalk/70 hover:text-chalk" : "text-graphite hover:text-soot",
-                    )}
-                  >
-                    {link.label}
-                  </AnchorLink>
-                </li>
-              ))}
+            <ul ref={listRef} className="relative hidden items-center gap-8 md:flex">
+              {NAV_LINKS.map((link) => {
+                const here = section === link.href.slice(2);
+                return (
+                  <li key={link.href}>
+                    <AnchorLink
+                      href={link.href}
+                      aria-current={here ? "true" : undefined}
+                      className={cn(
+                        "type-ui py-2 transition-colors duration-500",
+                        onInk
+                          ? here
+                            ? "text-chalk"
+                            : "text-chalk/70 hover:text-chalk"
+                          : here
+                            ? "text-soot"
+                            : "text-graphite hover:text-soot",
+                      )}
+                    >
+                      {link.label}
+                    </AnchorLink>
+                  </li>
+                );
+              })}
+              <motion.li
+                aria-hidden
+                className="pointer-events-none absolute -bottom-1 left-0 h-px bg-current"
+                initial={false}
+                animate={{ x: mark.x, width: mark.width, opacity: section ? 1 : 0 }}
+                transition={{ duration: 0.8, ease: SLOW }}
+              />
             </ul>
             <button
               type="button"
