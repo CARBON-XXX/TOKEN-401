@@ -11,6 +11,13 @@ import { NAV_LINKS } from "./nav";
 
 const linkClass = "type-ui text-left text-chalk/62 transition-colors duration-500 hover:text-chalk";
 
+const INKS = [
+  { name: "Charcoal", color: "var(--ink)" },
+  { name: "Indigo", color: "var(--indigo)" },
+  { name: "Clay", color: "var(--clay)" },
+  { name: "Cinnabar", color: "var(--rubric)" },
+] as const;
+
 export function Footer() {
   const { openContact } = useContact();
 
@@ -18,11 +25,11 @@ export function Footer() {
     <footer data-surface="ink" className="relative overflow-hidden bg-ink text-chalk">
       <div className="frame">
         <div className="grid grid-cols-12 gap-x-6 gap-y-14 border-t border-chalk/14 pt-16 sm:pt-20">
-          <p className="type-lede col-span-12 max-w-[16em] text-chalk lg:col-span-5">
+          <p className="type-lede col-span-12 max-w-[16em] text-chalk lg:col-span-5 lg:row-start-1">
             Autonomous defense for the systems the world now runs on.
           </p>
 
-          <FooterColumn title="Index" className="col-span-6 sm:col-span-4 lg:col-span-2 lg:col-start-7">
+          <FooterColumn title="Index" className="col-span-6 sm:col-span-4 lg:col-span-2 lg:col-start-7 lg:row-span-2 lg:row-start-1">
             {NAV_LINKS.map((l) => (
               <li key={l.href}>
                 <AnchorLink href={l.href} className={linkClass}>
@@ -32,7 +39,7 @@ export function Footer() {
             ))}
           </FooterColumn>
 
-          <FooterColumn title="Company" className="col-span-6 sm:col-span-4 lg:col-span-2">
+          <FooterColumn title="Company" className="col-span-6 sm:col-span-4 lg:col-span-2 lg:row-span-2 lg:row-start-1">
             <li>
               <button type="button" onClick={() => openContact("Careers")} className={linkClass}>
                 Careers
@@ -50,7 +57,7 @@ export function Footer() {
             </li>
           </FooterColumn>
 
-          <FooterColumn title="Correspondence" className="col-span-12 sm:col-span-4 lg:col-span-2">
+          <FooterColumn title="Correspondence" className="col-span-12 sm:col-span-4 lg:col-span-2 lg:row-span-2 lg:row-start-1">
             <li>
               <a href={`mailto:${CONTACT_EMAIL}`} className={linkClass}>
                 {CONTACT_EMAIL}
@@ -67,6 +74,21 @@ export function Footer() {
               </a>
             </li>
           </FooterColumn>
+
+          <div className="col-span-12 border-t border-chalk/14 pt-6 sm:col-span-8 lg:col-span-5 lg:col-start-1 lg:row-start-2 lg:self-end lg:border-0 lg:pt-0">
+            <p className="type-label text-chalk/62">Colophon</p>
+            <p className="type-caption mt-3 max-w-[30em] text-chalk/62">
+              Set in Instrument Sans, Newsreader and Geist Mono. Printed in four inks on bone.
+            </p>
+            <ul className="type-tech mt-4 flex flex-wrap gap-x-5 gap-y-2 text-chalk/55">
+              {INKS.map((ink) => (
+                <li key={ink.name} className="flex items-center gap-2">
+                  <span aria-hidden className="size-2.5 rounded-[1px] ring-1 ring-chalk/25" style={{ background: ink.color }} />
+                  {ink.name}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
         <div className="mt-24 sm:mt-32">
