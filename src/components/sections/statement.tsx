@@ -22,13 +22,13 @@ export function Statement() {
           />
         </header>
 
-        <div className="mt-14 grid grid-cols-12 gap-x-6 gap-y-8 lg:mt-20">
-          <Rise as="p" className="type-body col-span-12 max-w-[28em] text-graphite sm:col-span-6 lg:col-span-4 lg:col-start-7" delay={0.15}>
+        <div className="mt-14 grid grid-cols-12 gap-x-6 gap-y-6 lg:mt-20">
+          <Rise as="p" className="type-lede col-span-12 max-w-[27em] text-graphite sm:col-span-10 md:col-span-8 md:col-start-5 lg:col-span-5 lg:col-start-7" delay={0.15}>
             So we build defense at two speeds: a reflex fast enough to stop an attack as it happens,
             and agents that reason with care, show how they reached each decision, and treat
             permission as part of the work rather than an obstacle to it.
           </Rise>
-          <Rise as="p" className="type-body col-span-12 max-w-[28em] text-graphite sm:col-span-6 lg:col-span-2" delay={0.25}>
+          <Rise as="p" className="type-body col-span-12 max-w-[30em] text-stone sm:col-span-10 md:col-span-8 md:col-start-5 lg:col-span-5 lg:col-start-7" delay={0.25}>
             We are a small team of researchers and security engineers. We publish what we learn,
             including what fails.
           </Rise>
