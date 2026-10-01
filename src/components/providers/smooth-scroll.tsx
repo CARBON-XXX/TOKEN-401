@@ -1,6 +1,7 @@
 "use client";
 
 import Lenis from "lenis";
+import { MotionConfig } from "motion/react";
 import { createContext, useContext, useEffect, useRef, type ReactNode, type RefObject } from "react";
 
 const LenisContext = createContext<RefObject<Lenis | null>>({ current: null });
@@ -28,5 +29,9 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  return <LenisContext.Provider value={lenisRef}>{children}</LenisContext.Provider>;
+  return (
+    <LenisContext.Provider value={lenisRef}>
+      <MotionConfig reducedMotion="user">{children}</MotionConfig>
+    </LenisContext.Provider>
+  );
 }
