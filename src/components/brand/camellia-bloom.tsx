@@ -1,6 +1,8 @@
 "use client";
 
-import { motion, useReducedMotion, type Variants } from "motion/react";
+import { motion, type Variants } from "motion/react";
+
+import { useStill } from "@/components/site/motion-primitives";
 
 import { CAMELLIA_STROKES, CAMELLIA_VIEWBOX } from "./logo-paths";
 
@@ -58,7 +60,7 @@ export function CamelliaBloom({
   trigger = "mount",
   title,
 }: CamelliaBloomProps) {
-  const reduce = useReducedMotion();
+  const reduce = useStill();
   const svgProps = {
     viewBox: `0 0 ${CAMELLIA_VIEWBOX.width} ${CAMELLIA_VIEWBOX.height}`,
     className,

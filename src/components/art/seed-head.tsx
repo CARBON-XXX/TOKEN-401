@@ -1,8 +1,8 @@
 "use client";
 
-import { motion, useReducedMotion, type Variants } from "motion/react";
+import { motion, type Variants } from "motion/react";
 
-import { SLOW } from "@/components/site/motion-primitives";
+import { SLOW, useStill } from "@/components/site/motion-primitives";
 
 import { Stipple } from "./grain";
 import { grain, round } from "./organic";
@@ -70,7 +70,7 @@ const late: Variants = {
 };
 
 export function SeedHead({ className }: { className?: string }) {
-  const still = !!useReducedMotion();
+  const still = useStill();
   const acted = LINES[ACTED];
   const along = (r: number) => ({ x: round(C.x + acted.dir.x * r), y: round(C.y + acted.dir.y * r) });
   const from = { x: round(acted.tip.x + acted.dir.x * 6), y: round(acted.tip.y + acted.dir.y * 6) };
@@ -92,7 +92,7 @@ export function SeedHead({ className }: { className?: string }) {
         </radialGradient>
       </defs>
 
-      <motion.g initial={still ? false : "hidden"} whileInView="shown" viewport={{ once: true, amount: 0.4 }}>
+      <motion.g key={String(still)} initial={still ? false : "hidden"} whileInView="shown" viewport={{ once: true, amount: 0.4 }}>
         <motion.g variants={bezel} fill="none" strokeWidth={0.75}>
           {DIAL.map((t, i) => (
             <path

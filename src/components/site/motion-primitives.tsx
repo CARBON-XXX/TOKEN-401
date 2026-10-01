@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion, useTransform, type MotionValue } from "motion/react";
+import { motion, useTransform, type MotionValue } from "motion/react";
 import { useSyncExternalStore, type ReactNode } from "react";
 
 export const SLOW = [0.16, 1, 0.3, 1] as const;
@@ -58,14 +58,16 @@ type RiseProps = {
   as?: "div" | "p" | "li" | "figure" | "header" | "article";
 };
 
-/** The system’s only reveal: a fade and a 16px rise, once, as content reaches the reader. */
+/**
+ * The system’s only reveal: a fade and a 16px rise, once, as content reaches the reader.
+ * With reduced motion the global MotionConfig drops the rise and keeps the fade.
+ */
 export function Rise({ children, className, delay = 0, as = "div" }: RiseProps) {
-  const reduce = useReducedMotion();
   const Tag = motion[as];
   return (
     <Tag
       className={className}
-      initial={reduce ? false : { opacity: 0, y: 16 }}
+      initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.25 }}
       transition={{ duration: 1.2, delay, ease: SLOW }}

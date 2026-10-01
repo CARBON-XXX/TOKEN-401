@@ -1,8 +1,8 @@
 "use client";
 
-import { motion, useReducedMotion, type Variants } from "motion/react";
+import { motion, type Variants } from "motion/react";
 
-import { SLOW } from "@/components/site/motion-primitives";
+import { SLOW, useStill } from "@/components/site/motion-primitives";
 
 import { Stipple } from "./grain";
 import { pebblePath, round } from "./organic";
@@ -40,7 +40,7 @@ const heart: Variants = {
 
 /** Seven specialists as worn stones, gathered around the one incident they share. */
 export function Gathering({ className }: { className?: string }) {
-  const still = !!useReducedMotion();
+  const still = useStill();
 
   return (
     <svg
@@ -63,7 +63,7 @@ export function Gathering({ className }: { className?: string }) {
         </linearGradient>
       </defs>
 
-      <motion.g initial={still ? false : "hidden"} whileInView="shown" viewport={{ once: true, amount: 0.4 }}>
+      <motion.g key={String(still)} initial={still ? false : "hidden"} whileInView="shown" viewport={{ once: true, amount: 0.4 }}>
         {AGENTS.map((a, i) => {
           const dx = HEART.x - a.cx;
           const dy = HEART.y - a.cy;

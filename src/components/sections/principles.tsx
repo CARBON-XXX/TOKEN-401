@@ -1,10 +1,10 @@
 "use client";
 
-import { motion, useReducedMotion, useScroll, type MotionValue } from "motion/react";
+import { motion, useScroll, type MotionValue } from "motion/react";
 import { useRef, useSyncExternalStore } from "react";
 
 import { CAMELLIA_STROKES, CAMELLIA_VIEWBOX } from "@/components/brand/logo-paths";
-import { Rise, useScrub } from "@/components/site/motion-primitives";
+import { Rise, useScrub, useStill } from "@/components/site/motion-primitives";
 
 const PRINCIPLES = [
   {
@@ -51,7 +51,7 @@ export function Principles() {
   const listRef = useRef<HTMLOListElement>(null);
   const bloomRef = useRef<HTMLDivElement>(null);
   const wide = useWide();
-  const reduce = useReducedMotion();
+  const reduce = useStill();
 
   // On wide screens the flower stays in view and opens across all three principles;
   // on narrow ones it opens as it passes.
@@ -82,7 +82,7 @@ export function Principles() {
           <div className="col-span-12 lg:col-span-5">
             <div className="flex justify-center lg:sticky lg:top-[var(--nav-h)] lg:h-[calc(100svh-var(--nav-h))] lg:items-center">
               <div ref={bloomRef} className="relative aspect-[317/325] w-[min(66vw,320px)] lg:w-[min(30vw,430px)]">
-                <Bloom key={wide ? "wide" : "narrow"} progress={progress} still={!!reduce} />
+                <Bloom key={wide ? "wide" : "narrow"} progress={progress} still={reduce} />
               </div>
             </div>
           </div>

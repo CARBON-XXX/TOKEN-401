@@ -1,9 +1,9 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
 import { Fragment } from "react";
 
-import { Rise } from "@/components/site/motion-primitives";
+import { Rise, useStill } from "@/components/site/motion-primitives";
 import { SectionHead } from "@/components/site/section-head";
 import { cn } from "@/lib/utils";
 
@@ -71,7 +71,7 @@ const X1 = W - 44;
 const xs = STEPS.map((_, i) => X0 + (i * (X1 - X0)) / (STEPS.length - 1));
 
 function Pipeline({ className }: { className?: string }) {
-  const reduce = useReducedMotion();
+  const reduce = useStill();
   const hi = STEPS.findIndex((s) => s.name === HUMAN_AFTER);
   const a = xs[hi];
   const b = xs[hi + 1];

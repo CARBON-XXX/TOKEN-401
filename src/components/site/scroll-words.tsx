@@ -1,9 +1,9 @@
 "use client";
 
-import { motion, useReducedMotion, useScroll, type MotionValue } from "motion/react";
+import { motion, useScroll, type MotionValue } from "motion/react";
 import { useRef } from "react";
 
-import { useScrub } from "./motion-primitives";
+import { useScrub, useStill } from "./motion-primitives";
 
 type Segment = { text: string; italic?: boolean };
 
@@ -16,7 +16,7 @@ type ScrollWordsProps = {
 /** A statement that comes up word by word as it is read, like ink taking on paper. */
 export function ScrollWords({ segments, className, id }: ScrollWordsProps) {
   const ref = useRef<HTMLHeadingElement>(null);
-  const reduce = useReducedMotion();
+  const still = useStill();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.88", "end 0.42"] });
 
   const words = segments.flatMap((s) =>
@@ -30,7 +30,7 @@ export function ScrollWords({ segments, className, id }: ScrollWordsProps) {
   return (
     <h2 ref={ref} id={id} className={className}>
       {words.map(({ w, italic }, i) => (
-        <Word key={i} progress={scrollYProgress} from={i / n} to={(i + 2.5) / n} italic={italic} still={!!reduce}>
+        <Word key={i} progress={scrollYProgress} from={i / n} to={(i + 2.5) / n} italic={italic} still={still}>
           {w}
         </Word>
       ))}
@@ -56,7 +56,7 @@ function Word({
   const opacity = useScrub(progress, [from, Math.min(to, 1)], [0.14, 1]);
   return (
     <>
-      <motion.span style={still ? undefined : { opacity }} className={italic ? "font-serif font-normal tracking-[-0.01em] italic" : undefined}>
+      <motion.span style={{ opacity: still ? 1 : opacity }} className={italic ? "font-serif font-normal tracking-[-0.01em] italic" : undefined}>
         {children}
       </motion.span>{" "}
     </>

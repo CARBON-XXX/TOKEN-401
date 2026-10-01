@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
 
 import { TwoSpeeds } from "@/components/art/two-speeds";
 import { useContact } from "@/components/contact/contact-provider";
@@ -8,17 +8,13 @@ import { SLOW } from "@/components/site/motion-primitives";
 import { ButtonLink, PillButton } from "@/components/site/pill";
 
 export function Hero() {
-  const reduce = useReducedMotion();
   const { openContact } = useContact();
 
-  const enter = (delay: number) =>
-    reduce
-      ? {}
-      : {
-          initial: { opacity: 0, y: 14 },
-          animate: { opacity: 1, y: 0 },
-          transition: { duration: 1.2, delay, ease: SLOW },
-        };
+  const enter = (delay: number) => ({
+    initial: { opacity: 0, y: 14 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 1.2, delay, ease: SLOW },
+  });
 
   return (
     <section id="top" data-surface="bone" aria-labelledby="hero-title" className="relative pt-[var(--nav-h)]">
