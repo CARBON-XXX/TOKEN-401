@@ -112,6 +112,11 @@ to the judgement it exercises — “Judgment that asks first.”, “asks first
   journal’s (“Fig. 2”, serif italic) and captioned beneath a hairline: number, title, one plain
   paragraph. Spreads are staggered — the second figure starts lower than the first. No cards, no
   shadows.
+- **Below the wide grid:** a layout that only fits at 1440 px is not a layout. Section labels stack
+  their note under the label on phones rather than wrap either side. The journal is set as a
+  contents list — kind and date in a margin column, title and dek beside it — until three columns
+  have room (`lg`). Where a figure leads its prose (the camellia in the essay) it opens the
+  article as a plate on phones and sits sticky beside it from `md`.
 
 ## 6. Figures
 
@@ -124,6 +129,12 @@ to the judgement it exercises — “Judgment that asks first.”, “asks first
 
 Everything in them is illustrative, and says so where it could be mistaken for data. Where a
 figure has a scale, the scale is honest about itself: a broken axis rather than “not to scale”.
+
+A figure’s lines may scale with the page; its type may not. Fig. 1 is drawn in three geometries
+(wide from `xl`, medium from `md`, narrow below) and holds its markings near their set size with
+`useTypeHold`, which measures the drawing and counter-scales the type within a clamp. Labels that
+cross the stipple are knocked out of it with a paper-coloured stroke behind the letters, as a
+printer would mask a plate, never with a box.
 
 ## 7. Motion
 
@@ -141,6 +152,15 @@ figure has a scale, the scale is honest about itself: a broken axis rather than 
   - **flow** — the safeguards pulse and the threat-graph dashes move along their paths.
   - **scrub** — the company statement follows the reader’s scroll.
   - **draw** — the camellia opens across the principles.
+  - **read** — a hairline across the top of a journal article fills with the reader’s place in
+    the text, on a soft spring so it never jitters.
+- Interaction is answered by touch, not by hover:
+  - **press** — buttons and pills set one pixel into the page while held, at 75 ms, and darken a
+    step, the way a key gives under a finger.
+  - **place** — one line under the nav marks the section being read and slides to the next as
+    the reader arrives; it is measured from the link itself, so it fits any label length.
+  - **copy** — the closing address copies in one press; the label turns from `Copy` to `Copied`
+    and back, and a polite status line tells a screen reader the same.
 - Nothing responds to hover or follows the pointer. Hover may change a colour; nothing moves,
   grows or appears. Every behaviour works the same on a phone.
 - `prefers-reduced-motion` stops all of it and shows the finished state. New components read it
@@ -155,7 +175,16 @@ colours. No mock screens, no dashboards, no generic AI imagery.
 Photography is an accent: at most one per page, set small, warm monochrome, beside writing about
 what it shows — the camellia beside the essay on the name.
 
-## 9. Not in this system
+## 9. Colophon and edges
+
+The site signs off like a printed book. The footer closes with a colophon: the three typefaces by
+name and role, the paper (“bone”), and the four inks it is printed in — charcoal, indigo, clay,
+cinnabar — as swatches with what each one means. It is the palette’s rule stated in public.
+
+The edges keep the voice. A missing page answers as an instrument would: 401 against 404, “asks
+first” against “nothing here”, the name of the company explained by the one error it is not.
+
+## 10. Not in this system
 
 Glow, bloom or light effects · glossy or decorative gradients · neon or cyberpunk colour · glass
 and blur · incident logs, timestamps or telemetry as decoration · dashboards and feature grids ·
