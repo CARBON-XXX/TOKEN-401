@@ -13,13 +13,13 @@ export function SectionLabel({ label, note, surface = "bone", className }: Secti
   return (
     <div
       className={cn(
-        "type-label flex items-baseline justify-between gap-6 border-t pt-3",
+        "type-label flex flex-col gap-1.5 border-t pt-3 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6",
         ink ? "border-chalk/20 text-chalk/55" : "border-soot/15 text-stone",
         className,
       )}
     >
       <span className={ink ? "text-chalk" : "text-soot"}>{label}</span>
-      {note ? <span className="text-right">{note}</span> : null}
+      {note ? <span className="sm:text-right">{note}</span> : null}
     </div>
   );
 }
