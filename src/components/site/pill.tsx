@@ -22,16 +22,18 @@ export function Arrow({ className }: { className?: string }) {
 
 const tones: Record<Surface, Record<Tone, string>> = {
   bone: {
-    solid: "bg-soot text-chalk hover:bg-graphite",
-    outline: "border border-soot/20 text-soot hover:border-soot/45",
+    solid: "bg-soot text-chalk hover:bg-graphite active:bg-ink",
+    outline: "border border-soot/20 text-soot hover:border-soot/45 active:bg-soot/[0.06]",
   },
   ink: {
-    solid: "bg-chalk text-ink hover:bg-plaster",
-    outline: "border border-chalk/25 text-chalk hover:border-chalk/55",
+    solid: "bg-chalk text-ink hover:bg-plaster active:bg-plaster/80",
+    outline: "border border-chalk/25 text-chalk hover:border-chalk/55 active:bg-chalk/[0.08]",
   },
 };
 
-const base = "type-ui inline-flex h-11 items-center gap-2.5 rounded-[4px] px-5 font-medium transition-colors duration-300";
+/** A press sets the button a pixel into the page, like type into paper. */
+const base =
+  "type-ui inline-flex h-11 items-center gap-2.5 rounded-[4px] px-5 font-medium transition-[color,background-color,border-color,translate] duration-300 active:translate-y-px active:duration-75";
 
 export function buttonClass({ surface = "bone", tone = "solid", className }: { surface?: Surface; tone?: Tone; className?: string }) {
   return cn(base, tones[surface][tone], className);

@@ -130,7 +130,7 @@ export function ContactDialog({ open, onOpenChange, initialTopic }: ContactDialo
                       aria-pressed={topic === t}
                       onClick={() => setTopic(t)}
                       className={cn(
-                        "rounded-full border px-4 py-2 font-sans text-[0.875rem] transition-colors duration-500",
+                        "rounded-[4px] border px-3.5 py-2 font-sans text-[0.875rem] transition-colors duration-500 active:bg-plaster/60",
                         topic === t
                           ? "border-soot bg-soot text-chalk"
                           : "border-plaster text-graphite hover:border-stone hover:text-soot",
