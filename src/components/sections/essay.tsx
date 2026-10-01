@@ -12,14 +12,14 @@ export function Essay() {
         <div className="grid grid-cols-12 gap-x-6 gap-y-14 border-t border-plaster pt-[clamp(72px,9vw,128px)]">
           <Rise
             as="figure"
-            className="order-last col-span-7 sm:col-span-4 lg:sticky lg:top-[calc(var(--nav-h)+2rem)] lg:order-none lg:col-span-3 lg:self-start"
+            className="col-span-7 sm:col-span-5 md:sticky md:top-[calc(var(--nav-h)+2rem)] md:col-span-4 md:self-start lg:col-span-3"
           >
             <div className="relative aspect-[3/4] overflow-hidden bg-plaster">
               <Image
                 src={plaster}
                 alt="A single camellia and its leaves against a cracked plaster wall, in black and white."
                 placeholder="blur"
-                sizes="(min-width: 1024px) 22vw, (min-width: 640px) 33vw, 58vw"
+                sizes="(min-width: 1024px) 22vw, (min-width: 768px) 30vw, (min-width: 640px) 40vw, 58vw"
                 className="size-full object-cover grayscale sepia-[0.18]"
               />
             </div>
@@ -28,7 +28,7 @@ export function Essay() {
             </figcaption>
           </Rise>
 
-          <article className="col-span-12 lg:col-span-6 lg:col-start-6">
+          <article className="col-span-12 md:col-span-8 md:col-start-5 lg:col-span-6 lg:col-start-6">
             <Rise as="header">
               <p className="type-label text-stone">On the name</p>
               <h2 id="essay-title" className="type-display-2 mt-8 max-w-[11em] text-soot">
