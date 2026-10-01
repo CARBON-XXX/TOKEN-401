@@ -84,6 +84,14 @@ export function getEntry(slug: string) {
   return JOURNAL.find((entry) => entry.slug === slug);
 }
 
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+/** "2026-09-16" as an instrument would stamp it: "16 Sep 2026". */
+export function stampDate(iso: string) {
+  const [year, month, day] = iso.split("-").map(Number);
+  return `${day} ${MONTHS[month - 1]} ${year}`;
+}
+
 /** The entry after this one in the index, wrapping to the first. */
 export function getNextEntry(slug: string) {
   const i = JOURNAL.findIndex((entry) => entry.slug === slug);
