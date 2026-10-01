@@ -7,6 +7,7 @@ import { Footer } from "@/components/site/footer";
 import { Rise } from "@/components/site/motion-primitives";
 import { Nav } from "@/components/site/nav";
 import { Arrow } from "@/components/site/pill";
+import { ReadingProgress } from "@/components/site/reading-progress";
 import { JOURNAL, getEntry, getNextEntry } from "@/content/journal";
 
 export function generateStaticParams() {
@@ -33,6 +34,7 @@ export default async function JournalEntryPage({ params }: PageProps<"/journal/[
   return (
     <>
       <Nav />
+      <ReadingProgress targetId="top" />
       <main>
         <article
           id="top"
