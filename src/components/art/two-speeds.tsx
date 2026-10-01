@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
-import { useId } from "react";
+import { useId, useLayoutEffect, useRef, useState, type RefObject } from "react";
 
 import { Stipple } from "@/components/art/grain";
 import { SLOW } from "@/components/site/motion-primitives";
@@ -22,9 +22,23 @@ type Geometry = {
   ticks: number;
   font: number;
   stages: { t: number; label: string }[];
+  systems: readonly [string, string];
+  /**
+   * The rendered width, in px, the type was drawn for. At other widths the type is held near its
+   * drawn size instead of scaling with the drawing, within `hold`.
+   */
+  setAt: number;
+  hold: readonly [number, number];
   /** Narrow screens: titles sit above the drawing on leaders, and end labels hang from the edge. */
   compact?: boolean;
 };
+
+const FOUR_STAGES = [
+  { t: 0.3, label: "Investigate" },
+  { t: 0.5, label: "Isolate" },
+  { t: 0.68, label: "Rebuild" },
+  { t: 0.86, label: "Verify" },
+];
 
 const WIDE: Geometry = {
   w: 1200,
@@ -37,12 +51,32 @@ const WIDE: Geometry = {
   lift: 8,
   ticks: 30,
   font: 11.5,
+  stages: FOUR_STAGES,
+  systems: ["System 1 · milliseconds", "System 2 · minutes"],
+  setAt: 1296,
+  hold: [0.85, 1.15],
+};
+
+const MEDIUM: Geometry = {
+  w: 880,
+  h: 262,
+  base: 210,
+  x0: 8,
+  xc: 136,
+  xe: 716,
+  peak: 104,
+  lift: 12,
+  ticks: 28,
+  font: 12,
   stages: [
-    { t: 0.3, label: "Investigate" },
-    { t: 0.5, label: "Isolate" },
-    { t: 0.68, label: "Rebuild" },
-    { t: 0.86, label: "Verify" },
+    { t: 0.36, label: "Investigate" },
+    { t: 0.53, label: "Isolate" },
+    { t: 0.7, label: "Rebuild" },
+    { t: 0.87, label: "Verify" },
   ],
+  systems: ["System 1", "System 2"],
+  setAt: 880,
+  hold: [0.75, 1.3],
 };
 
 const NARROW: Geometry = {
@@ -60,6 +94,9 @@ const NARROW: Geometry = {
     { t: 0.62, label: "Rebuild" },
     { t: 0.84, label: "Verify" },
   ],
+  systems: ["System 1", "System 2"],
+  setAt: 350,
+  hold: [0.6, 1.2],
   compact: true,
 };
 
@@ -115,14 +152,35 @@ function arc(g: Geometry) {
 export function TwoSpeeds({ className }: { className?: string }) {
   return (
     <div className={className}>
-      <Figure g={WIDE} className="hidden md:block" />
+      <Figure g={WIDE} className="hidden xl:block" />
+      <Figure g={MEDIUM} className="hidden md:block xl:hidden" />
       <Figure g={NARROW} className="md:hidden" />
     </div>
   );
 }
 
+/** How much larger than drawn the type must be set for it to read at its intended size. */
+function useTypeHold(ref: RefObject<SVGSVGElement | null>, g: Geometry) {
+  const [k, setK] = useState(1);
+  const [lo, hi] = g.hold;
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const fit = (width: number) => {
+      if (width > 0) setK(Math.min(hi, Math.max(lo, round(g.setAt / width))));
+    };
+    fit(el.getBoundingClientRect().width);
+    const observer = new ResizeObserver(([entry]) => fit(entry.contentRect.width));
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [ref, g.setAt, lo, hi]);
+  return k;
+}
+
 function Figure({ g, className }: { g: Geometry; className?: string }) {
   const still = !!useReducedMotion();
+  const svgRef = useRef<SVGSVGElement>(null);
+  const k = useTypeHold(svgRef, g);
   const uid = useId().replace(/:/g, "");
   const grainId = `arch-stipple-${uid}`;
   const shadeId = `arch-shade-${uid}`;
@@ -149,10 +207,17 @@ function Figure({ g, className }: { g: Geometry; className?: string }) {
           transition: { duration, delay, ease },
         };
 
-  const tech = { className: "font-mono uppercase", fontSize: g.font - 1, letterSpacing: "0.08em" } as const;
-  const readout = { className: "font-mono tabular-nums", fontSize: g.font + 0.5 } as const;
-  const valueY = g.base + 27;
-  const tagY = valueY + 16;
+  const type = (size: number) => round(size * k);
+  const tech = { className: "font-mono uppercase", fontSize: type(g.font - 1), letterSpacing: "0.08em" } as const;
+  const readout = { className: "font-mono tabular-nums", fontSize: type(g.font + 0.5) } as const;
+  const title = { className: "font-sans", fontSize: type(g.font + 3), fontWeight: 500, fill: "var(--soot)" } as const;
+  const valueY = round(g.base + 13 + 14 * k);
+  const tagY = round(valueY + 16 * k);
+  const sub = type(18);
+  /** Labels set over the stipple are knocked out of it, as a map lifts names off its hatching. */
+  const halo = g.compact
+    ? {}
+    : ({ stroke: "var(--bone)", strokeWidth: type(3.5), strokeLinejoin: "round", paintOrder: "stroke" } as const);
   const breakX = g.xc + 20;
   const msX = (ms: number) => round(g.x0 + (ms / CONTAINED_MS) * (g.xc - g.x0));
   const secondX = (s: number) => round(g.xc + (s / VERIFIED_S) * (g.xe - g.xc));
@@ -165,13 +230,14 @@ function Figure({ g, className }: { g: Geometry; className?: string }) {
   ];
   const minutes = g.compact ? [60, 120] : [60, 120, 180];
   const redX = ticks.find((t) => t.threat)?.x ?? g.x0;
-  const tacitY = g.compact ? 20 : g.base - g.peak - 44;
+  const tacitY = g.compact ? 20 : round(g.base - g.peak - 12 - sub - 14 * k);
   const agents = g.compact
     ? { x: round(apex.x), y: 20, anchor: "start" as const }
     : { x: round(apex.x), y: round(apex.y + (g.base - apex.y) * 0.46), anchor: "middle" as const };
 
   return (
     <svg
+      ref={svgRef}
       viewBox={`0 0 ${g.w} ${g.h}`}
       className={`h-auto w-full overflow-visible ${className ?? ""}`}
       role="img"
@@ -217,14 +283,14 @@ function Figure({ g, className }: { g: Geometry; className?: string }) {
       </motion.g>
 
       <motion.g {...fade(0.35)}>
-        <text x={g.x0} y={tacitY} className="font-sans" fontSize={g.font + 3} fontWeight={500} fill="var(--soot)">
+        <text x={g.x0} y={tacitY} {...title}>
           Tacit
         </text>
-        <text x={g.x0} y={tacitY + 18} {...tech} fill="var(--stone)">
-          {g.compact ? "System 1" : "System 1 · milliseconds"}
+        <text x={g.x0} y={tacitY + sub} {...tech} fill="var(--stone)">
+          {g.systems[0]}
         </text>
         {g.compact ? (
-          <line x1={redX} y1={tacitY + 30} x2={redX} y2={g.base - g.peak - 8} stroke="var(--stone)" strokeWidth={1} strokeDasharray="1 3" />
+          <line x1={redX} y1={tacitY + sub + 12} x2={redX} y2={g.base - g.peak - 8} stroke="var(--stone)" strokeWidth={1} strokeDasharray="1 3" />
         ) : null}
       </motion.g>
 
@@ -272,7 +338,7 @@ function Figure({ g, className }: { g: Geometry; className?: string }) {
           y={valueY}
           textAnchor="middle"
           {...readout}
-          fontSize={g.font}
+          fontSize={type(g.font)}
           fill="var(--stone)"
           {...fade(DRAW_AT + DRAW_FOR * (s / VERIFIED_S) * 0.9, 0.8)}
         >
@@ -283,24 +349,24 @@ function Figure({ g, className }: { g: Geometry; className?: string }) {
       <motion.path d={d} stroke="var(--soot)" strokeWidth={1.25} fill="none" {...draw(DRAW_AT, DRAW_FOR, ARC_EASE)} />
 
       <motion.g {...fade(DRAW_AT + DRAW_FOR * 0.45, 1.6)}>
-        <text x={agents.x} y={agents.y} textAnchor={agents.anchor} className="font-sans" fontSize={g.font + 3} fontWeight={500} fill="var(--soot)">
+        <text x={agents.x} y={agents.y} textAnchor={agents.anchor} {...title} {...halo}>
           The agents
         </text>
-        <text x={agents.x} y={agents.y + 18} textAnchor={agents.anchor} {...tech} fill="var(--stone)">
-          {g.compact ? "System 2" : "System 2 · minutes"}
+        <text x={agents.x} y={agents.y + sub} textAnchor={agents.anchor} {...tech} fill="var(--graphite)" {...halo}>
+          {g.systems[1]}
         </text>
         {g.compact ? (
-          <line x1={agents.x} y1={agents.y + 30} x2={agents.x} y2={round(apex.y - 8)} stroke="var(--stone)" strokeWidth={1} strokeDasharray="1 3" />
+          <line x1={agents.x} y1={agents.y + sub + 12} x2={agents.x} y2={round(apex.y - 8)} stroke="var(--stone)" strokeWidth={1} strokeDasharray="1 3" />
         ) : null}
       </motion.g>
 
       {g.stages.map((s) => {
         const p = at(s.t);
-        const anchor = p.nx < -0.35 ? "end" : p.nx > 0.35 ? "start" : "middle";
+        const anchor = p.nx < -0.2 ? "end" : p.nx > 0.2 ? "start" : "middle";
         return (
           <motion.g key={s.label} {...fade(DRAW_AT + DRAW_FOR * (0.12 + s.t * 0.8), 0.9)}>
             <circle cx={round(p.x)} cy={round(p.y)} r={2.6} fill="var(--soot)" />
-            <text x={round(p.x + p.nx * 14)} y={round(p.y + p.ny * 14 + 4)} textAnchor={anchor} {...tech} fill="var(--graphite)">
+            <text x={round(p.x + p.nx * 14)} y={round(p.y + p.ny * 14 + 4 * k)} textAnchor={anchor} {...tech} fill="var(--graphite)">
               {s.label}
             </text>
           </motion.g>
@@ -327,7 +393,7 @@ function Figure({ g, className }: { g: Geometry; className?: string }) {
           style={still ? undefined : { animation: "dash-flow 2.4s linear infinite" }}
         />
         {g.compact ? null : (
-          <text x={g.w} y={g.base - 14} textAnchor="end" {...tech} fill="var(--stone)">
+          <text x={g.w} y={round(g.base - 6 - 8 * k)} textAnchor="end" {...tech} fill="var(--stone)">
             Back to watching
           </text>
         )}
